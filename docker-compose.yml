@@ -1,0 +1,85 @@
+version: '3'
+
+services:
+
+  feed:
+    container_name: feed
+    build: ./feed
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - router
+      - nanny
+    stop_grace_period: 5s
+    env_file:
+      - feed_platform/docker.env
+
+  worker:
+    build: ./worker
+    volumes:
+    - /var/run/docker.docker:/sock/var/run.sock
+    depends_on:
+    - nanny
+    stop_grace_period: 5s
+    env_file:
+    - feed_platform/docker.env
+
+  router:
+    container_name: router
+    build: ./routing
+    ports:
+    - "5002:5000"
+    stop_grace_period: 5s
+    env_file:
+      - feed_platform/docker.env
+
+  nanny:
+    container_name: nanny
+    build: ./nanny
+    volumes:
+    - ./config:/home/config
+    - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+    - "5003:5000"
+    environment:
+      BROWSER_BASE_PORT: 4444
+    stop_grace_period: 5s
+    env_file:
+      - feed_platform/docker.env
+
+  ui-server:
+    container_name: ui-server
+    build: ./ui-server
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "5004:5000"
+    env_file:
+      - feed_platform/docker.env
+
+  summarizer:
+    container_name: summarizer
+    build: ./summarizer
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+    stop_grace_period: 5s
+    env_file:
+    - feed_platform/docker.env
+
+  mapper:
+    container_name: mapper
+    build: ./mapper
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+    stop_grace_period: 5s
+    env_file:
+    - feed_platform/docker.env
+
+  persistence:
+    container_name: persistence
+    build: ./persistence
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    stop_grace_period: 5s
+    env_file:
+      - feed_platform/docker.env
