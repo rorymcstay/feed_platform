@@ -79,15 +79,6 @@ services:
     - JAVA_OPTS=-Dhazelcast.mc.rest.enabled=true
     ports:
     - 8080:8080
-  jupyter:
-    container_name: jupyter
-    build: ./learning
-    volumes:
-      - ./learning/notebooks:/home/notebooks
-    ports:
-      - "8888:8888"
-    env_file:
-      - feed_platform/docker.env
   database:
     image: postgres
     ports:

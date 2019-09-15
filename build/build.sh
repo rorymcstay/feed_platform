@@ -1,30 +1,32 @@
-get_sources() {
-  git clone "${GIT_CLONE_URL}" staging
-  cd /"${DEPLOYMENT_ROOT}"/staging || exit
-}
-
-build_images() {
-  echo building "$image"
-  git pull
-  docker-compose build
-}
-
-set_image_names() {
-  while IFS= read -r line; do
-      images+=( "$line" )
-  done < <( docker-compose config --services )
-}
-
 make_repos() {
-  for image in "${images[@]}"; do
-      aws ecr create-repository --repository-name "$image" --profile "${AWS_PROFILE}" --region us-east-1
-  done
+   while IFS= read -r line; do
+      OIFS=$IFS
+      image_dets=[]
+      IFS='=' read -ra image_dets <<< "$line"
+      IFS=$OIFS
+      echo "${image_dets[0]}"
+      aws ecr create-repository --repository-name "${PROJECT_NAME}"/"${image_dets[0]}" --profile "${AWS_PROFILE}" --region us-west-2
+   done < /"${DEPLOYMENT_ROOT}"/manifest.txt
 }
 
-push_images() {
-  for image in "${images[@]}"; do
-    echo pushing "$image"
-      docker tag "${PROJECT_NAME}_$image" "${IMAGE_REPOSITORY}"/"${PROJECT_NAME}"-"$image":latest
-      docker push "${IMAGE_REPOSITORY}"/"${PROJECT_NAME}"-"$image":latest
-  done
+build_and_push_images() {
+  while IFS= read -r line; do
+
+      # get tag and name of current line
+      OIFS=$IFS
+      IFS='=' read -ra image_dets <<< "$line"
+      IFS=$OIFS
+
+      echo git clone "${GIT_CLONE_URL}"/"${PROJECT_NAME}"_"${image_dets[0]}" "${DEPLOYMENT_ROOT}"/"${image_dets[0]}"
+      git clone "${GIT_CLONE_URL}"/"${PROJECT_NAME}"_"${image_dets[0]}" "${DEPLOYMENT_ROOT}"/"${image_dets[0]}"
+      cd "${DEPLOYMENT_ROOT}"/${image_dets[0]} && git checkout "${image_dets[1]}"
+      cd "${DEPLOYMENT_ROOT}"
+
+      docker build "${DEPLOYMENT_ROOT}"/"${image_dets[0]}" --tag "${PROJECT_NAME}"/"${image_dets[0]}":"${image_dets[1]}"
+      docker tag "${PROJECT_NAME}"/"${image_dets[0]}":"${image_dets[1]}" "${IMAGE_REPOSITORY}"/${PROJECT_NAME}/"${image_dets[0]}:${image_dets[1]}"
+      echo pushing "${image_dets[0]}:${image_dets[1]}"
+      docker push "${IMAGE_REPOSITORY}"/${PROJECT_NAME}/"${image_dets[0]}:${image_dets[1]}"
+      rm -rf "${DEPLOYMENT_ROOT}"/"${image_dets[0]}"
+
+   done < /"${DEPLOYMENT_ROOT}"/manifest.txt
 }

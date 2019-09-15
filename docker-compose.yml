@@ -4,7 +4,7 @@ services:
 
   leader:
     container_name: leader
-    image: ${REPOSITORY_URL}/${PROJECT_NAME}/leader
+    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/leader:0.0.0
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
@@ -12,30 +12,30 @@ services:
       - nanny
     stop_grace_period: 5s
     env_file:
-      - feed_platform/docker.env
+      - docker.env
 
   worker:
-    image: ${REPOSITORY_URL}/${PROJECT_NAME}/worker
+    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/worker:0.0.0
     volumes:
     - /var/run/docker.docker:/sock/var/run.sock
     depends_on:
     - nanny
     stop_grace_period: 5s
     env_file:
-    - feed_platform/docker.env
+    - docker.env
 
   router:
     container_name: router
-    image: ${REPOSITORY_URL}/${PROJECT_NAME}/router
+    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/routing:0.0.0
     ports:
     - "5002:5000"
     stop_grace_period: 5s
     env_file:
-      - feed_platform/docker.env
+      - docker.env
 
   nanny:
     container_name: nanny
-    image: ${REPOSITORY_URL}/${PROJECT_NAME}/nanny
+    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/nanny:0.0.0
     volumes:
     - ./config:/home/config
     - /var/run/docker.sock:/var/run/docker.sock
@@ -45,41 +45,40 @@ services:
       BROWSER_BASE_PORT: 4444
     stop_grace_period: 5s
     env_file:
-      - feed_platform/docker.env
+      - docker.env
 
   ui-server:
-    image: ${REPOSITORY_URL}/${PROJECT_NAME}/ui-server
-    build: ./ui-server
+    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/ui-server:0.0.0
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
       - "5004:5000"
     env_file:
-      - feed_platform/docker.env
+      - docker.env
 
   summarizer:
     container_name: summarizer
-    image: ${REPOSITORY_URL}/${PROJECT_NAME}/summarizer
+    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/summarizer:0.0.0
     volumes:
     - /var/run/docker.sock:/var/run/docker.sock
     stop_grace_period: 5s
     env_file:
-    - feed_platform/docker.env
+    - docker.env
 
   mapper:
     container_name: mapper
-    image: ${REPOSITORY_URL}/${PROJECT_NAME}/mapper
+    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/mapper:0.0.0
     volumes:
     - /var/run/docker.sock:/var/run/docker.sock
     stop_grace_period: 5s
     env_file:
-    - feed_platform/docker.env
+    - docker.env
 
   persistence:
     container_name: persistence
-    image: ${REPOSITORY_URL}/${PROJECT_NAME}/persistence
+    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/persistence:0.0.0
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     stop_grace_period: 5s
     env_file:
-      - feed_platform/docker.env
+      - docker.env
