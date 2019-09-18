@@ -1,3 +1,7 @@
+#!/bin/sh
+
+DEPLOYMENT_ROOT=$(pwd)
+
 make_repos() {
    while IFS= read -r line; do
       OIFS=$IFS
@@ -30,3 +34,7 @@ build_and_push_images() {
 
    done < /"${DEPLOYMENT_ROOT}"/manifest.txt
 }
+
+make_repos
+
+build_and_push_images
