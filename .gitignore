@@ -1,3 +1,14 @@
 *.iml
 .idea
 .auth
+leader
+mapper
+nanny
+persistence
+platform
+routing
+summarizer
+ui-server
+worker
+build/manifest.txt
+
