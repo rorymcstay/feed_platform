@@ -1,0 +1,234 @@
+[
+  {
+    "_id": ObjectId(),
+    "name": "worker",
+    "value": {
+      "title": "Worker Stream Config",
+      "description": "specifies what the worker should send out",
+      "type": "object",
+      "properties": {
+        "class": {
+          "type": "string",
+          "default": null,
+          "title": "name of class to stream"
+        },
+        "single": {
+          "type": "boolean",
+          "default": true,
+          "title": "is the item unique"
+        },
+        "page_ready": {
+          "type": "string",
+          "default": "img",
+          "title": "the class of the item to wait for"
+        }
+      }
+    }
+  },
+  {
+    "_id": ObjectId(),
+    "name": "feed",
+    "value": {
+      "title": "Feed Config",
+      "description": "Configuration for fees",
+      "type": "object",
+      "properties": {
+        "next_page_xpath": {
+          "type": "string",
+          "title": "next page xpath"
+        },
+        "next_button_css": {
+          "type": "string",
+          "title": "next button css selector"
+        },
+        "next_button_text": {
+          "type": "string",
+          "title": "Text displayed on next button"
+        },
+        "result_stub": {
+          "type": "string",
+          "title": "base url of result page"
+        },
+        "wait_for": {
+          "type": "string",
+          "title": "Class to wait for on result page"
+        },
+        "base_url": {
+          "type": "string",
+          "title": "base url of results list page"
+        },
+        "result_stream": {
+          "type": "object",
+          "properties": {
+            "class": {
+              "title": "class of result card to stream",
+              "type": "string"
+            },
+            "single": {
+              "title": "is it a single item",
+              "type": "boolean",
+              "default": false
+            }
+          }
+        },
+        "page_url_param": {
+          "type": "string",
+          "title": "parameter name of page in url"
+        }
+      }
+    }
+  },
+  {
+    "_id": ObjectId(),
+    "name": "summarizer",
+    "value": {
+      "title": "Result Summary Config",
+      "description": "data to parse from results list",
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "object",
+          "properties": {
+            "class": {
+              "title": "class of url container",
+              "type": "string"
+            },
+            "single": {
+              "title": "is it a single item",
+              "type": "boolean",
+              "default": false
+            },
+            "attr": {
+              "title": "attribute of tag",
+              "type": "string",
+              "default": null
+            },
+            "name": {
+              "title": "name of tag",
+              "type": "string"
+            }
+          }
+        },
+        "price": {
+          "type": "object",
+          "properties": {
+            "class": {
+              "title": "class of price container",
+              "type": "string"
+            },
+            "single": {
+              "title": "is it a single item",
+              "type": "boolean",
+              "default": false
+            },
+            "attr": {
+              "title": "attribute of tag",
+              "type": "string",
+              "default": null
+            },
+            "name": {
+              "title": "name of tag",
+              "type": "string"
+            }
+          }
+        },
+        "attrs": {
+          "type": "object",
+          "title": "summary attributes",
+          "properties": {
+            "class": {
+              "title": "class of attrs container",
+              "type": "string"
+            },
+            "single": {
+              "title": "is it a single item",
+              "type": "boolean",
+              "default": false
+            },
+            "attr": {
+              "title": "class of attrs container",
+              "type": "string",
+              "default": null
+            },
+            "name": {
+              "title": "container tag name",
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "_id": ObjectId(),
+    "name": "router",
+    "value": {
+      "title": "Routing configuration",
+      "type": "object",
+      "properties": {
+        "skeleton": {
+          "type": "array",
+          "title": "A list of strings, for page value, add {page} etc..",
+          "items": {
+            "type": "string",
+            "default": "bazinga"
+          }
+        },
+        "sort_first": {
+          "type": "object",
+          "title": "enter respective values",
+          "properties": {
+            "newest": {
+              "type": "string"
+            },
+            "oldest": {
+              "type": "string"
+            },
+            "high": {
+              "type": "string"
+            },
+            "low": {
+              "type": "string"
+            }
+          }
+        },
+        "page": {
+          "type": "object",
+          "properties": {
+            "increment": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "_id": ObjectId(),
+    "name": "mapper",
+    "value": {
+      "title": "Data Mapping configuration",
+      "type": "object",
+      "properties": {
+        "json_identifier": {
+          "type": "string",
+          "title": "variable name of json in script tag"
+        },
+        "attrs": {
+          "type": "array",
+          "title": "name and field of variable to capture",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "field": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }}
+    ]

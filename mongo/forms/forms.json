@@ -1,0 +1,25 @@
+{
+  "_id": ObjectId(),
+  "name": "mapper",
+  "value": {
+    "title": "Data Mapping configuration",
+    "type": "object",
+    "properties": {
+      "attrs": {
+        "type": "array",
+        "title": "Mapping",
+        "items": {
+          "type": "object",
+          "properties": {
+            "staging_column_name": {
+              "type": "string"
+            },
+            "final_column_name": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

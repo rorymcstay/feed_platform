@@ -1,7 +1,5 @@
- 
-
-
-
+#bin/sh
+DEPLOYMENT_ROOT=$(pwd)
 while IFS= read -r line; do
 
       # get tag and name of current line

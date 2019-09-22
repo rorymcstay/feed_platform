@@ -1,3 +1,52 @@
 {
-  "services": {}
+  "services": {
+    "mapper": {
+      "commitHash": "db38e6fcc9f0b7881eb34b5006508bb44c473252",
+      "versions": [
+        "0.0.0"
+      ]
+    },
+    "nanny": {
+      "commitHash": "f09c052128b6cebde1dbb70061cfd7d14712c199",
+      "versions": [
+        "0.0.0"
+      ]
+    },
+    "summarizer": {
+      "commitHash": "17564f3f184a8185d88185552387598490f3b7f8",
+      "versions": [
+        "0.0.0"
+      ]
+    },
+    "ui-server": {
+      "commitHash": "4a3643faf99cae8b192cccc1380f87a73a43574a",
+      "versions": [
+        "0.0.0"
+      ]
+    },
+    "worker": {
+      "commitHash": "9c3eb77f32b6aeb40e9fabe18faace94babaa95a",
+      "versions": [
+        "0.0.0"
+      ]
+    },
+    "leader": {
+      "commitHash": "c151936ceed8ce82e29ee7a6260d45eb2219447e",
+      "versions": [
+        "0.0.0"
+      ]
+    },
+    "persistence": {
+      "commitHash": "b35ae4451898d495004035dc0d3554563e324645",
+      "versions": [
+        "0.0.0"
+      ]
+    },
+    "routing": {
+      "commitHash": "bea1c40ded90d8652960d0e4fd06d8591f20f833",
+      "versions": [
+        "0.0.0"
+      ]
+    }
+  }
 }
