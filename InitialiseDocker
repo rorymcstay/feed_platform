@@ -1,6 +1,6 @@
 FROM python:3.6-alpine
 
-RUN mkdir -p /home
+RUN mkdir -p /mongo
 
 WORKDIR /mongo
 
