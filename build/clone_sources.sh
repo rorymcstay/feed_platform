@@ -1,5 +1,4 @@
-#bin/sh
-DEPLOYMENT_ROOT=$(pwd)
+DEPLOYMENT_ROOT=~/app/feed/
 while IFS= read -r line; do
 
       # get tag and name of current line
@@ -10,5 +9,5 @@ while IFS= read -r line; do
       echo git clone "${GIT_CLONE_URL}"/"${PROJECT_NAME}"_"${image_dets[0]}" "${DEPLOYMENT_ROOT}"/"${image_dets[0]}"
       git clone "${GIT_CLONE_URL}"/"${PROJECT_NAME}"_"${image_dets[0]}" "${DEPLOYMENT_ROOT}"/"${image_dets[0]}"
       cd "${DEPLOYMENT_ROOT}"/${image_dets[0]} && git checkout "${image_dets[1]}"
-      cd "${DEPLOYMENT_ROOT}"
+      cd "${DEPLOYMENT_ROOT}" || exit
 done < $1 

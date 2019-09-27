@@ -1,0 +1,14 @@
+[
+  {
+    "name": "donedeal",
+    "class": null,
+    "single": true,
+    "page_ready": "img"
+  },
+  {
+    "name": "pistonheads",
+    "class": null,
+    "single": true,
+    "page_ready": "img"
+  }
+]

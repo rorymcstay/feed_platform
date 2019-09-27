@@ -1,6 +1,5 @@
 [
   {
-    "_id": ObjectId(),
     "name": "worker",
     "value": {
       "title": "Worker Stream Config",
@@ -26,7 +25,6 @@
     }
   },
   {
-    "_id": ObjectId(),
     "name": "feed",
     "value": {
       "title": "Feed Config",
@@ -79,7 +77,6 @@
     }
   },
   {
-    "_id": ObjectId(),
     "name": "summarizer",
     "value": {
       "title": "Result Summary Config",
@@ -160,7 +157,6 @@
     }
   },
   {
-    "_id": ObjectId(),
     "name": "router",
     "value": {
       "title": "Routing configuration",
@@ -204,7 +200,6 @@
     }
   },
   {
-    "_id": ObjectId(),
     "name": "mapper",
     "value": {
       "title": "Data Mapping configuration",

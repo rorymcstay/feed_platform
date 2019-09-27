@@ -1,0 +1,72 @@
+[
+  {
+    "name": "donedeal",
+    "url": {
+      "class": [
+        "card__link"
+      ],
+      "single": true,
+      "attr": "href",
+      "name": "a"
+    },
+    "price": {
+      "class": [
+        "card__price"
+      ],
+      "single": true,
+      "attr": null,
+      "name": "span"
+    },
+    "imgs": {
+      "class": [
+        "card__photo"
+      ],
+      "single": true,
+      "attr": "src",
+      "name": "img"
+    },
+    "attrs": {
+      "class": [
+        "card__body-keyinfo"
+      ],
+      "single": false,
+      "attr": null,
+      "name": "li"
+    }
+  },
+  {
+    "name": "pistonheads",
+    "url": {
+      "class": [
+        "listing-headline"
+      ],
+      "single": true,
+      "attr": "href",
+      "name": "a"
+    },
+    "price": {
+      "class": [
+        "price"
+      ],
+      "single": true,
+      "attr": null,
+      "name": "span"
+    },
+    "attrs": {
+      "class": [
+        "listing-info"
+      ],
+      "single": false,
+      "attr": null,
+      "name": "li"
+    },
+    "imgs": {
+      "class": [
+        "mainimg"
+      ],
+      "single": false,
+      "attr": "src",
+      "name": "img"
+    }
+  }
+]

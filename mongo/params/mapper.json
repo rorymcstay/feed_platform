@@ -1,0 +1,34 @@
+[
+  {
+    "name": "donedeal",
+    "json_identifier": "window.adDetails",
+    "attrs": {
+      "price": "price",
+      "county": "county",
+      "currency": "currency",
+      "photos": "medium",
+      "ad_age": "age",
+      "keyInfo": "keyInfo",
+      "title": "header",
+      "description": "description"
+    }
+  },
+  {
+    "name": "pistonheads",
+    "json_identifier": "pageDnaObj",
+    "attrs": {
+      "price": "price",
+      "county": "county",
+      "currency": "price_currency",
+      "make": "manufacturer",
+      "model": "model",
+      "year": "age",
+      "fuel": "fuel_type",
+      "engine_size": "engine_size",
+      "private": "private",
+      "style": "styles",
+      "ad_age": "age",
+      "title": "title"
+    }
+  }
+]

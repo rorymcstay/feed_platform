@@ -1,0 +1,43 @@
+[
+  {
+    "name": "donedeal",
+    "skeleton": [
+      "https://www.donedeal.co.uk/cars/",
+      "{make}",
+      "/",
+      "{model}",
+      "?sort=",
+      "{sort}",
+      "&start=",
+      "{page}"
+    ],
+    "sort_first": {
+      "newest": "publishdate%20desc",
+      "oldest": "publishdate%20asc",
+      "high": "price%20desc",
+      "low": "price%20asc"
+    },
+    "page": {
+      "increment": 28
+    }
+  },
+  {
+    "name": "pistonheads",
+    "skeleton": [
+      "https://www.pistonheads.com/classifieds?Category=used-cars&",
+      "&SortOptions=",
+      "{sort}",
+      "&Page=",
+      "{page}"
+    ],
+    "sort_first": {
+      "newest": "Date",
+      "oldest": "Random",
+      "high": "PriceHighToLow",
+      "low": "PriceLowToHigh"
+    },
+    "page": {
+      "increment": 1
+    }
+  }
+]

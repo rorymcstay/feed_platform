@@ -1,5 +1,4 @@
-{
-  "_id": ObjectId(),
+[{
   "name": "mapper",
   "value": {
     "title": "Data Mapping configuration",
@@ -22,4 +21,4 @@
       }
     }
   }
-}
+}]
