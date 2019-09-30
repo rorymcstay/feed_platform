@@ -57,7 +57,7 @@ services:
     image: hazelcast/hazelcast
     container_name: hazelcast
     volumes:
-    - ./feed_platform:/configFolder
+    - ./hazelcast:/configFolder
     environment:
     - JAVA_OPTS=-Dhazelcast.config=/configFolder/hazelcast.xml -Dhazelcast.mancenter.url=http://cache-manager:8080/hazelcast-mancenter -Dgroup.name=dev -Dgroup.password=dev-pass
     ports:

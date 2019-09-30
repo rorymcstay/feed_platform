@@ -3,7 +3,7 @@ version: '3'
 services:
 
   leader:
-    container_name: leader
+    container_name: feed_leader_template
     image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/leader:0.0.0
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -16,6 +16,7 @@ services:
 
   worker:
     image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/worker:0.0.0
+    restart: unless-stopped
     volumes:
     - /var/run/docker.docker:/sock/var/run.sock
     depends_on:
@@ -25,8 +26,8 @@ services:
     - docker.env
 
   router:
-    container_name: router
     image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/routing:0.0.0
+    restart: unless-stopped
     ports:
     - "5002:5000"
     stop_grace_period: 5s
@@ -34,8 +35,8 @@ services:
       - docker.env
 
   nanny:
-    container_name: nanny
     image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/nanny:0.0.0
+    restart: unless-stopped
     volumes:
     - ./config:/home/config
     - /var/run/docker.sock:/var/run/docker.sock
@@ -49,6 +50,7 @@ services:
 
   ui-server:
     image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/ui-server:0.0.0
+    restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
@@ -57,8 +59,8 @@ services:
       - docker.env
 
   summarizer:
-    container_name: summarizer
     image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/summarizer:0.0.0
+    restart: unless-stopped
     volumes:
     - /var/run/docker.sock:/var/run/docker.sock
     stop_grace_period: 5s
@@ -66,8 +68,8 @@ services:
     - docker.env
 
   mapper:
-    container_name: mapper
     image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/mapper:0.0.0
+    restart: unless-stopped
     volumes:
     - /var/run/docker.sock:/var/run/docker.sock
     stop_grace_period: 5s
@@ -75,10 +77,13 @@ services:
     - docker.env
 
   persistence:
-    container_name: persistence
     image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/persistence:0.0.0
+    restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     stop_grace_period: 5s
     env_file:
       - docker.env
+
+  feed-admin:
+    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/feed-admin:0.0.0

@@ -4,7 +4,7 @@ import logging
 from pymongo import MongoClient
 
 mongo_params = {
-    "host": os.getenv("MONGO_HOST", "localhost:27017"),
+    "host": os.getenv("DATABASE", "localhost"),
     "username": os.getenv("MONGO_USER", "root"),
     "password": os.getenv("MONGO_PASS", "root"),
     "serverSelectionTimeoutMS": 5
@@ -30,6 +30,7 @@ params
 
 """
 dataroot=os.getenv("DATAROOT", os.getcwd())
+
 
 log = logging.getLogger(__name__)
 
