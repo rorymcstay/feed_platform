@@ -1,16 +1,13 @@
 {
-  "name": "feed-admin",
+  "name": "${COMPONENT}",
   "source": {
     "type": "CODECOMMIT",
-    "location": "ssh://git-codecommit.us-west-2.amazonaws.com/v1/repos/feed-admin",
+    "location": "ssh://git-codecommit.us-west-2.amazonaws.com/v1/repos/${COMPONENT}",
     "gitCloneDepth": 0,
     "insecureSsl": true
   },
   "artifacts": {
     "type": "NO_ARTIFACTS"
-  },
-  "logsConfig": {
-    "cloudwatch-logs-status": "DISABLED"
   },
   "cache": {
     "type": "NO_CACHE",
@@ -28,13 +25,13 @@
       },
       {
         "name": "COMPONENT",
-        "value": "feed-admin",
+        "value": "${COMPONENT}",
         "type": "PLAINTEXT"
       }
     ],
     "privilegedMode": true
   },
-  "serviceRole": "arn:aws:iam::064106913348:user/car_app",
+  "serviceRole": "arn:aws:iam::064106913348:role/car_app",
   "timeoutInMinutes": 5,
   "tags": [
     {
