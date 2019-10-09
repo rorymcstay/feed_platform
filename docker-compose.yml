@@ -87,3 +87,9 @@ services:
 
   feed-admin:
     image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/feed-admin:0.0.0
+    restart: unless-stopped
+    stop_grace_period: 5s
+    env_file:
+      - docker.env
+    ports:
+      - "3000:80"
