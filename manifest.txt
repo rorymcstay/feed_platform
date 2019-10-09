@@ -6,4 +6,4 @@ routing=0.0.0
 summarizer=0.0.0
 worker=0.0.0
 persistence=0.0.0
-feed-amind=0.0.0
+feed-admin=0.0.0

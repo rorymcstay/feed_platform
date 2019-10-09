@@ -1,8 +1,8 @@
 {
-  "name": "${COMPONENT}",
+  "name": "feed-admin",
   "source": {
     "type": "CODECOMMIT",
-    "location": "ssh://git-codecommit.us-west-2.amazonaws.com/v1/repos/feed_${COMPONENT}",
+    "location": "ssh://git-codecommit.us-west-2.amazonaws.com/v1/repos/feed-admin",
     "gitCloneDepth": 0,
     "insecureSsl": true
   },
@@ -25,13 +25,13 @@
       },
       {
         "name": "COMPONENT",
-        "value": "${COMPONENT}",
+        "value": "feed-admin",
         "type": "PLAINTEXT"
       }
     ],
     "privilegedMode": true
   },
-  "serviceRole": "arn:aws:iam::064106913348:role/FeedAdmin",
+  "serviceRole": "arn:aws:iam::064106913348:role/car_app",
   "timeoutInMinutes": 5,
   "tags": [
     {
