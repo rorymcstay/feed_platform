@@ -6,6 +6,7 @@ persistence
 routing
 summarizer
 ui-server
+feed-admin
 worker
 feed-admin
 feed-manager
