@@ -10,7 +10,7 @@ COPY params params
 COPY initialise.py initialise.py
 
 ENV DATAROOT=/usr/local/setup/mongo
-ENV DATABASE="784e3a5d540e:27017"
+ENV DATABASE="mongo:27017"
 
 # Copying over necessary files
 

@@ -7,6 +7,8 @@ routing
 summarizer
 ui-server
 worker
+feed-admin
+feed-manager
 venv
 *.iml
 .auth
