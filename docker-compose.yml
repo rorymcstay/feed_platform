@@ -26,6 +26,7 @@ services:
     - docker.env
 
   router:
+    container_name: feed_router
     image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/routing:0.0.0
     restart: unless-stopped
     ports:
@@ -35,6 +36,7 @@ services:
       - docker.env
 
   nanny:
+    container_name: feed_nanny
     image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/nanny:0.0.0
     restart: unless-stopped
     volumes:
@@ -49,6 +51,7 @@ services:
       - docker.env
 
   ui-server:
+    container_name: feed_ui-server
     image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/ui-server:0.0.0
     restart: unless-stopped
     volumes:
