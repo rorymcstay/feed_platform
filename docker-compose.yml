@@ -52,6 +52,7 @@ services:
     image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/ui-server:0.0.0
     restart: unless-stopped
     volumes:
+      - deployment.env:/home/deployment.env
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
       - "5004:5000"
@@ -86,4 +87,7 @@ services:
       - docker.env
 
   feed-admin:
+    ports:
+    -"80:80"
     image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/feed-admin:0.0.0
+
