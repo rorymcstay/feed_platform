@@ -3,83 +3,79 @@ version: '3'
 services:
 
   worker:
-    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/worker:0.0.0
-    restart: unless-stopped
+    build: ${SOURCE_DIR}/worker
     volumes:
     - /var/run/docker.docker:/sock/var/run.sock
     depends_on:
     - nanny
     stop_grace_period: 5s
     env_file:
-    - ./envs/deployment.env
+    - envs/deployment.env
 
   router:
     container_name: feed_router
-    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/routing:0.0.0
-    restart: unless-stopped
+    build: ${SOURCE_DIR}/routing
+    ports:
+    - "5002:5000"
     stop_grace_period: 5s
     env_file:
-      - ./envs/deployment.env
+      - envs/deployment.env
 
   nanny:
     container_name: feed_nanny
-    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/nanny:0.0.0
-    restart: unless-stopped
+    build: ${SOURCE_DIR}/nanny
     volumes:
     - ./config:/home/config
     - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+    - "5003:5000"
+    environment:
+      BROWSER_BASE_PORT: 4444
     stop_grace_period: 5s
     env_file:
       - ./envs/deployment.env
 
   ui-server:
     container_name: feed_ui-server
-    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/ui-server:0.0.0
-    restart: unless-stopped
+    build: ${SOURCE_DIR}/ui-server
     volumes:
-      - ./envs/:/home/envs
       - /var/run/docker.sock:/var/run/docker.sock
+      - ./envs:/home/src/config
     ports:
-      - "5000:5000"
+      - "5004:5000"
     env_file:
-      - ./envs/deployment.env
+      - envs/deployment.env
 
   summarizer:
-    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/summarizer:0.0.0
-    restart: unless-stopped
+    build: ${SOURCE_DIR}/summarizer
     volumes:
     - /var/run/docker.sock:/var/run/docker.sock
     stop_grace_period: 5s
     env_file:
-    - ./envs/deployment.env
+    - envs/deployment.env
 
   mapper:
-    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/mapper:0.0.0
-    restart: unless-stopped
+    build: ${SOURCE_DIR}/mapper
     volumes:
     - /var/run/docker.sock:/var/run/docker.sock
     stop_grace_period: 5s
     env_file:
-    - ./envs/deployment.env
+    - envs/deployment.env
 
   persistence:
-    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/persistence:0.0.0
-    restart: unless-stopped
+    build: ${SOURCE_DIR}/persistence
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     stop_grace_period: 5s
     env_file:
-      - ./envs/deployment.env
-
+      - envs/deployment.env  
   feed-admin:
     ports:
-      - "80:80"
-    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/feed-admin:0.0.0
-    restart: unless-stopped
+     - "3000:80"
+    container_name: feed-admin
+    build: ${SOURCE_DIR}/feed-admin
     stop_grace_period: 5s
-    env_file:
-      - ./envs/deployment.env
     environment:
-      - UISERVER=feed_ui-server:5000
-      - SERVERNAME=feed-admin
+    - UISERVER=http://ui-server:5000
+    - SERVERNAME=feed-admin
 
