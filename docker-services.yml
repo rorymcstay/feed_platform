@@ -78,7 +78,7 @@ services:
     # http://docs.hazelcast.org/docs/latest-development/manual/html/Management/Clustered_REST_via_Management_Center.html
     - JAVA_OPTS=-Dhazelcast.mc.rest.enabled=true
     ports:
-    - 8080:8080
+    - 8082:8080
   database:
     container_name: database
     image: postgres
