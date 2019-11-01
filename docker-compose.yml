@@ -51,6 +51,9 @@ services:
     volumes:
     - /var/run/docker.sock:/var/run/docker.sock
     stop_grace_period: 5s
+    environment:
+      - TOPICS=results
+      - PREFIX=stg
     env_file:
     - envs/deployment.env
 
