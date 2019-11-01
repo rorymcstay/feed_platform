@@ -52,6 +52,9 @@ services:
     stop_grace_period: 5s
     env_file:
     - ./envs/deployment.env
+    environment:
+      - TOPICS=results
+      - PREFIX=stg
 
   mapper:
     image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/mapper:0.0.0
