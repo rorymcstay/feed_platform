@@ -29,6 +29,8 @@ services:
     - ./config:/home/config
     - /var/run/docker.sock:/var/run/docker.sock
     stop_grace_period: 5s
+    environment:
+    - NETWORK=feed_platform_default
     env_file:
       - ./envs/deployment.env
 
@@ -80,6 +82,6 @@ services:
     env_file:
       - ./envs/deployment.env
     environment:
-      - UISERVER=feed_ui-server:5000
+      - UISERVER=http://ui-server:5000
       - SERVERNAME=feed-admin
 
