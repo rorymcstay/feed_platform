@@ -15,6 +15,6 @@ export DATAROOT=/home/rory/feed_platform/mongo
 
 alias dc="docker-compose -f docker-compose.yml "
 
-alias dc-deploy="docker-compose -f deploy.yml "
-aliad dc-services="docker-compose -f services.yml"
+alias dc-deploy="docker-compose -f deployment.yml "
+alias dc-services="docker-compose -f services.yml"
 
