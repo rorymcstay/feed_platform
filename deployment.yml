@@ -79,7 +79,7 @@ services:
   feed-admin:
     ports:
       - "80:80"
-    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/feed-admin:0.0.0
+    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/feed-admin:0.0.1
     restart: unless-stopped
     stop_grace_period: 5s
     env_file:
