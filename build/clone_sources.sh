@@ -1,4 +1,6 @@
-export DEPLOYMENT_ROOT=~/app/feed/
+#!/bin/sh
+
+export DEPLOYMENT_ROOT=~/feed/dev/feed/
 
 clone_sources(){
 
@@ -11,8 +13,8 @@ clone_sources(){
 
         echo git clone "${GIT_CLONE_URL}"/"${PROJECT_NAME}"_"${image_dets[0]}" "${DEPLOYMENT_ROOT}"/"${image_dets[0]}"
         git clone "${GIT_CLONE_URL}"/"${PROJECT_NAME}"_"${image_dets[0]}" "${DEPLOYMENT_ROOT}"/"${image_dets[0]}"
-        cd "${DEPLOYMENT_ROOT}"/${image_dets[0]} && git checkout "${image_dets[1]}"
-        cd "${DEPLOYMENT_ROOT}" || exit
+        #cd "${DEPLOYMENT_ROOT}"/${image_dets[0]} && git checkout "${image_dets[1]}"
+        #cd "${DEPLOYMENT_ROOT}" || exit
   done < $1
 }
 
@@ -33,3 +35,5 @@ hello() {
        echo false
   fi
 }
+
+#clone_sources

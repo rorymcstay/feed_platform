@@ -1,8 +1,8 @@
 export IMAGE_REPOSITORY=064106913348.dkr.ecr.us-west-2.amazonaws.com
 export PROJECT_NAME=feed
-export SOURCE_DIR=$HOME/dev/feed
+export SOURCE_DIR=/home/emmett/feed/dev/feed
 
-export GIT_CLONE_URL=ssh://git-codecommit.us-west-2.amazonaws.com/v1/repos
+export GIT_CLONE_URL=https://git-codecommit.us-west-2.amazonaws.com/v1/repos
 
 export MONGO_HOST=localhost
 export MONGO_PORT=20717
