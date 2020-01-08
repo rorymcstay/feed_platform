@@ -1,3 +1,5 @@
+#!/bin/sh
+
 clone_sources(){
   # pass a file like
   # component=0.0.0
