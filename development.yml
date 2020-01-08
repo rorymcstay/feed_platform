@@ -79,6 +79,6 @@ services:
     build: ${SOURCE_DIR}/feed-admin
     stop_grace_period: 5s
     environment:
-    - UISERVER=ui-server:5000
+    - UISERVER=http://feed_ui-server:5000
     - SERVERNAME=feed-admin
 

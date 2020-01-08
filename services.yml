@@ -89,3 +89,7 @@ services:
       - POSTGRES_USER=feeds
       - POSTGRES_DB=feeds
 
+networks:
+  feed_network:
+    driver: bridge
+

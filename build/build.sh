@@ -32,5 +32,5 @@ build_and_push_images() {
       docker push "${IMAGE_REPOSITORY}"/${PROJECT_NAME}/"${image_dets[0]}:${image_dets[1]}"
       rm -rf "${DEPLOYMENT_ROOT}"/"${image_dets[0]}"
 
-   done < /"${DEPLOYMENT_ROOT}"/build/manifest.txt
+   done < /"${DEPLOYMENT_ROOT}"/manifest.txt
 }
