@@ -1,5 +1,5 @@
 # project details
-export DEPLOYMENT_ROOT=~/app/feed
+export DEPLOYMENT_ROOT=$HOME/app/feed
 export SOURCE_DIR=$HOME/dev/feed
 export PROJECT_NAME=feed
 

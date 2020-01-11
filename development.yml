@@ -44,6 +44,7 @@ services:
     ports:
       - "5004:5000"
     env_file:
+
       - envs/deployment.env
 
   summarizer:

@@ -25,7 +25,7 @@
     }
   },
   {
-    "name": "feed",
+    "name": "leader",
     "value": {
       "title": "Feed Config",
       "description": "Configuration for fees",

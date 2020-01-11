@@ -1,14 +1,31 @@
-To install
+Getting started
 
-    source environment.sh
+1. make the directories 
+    
+        mkdir $HOME/dev/feed
+    
+    This repo should be in $HOME/app/feed
+2. then do
+    
+        ~/app/feed$ source environment.sh
+        ~/app/feed$ clone_sources
 
-    clone_sources
+3. then start the services
+    
+        ~/app/feed$ dc-services up
 
-    dc build
+4. then initialise the mongo database
+        
+        ~/app/feed$ docker build config_data --tag config_data
+        ~/app/feed$ docker run --network feed_default config_data
+        # TODO run the config_data container with the services.yml config
+        
+5. start the components
 
-    dc-services up
+        ~/app/feed$ dc up -d nanny ui-server router
+        ~/app/feed$ dc-up # this will follow logs allowing you to detatch
+   
 
-    dc up
 
 Platform Road Map:
 
