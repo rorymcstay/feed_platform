@@ -27,6 +27,14 @@ Getting started
    
 
 
+# Stop Service
+NOTE: environment.sh must be ran by source or active before commands can be ran
+
+To stop the feed_ containers run the following command
+    dc down 
+
+To stop the backend services run the following command
+    dc-services down
 Platform Road Map:
 
 # monitoring
