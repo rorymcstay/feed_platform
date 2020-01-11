@@ -12,7 +12,7 @@ export MONGO_HOST=localhost
 export MONGO_PORT=20717
 export DATABASE_HOST=localhost
 export DATABASE_PORT=5432
-export DATAROOT=/home/rory/feed/mongo
+export DATAROOT=$HOME/app/feed/mongo
 
 # docker file helpers
 alias dc="docker-compose -f $DEPLOYMENT_ROOT/development.yml "
