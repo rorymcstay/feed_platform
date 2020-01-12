@@ -22,3 +22,6 @@ alias dc-services="docker-compose -f $DEPLOYMENT_ROOT/services.yml"
 
 source $DEPLOYMENT_ROOT/build/clone_sources.sh
 
+alias gitinfoall="for com in $(ls $SOURCE_DIR); do cd $SOURCE_DIR/$com; echo \"$i\"; git status; cd $SOURCE_DIR; done"
+alias gitpushall="for com in $(ls $SOURCE_DIR); do cd $SOURCE_DIR/$com; echo \"### $i ###\"; git push; cd $SOURCE_DIR; done"
+

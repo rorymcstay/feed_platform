@@ -44,10 +44,10 @@ services:
     ports:
       - "5004:5000"
     env_file:
-
       - envs/deployment.env
 
   summarizer:
+    container_name: feed_summarizer
     build: ${SOURCE_DIR}/summarizer
     volumes:
     - /var/run/docker.sock:/var/run/docker.sock
@@ -59,6 +59,7 @@ services:
     - envs/deployment.env
 
   mapper:
+    container_name: feed_mapper
     build: ${SOURCE_DIR}/mapper
     volumes:
     - /var/run/docker.sock:/var/run/docker.sock
@@ -67,6 +68,7 @@ services:
     - envs/deployment.env
 
   persistence:
+    container_name: feed_persistence
     build: ${SOURCE_DIR}/persistence
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
