@@ -5,7 +5,7 @@ export PROJECT_NAME=feed
 
 # sdlc
 export IMAGE_REPOSITORY=064106913348.dkr.ecr.us-west-2.amazonaws.com
-export GIT_CLONE_URL=ssh://git-codecommit.us-west-2.amazonaws.com/v1/repos
+export GIT_CLONE_URL=https://git-codecommit.us-west-2.amazonaws.com/v1/repos
 
 # config database load params
 export MONGO_HOST=localhost
