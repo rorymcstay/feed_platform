@@ -10,9 +10,7 @@ phases:
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
-      - git clone https://git-codecommit.us-west-2.amazonaws.com/v1/repos/feed_platform
-        # run code git wrapper
-        # check the tag
+      - git clone $GIT_URL/feed_platform
   build:
     commands:
       - echo Build started on `date`

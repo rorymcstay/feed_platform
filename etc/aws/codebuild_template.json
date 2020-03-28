@@ -4,8 +4,14 @@
     "type": "CODECOMMIT",
     "location": "https://git-codecommit.us-west-2.amazonaws.com/v1/repos/feed_${COMPONENT}",
     "gitCloneDepth": 0,
-    "insecureSsl": true
+    "insecureSsl": true,
+    "buildspec":"$CODEBUILD_SRC_DIR_platform/etc/aws/buildspec.yml"
   },
+  "secondarySources": [{
+    "type":"CODECOMMIT",
+    "location": "https://git-codecommit.us-west-2.amazonaws.com/v1/repos/feed_${COMPONENT}",
+    "sourceIdentifier": "platform"
+  }],
   "artifacts": {
     "type": "NO_ARTIFACTS"
   },
@@ -32,6 +38,11 @@
         "name": "IMAGE_REPOSITORY",
         "value": "064106913348.dkr.ecr.us-west-2.amazonaws.com",
         "type": "PLAINTEXT"
+      },
+      {
+          "name": "GIT_URL",
+          "value": "https://git-codecommit.us-west-2.amazonaws.com/v1/repos/",
+          "type": "PLAINTEXT"
       }
     ],
     "privilegedMode": true
@@ -42,6 +53,10 @@
     {
       "key": "project",
       "value": "feed"
+    },
+    {
+        "key": "component",
+        "value": "${COMPONENT}"
     }
   ],
   "badgeEnabled": true

@@ -1,8 +1,0 @@
-feed-admin
-ui-server
-leader
-persistence
-mapper
-nanny
-routing
-worker

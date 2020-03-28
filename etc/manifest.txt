@@ -1,0 +1,10 @@
+ui-server=
+leader=
+mapper=
+nanny=
+routing=
+summarizer=
+worker=
+persistence=
+commands=
+feed-admin=
