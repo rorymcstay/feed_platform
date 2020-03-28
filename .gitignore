@@ -1,4 +1,6 @@
 .idea
+templates
+*.swp
 leader
 mapper
 nanny

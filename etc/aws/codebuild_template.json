@@ -9,7 +9,7 @@
   },
   "secondarySources": [{
     "type":"CODECOMMIT",
-    "location": "https://git-codecommit.us-west-2.amazonaws.com/v1/repos/feed_${COMPONENT}",
+    "location": "https://git-codecommit.us-west-2.amazonaws.com/v1/repos/feed_platform",
     "sourceIdentifier": "platform"
   }],
   "artifacts": {
