@@ -58,6 +58,17 @@ services:
     env_file:
     - envs/deployment.env
 
+  commands:
+    container_name: feed_commands
+    build: ${SOURCE_DIR}/commands
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+    stop_grace_period: 5s
+    ports:
+      - "5001:5000"
+    env_file:
+    - envs/deployment.env
+
   mapper:
     container_name: feed_mapper
     build: ${SOURCE_DIR}/mapper
@@ -74,7 +85,8 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     stop_grace_period: 5s
     env_file:
-      - envs/deployment.env  
+      - envs/deployment.env 
+
   feed-admin:
     ports:
      - "3000:80"
@@ -83,5 +95,6 @@ services:
     stop_grace_period: 5s
     environment:
     - UISERVER=http://feed_ui-server:5000
+    - COMMANDSERVER=http://feed_commands:5000
     - SERVERNAME=feed-admin
 
