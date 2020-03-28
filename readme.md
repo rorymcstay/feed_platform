@@ -3,7 +3,7 @@ Getting started
 1. make the directories 
     
         mkdir $HOME/dev/feed
-    
+
     This repo should be in $HOME/app/feed
 2. then do
     
@@ -37,11 +37,11 @@ Getting started
 
 ## monitoring
 https://grafana.com/grafana/dashboards/893
-    
+
     - monitoring.yml
     - grafana/
     - prometheus/
-    
+
 ## services
     - services.yml
 
@@ -50,5 +50,6 @@ https://grafana.com/grafana/dashboards/893
     - docker.env
 
 ## Database initialisation script
+
 
 
