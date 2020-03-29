@@ -1,4 +1,4 @@
-
+IMAGE_REPO_NAME=$PROJECT_NAME/$COMPONENT
 echo "git describe --exact-match --tags $(git log -n1 --pretty='%h')"
 tag=$(git describe --exact-match --tags $(git log -n1 --pretty='%h'))
 
@@ -7,9 +7,9 @@ echo $tag | grep -E -q "^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(-(0|[1-9]\d*|\
     || IS_RELEASE=0
 
 if [ $IS_RELEASE -eq "1" ]; then
-    echo "publishing docker image version $tag" 
-    docker tag $IMAGE_REPO_NAME:$tag $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:tag;
-    docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$tag;
+    echo "publishing docker image version $tag";
+    docker tag $IMAGE_REPO_NAME:$IMAGE_REPOSITORY/$IMAGE_REPO_NAME:tag;
+    docker push $IMAGE_REPOSITORY/$IMAGE_REPO_NAME:$tag;
     exit;
 fi
 
