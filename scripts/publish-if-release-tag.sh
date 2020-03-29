@@ -1,3 +1,10 @@
+git clone $GIT_URL/"$PROJECT_NAME"_"$COMPONENT" git_dir 
+
+cd git_dir || exit
+
+git checkout $CODEBUILD_RESOLVED_SOURCE_VERSION
+
+
 IMAGE_NAME=$PROJECT_NAME/$COMPONENT
 echo "git describe --exact-match --tags $(git log -n1 --pretty='%h')"
 tag=$(git describe --exact-match --tags $(git log -n1 --pretty='%h'))

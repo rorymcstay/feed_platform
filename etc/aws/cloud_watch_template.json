@@ -1,0 +1,23 @@
+{
+  "source": [
+    "aws.codecommit"
+  ],
+  "detail-type": [
+    "CodeCommit Repository State Change"
+  ],
+  "resources": [
+    "arn:aws:codecommit:us-west-2:064106913348:feed_feed-admin"
+  ],
+  "detail": {
+    "event": [
+      "referenceCreated",
+      "referenceUpdated"
+    ],
+    "referenceType": [
+      "branch"
+    ],
+    "referenceName": [
+      "master"
+    ]
+  }
+}
