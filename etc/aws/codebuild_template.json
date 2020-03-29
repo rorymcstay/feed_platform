@@ -4,8 +4,7 @@
     "type": "CODECOMMIT",
     "location": "https://git-codecommit.us-west-2.amazonaws.com/v1/repos/feed_${COMPONENT}",
     "gitCloneDepth": 0,
-    "insecureSsl": true,
-    "buildspec":"$CODEBUILD_SRC_DIR_platform/etc/aws/buildspec.yml"
+    "insecureSsl": true
   },
   "secondarySources": [{
     "type":"CODECOMMIT",

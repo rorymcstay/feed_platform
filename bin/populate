@@ -11,6 +11,8 @@ parser.add_argument('--file')
 parser.add_argument('--escaped', action='store_true', default=False)
 
 def replaceEnvVar(string):
+    if "CODEBUILD" in string:
+        return string
     replacement = string.replace("$", "").format(**os.environ)
     if replacement==string:
         logging.info("Error replacing {}".format(string))

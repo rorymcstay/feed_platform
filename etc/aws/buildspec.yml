@@ -10,7 +10,6 @@ phases:
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
-      - git clone $GIT_URL/feed_platform
   build:
     commands:
       - echo Build started on `date`
@@ -19,4 +18,4 @@ phases:
   post_build:
     commands:
       - echo Build completed on `date`
-      - feed_platform/scripts/code-build-git-wrapper.sh https://git-codecommit.us-west-2.amazonaws.com/v1/repos/"$PROJECT_NAME"_"$COMPONENT"
+      - $CODEBUILD_SRC_DIR_platform/scripts/code-build-git-wrapper.sh https://git-codecommit.us-west-2.amazonaws.com/v1/repos/"$PROJECT_NAME"_"$COMPONENT"

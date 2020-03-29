@@ -84,9 +84,3 @@ fi
 
 echo "Not publishing image as $tag"
 
-
-
-
-
-mv .git "$WORKING_DIR"
-
