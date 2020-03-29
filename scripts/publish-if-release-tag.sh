@@ -9,7 +9,7 @@ echo $tag | grep -E -q "^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(-(0|[1-9]\d*|\
 if [ $IS_RELEASE -eq "1" ]; then
     echo "publishing docker image version $tag";
     docker images --all;
-    docker tag $IMAGE_REPOSITORY/$IMAGE_NAME $IMAGE_REPOSITORY/$IMAGE_NAME:tag;
+    docker tag $IMAGE_REPOSITORY/$IMAGE_NAME $IMAGE_REPOSITORY/$IMAGE_NAME:$tag;
     docker push $IMAGE_REPOSITORY/$IMAGE_NAME:$tag;
     exit;
 fi
