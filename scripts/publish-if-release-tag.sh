@@ -1,4 +1,4 @@
-IMAGE_REPO_NAME=$PROJECT_NAME/$COMPONENT
+IMAGE_NAME=$PROJECT_NAME/$COMPONENT
 echo "git describe --exact-match --tags $(git log -n1 --pretty='%h')"
 tag=$(git describe --exact-match --tags $(git log -n1 --pretty='%h'))
 
@@ -9,8 +9,8 @@ echo $tag | grep -E -q "^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(-(0|[1-9]\d*|\
 if [ $IS_RELEASE -eq "1" ]; then
     echo "publishing docker image version $tag";
     docker images --all;
-    docker tag $COMPONENT:$CODEBUILD_RESOLVED_SOURCE_VERSION $IMAGE_REPOSITORY/$IMAGE_REPO_NAME:tag;
-    docker push $IMAGE_REPOSITORY/$IMAGE_REPO_NAME:$tag;
+    docker tag $IMAGE_REPOSITORY/$IMAGE_NAME $IMAGE_REPOSITORY/$IMAGE_NAME:tag;
+    docker push $IMAGE_REPOSITORY/$IMAGE_NAME:$tag;
     exit;
 fi
 
