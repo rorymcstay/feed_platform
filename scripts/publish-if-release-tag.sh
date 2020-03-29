@@ -1,4 +1,4 @@
-git clone $GIT_URL/"$PROJECT_NAME"_"$COMPONENT" git_dir 
+git clone $GIT_URL git_dir 
 
 cd git_dir || exit
 
