@@ -8,7 +8,7 @@ echo $tag | grep -E -q "^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(-(0|[1-9]\d*|\
 
 if [ $IS_RELEASE -eq "1" ]; then
     echo "publishing docker image version $tag";
-    docker tag $IMAGE_REPO_NAME:$IMAGE_REPOSITORY/$IMAGE_REPO_NAME:tag;
+    docker tag $COMPONENT:$CODEBUILD_RESOLVED_SOURCE_VERSION $IMAGE_REPOSITORY/$IMAGE_REPO_NAME:tag;
     docker push $IMAGE_REPOSITORY/$IMAGE_REPO_NAME:$tag;
     exit;
 fi
