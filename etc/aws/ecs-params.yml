@@ -4,13 +4,11 @@ task_definition:
   task_execution_role: "arn:aws:iam::064106913348:role/FeedAdmin"
   ecs_network_mode: awsvpc
   task_size:
-    cpu_limit: 512
-    mem_limit: 2048
-  docker_volumes:
-    - name: 'hazelcastConfig'
+    cpu_limit: 2048
+    mem_limit: 8192
 
 run_params:
   network_configuration:
     awsvpc_configuration:
       subnets: 
-        - subnet-018b103b25eb9c865 
+        - subnet-018b103b25eb9c865  
