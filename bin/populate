@@ -1,59 +1,13 @@
 #!/usr/bin/env python3
-import json
-import os
-import sys
-import logging
+from populate import *
 import argparse
 
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--file')
+parser.add_argument('--outfile', default='')
 parser.add_argument('--escaped', action='store_true', default=False)
 
-def replaceEnvVar(string):
-    if "CODEBUILD" in string:
-        return string
-    replacement = string.replace("$", "").format(**os.environ)
-    if replacement==string:
-        logging.info("Error replacing {}".format(string))
-    return replacement
-
-
-def replaceIterList(lis):
-    new = []
-    for item in lis:
-        if isinstance(item, dict):
-            new.append(replaceIter(item))
-        elif isinstance(item, list):
-            new.append(replaceIterList(item))
-        else:
-            new.append(replaceEnvVar(str(item)))
-    return new
-
-
-def replaceIter(dic):
-    new = dic
-    for key in dic:
-        if isinstance(dic[key], dict):
-            new.update({key: replaceIter(dic[key])})
-            continue
-        if isinstance(dic[key], list):
-            new.update({key: replaceIterList(dic[key])})
-        if isinstance(dic[key], str) and "$" in dic[key]:
-            new.update({key: replaceEnvVar(dic[key])})
-    return new
-
-
 if __name__ == '__main__':
-    variables = dict(**os.environ)
     args = parser.parse_args()
-    with open(args.file) as fileString:
-        fileString = fileString.read()
-        dic = json.loads(fileString)
-        populated = replaceIter(dic)
-    jsonString = json.dumps(populated)
-    if args.escaped:
-        print(json.dumps(jsonString))
-    else:
-        print(jsonString)
-
+    populate(args.file, args.escaped, args.outfile)

@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 
 services:
   mongo:
@@ -40,8 +40,6 @@ services:
     ports:
      - '9092:9092'
      - '29092:29092'
-    links:
-      - zookeeper:zk
     environment:
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
       - KAFKA_CREATE_TOPICS="donedeal-results;donedeal-items;pistonheads-items;pistonheads-results;worker-queue"
@@ -49,36 +47,18 @@ services:
       - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
       - ALLOW_PLAINTEXT_LISTENER=yes
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
 
     # hazelcast imdg
   hazelcast:
     image: hazelcast/hazelcast
     container_name: hazelcast
     volumes:
-    - $DEPLOYMENT_ROOT/etc/hazelcast:/configFolder
+    - hazelcastConfig:/configFolder
     environment:
     - JAVA_OPTS=-Dhazelcast.config=/configFolder/hazelcast.xml -Dhazelcast.mancenter.url=http://cache-manager:8080/hazelcast-mancenter -Dgroup.name=dev -Dgroup.password=dev-pass
     ports:
     - 5701:5701
-    links:
-    - management-center:mancenter
 
-    #management center
-  management-center:
-    image: hazelcast/management-center
-    container_name: cache-manager
-    # persisting mancenter users db folder to local disk
-    volumes:
-    - ~/mancenter3.8:/mancenter-3.8
-    environment:
-    - MANCENTER_DATA=/mancenter-3.8
-    # enable REST interface on management center
-    # http://docs.hazelcast.org/docs/latest-development/manual/html/Management/Clustered_REST_via_Management_Center.html
-    - JAVA_OPTS=-Dhazelcast.mc.rest.enabled=true
-    ports:
-    - 8082:8080
   database:
     container_name: database
     image: postgres
@@ -88,8 +68,5 @@ services:
       - POSTGRES_PASSWORD=feeds
       - POSTGRES_USER=feeds
       - POSTGRES_DB=feeds
-
-networks:
-  feed_network:
-    driver: bridge
-
+volumes:
+    hazelcastConfig:

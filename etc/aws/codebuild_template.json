@@ -40,7 +40,7 @@
       },
       {
           "name": "GIT_URL",
-          "value": "https://git-codecommit.us-west-2.amazonaws.com/v1/repos/",
+          "value": "https://git-codecommit.us-west-2.amazonaws.com/v1/repos/feed_${COMPONENT}",
           "type": "PLAINTEXT"
       }
     ],

@@ -1,12 +1,10 @@
-version: '3'
+version: '3.0'
 
 services:
 
   worker:
     image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/worker:0.0.0
     restart: unless-stopped
-    volumes:
-    - /var/run/docker.docker:/sock/var/run.sock
     depends_on:
     - nanny
     stop_grace_period: 5s
@@ -25,9 +23,6 @@ services:
     container_name: feed_nanny
     image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/nanny:0.0.0
     restart: unless-stopped
-    volumes:
-    - ./config:/home/config
-    - /var/run/docker.sock:/var/run/docker.sock
     stop_grace_period: 5s
     environment:
     - NETWORK=feed_default
@@ -38,19 +33,19 @@ services:
     container_name: feed_ui-server
     image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/ui-server:0.0.0
     restart: unless-stopped
-    volumes:
-      - ./envs/:/home/envs
-      - /var/run/docker.sock:/var/run/docker.sock
-    ports:
-      - "5000:5000"
     env_file:
       - ./envs/deployment.env
+
+  commands:
+    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/summarizer:0.0.0
+    restart: unless-stopped
+    stop_grace_period: 5s
+    env_file:
+    - envs/deployment.env
 
   summarizer:
     image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/summarizer:0.0.0
     restart: unless-stopped
-    volumes:
-    - /var/run/docker.sock:/var/run/docker.sock
     stop_grace_period: 5s
     env_file:
     - ./envs/deployment.env
@@ -61,8 +56,6 @@ services:
   mapper:
     image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/mapper:0.0.0
     restart: unless-stopped
-    volumes:
-    - /var/run/docker.sock:/var/run/docker.sock
     stop_grace_period: 5s
     env_file:
     - ./envs/deployment.env
@@ -70,21 +63,20 @@ services:
   persistence:
     image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/persistence:0.0.0
     restart: unless-stopped
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
     stop_grace_period: 5s
     env_file:
       - ./envs/deployment.env
 
   feed-admin:
-    ports:
-      - "80:80"
     image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/feed-admin:0.0.1
     restart: unless-stopped
+    ports:
+      - "80:80"
     stop_grace_period: 5s
     env_file:
       - ./envs/deployment.env
     environment:
-      - UISERVER=http://ui-server:5000
+      - UISERVER=http://feed_ui-server:5000
+      - COMMANDSERVER=http://feed_commands:5000
       - SERVERNAME=feed-admin
 

@@ -40,3 +40,4 @@ alias gitinfoall="for com in $(ls $SOURCE_DIR); do cd $SOURCE_DIR/$com; echo \"$
 alias gitpushall="for com in $(ls $SOURCE_DIR); do cd $SOURCE_DIR/$com; echo \"### $i ###\"; git push; cd $SOURCE_DIR; done"
 
 export PATH="$PATH:/$DEPLOYMENT_ROOT/bin"
+export PYTHONPATH="$PYTHONPATH:$DEPLOYMENT_ROOT/lib/python"
