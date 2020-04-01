@@ -1,0 +1,171 @@
+{
+  "ipcMode": null,
+  "executionRoleArn": "arn:aws:iam::064106913348:role/FeedAdmin",
+  "containerDefinitions": [
+   {
+      "image": "${IMAGE_REPOSITORY}//routing:0.0.0",
+      "name": "router",
+      "cpu": 251,
+      "memory": 256,
+      "portMappings": {
+          "containerPort": 5000
+      }
+      "dependsOn": [
+          {
+             "Condition": "START",
+             "ContainerName": "nanny"
+          }
+      ]
+
+    },
+    { 
+
+      "image": "${IMAGE_REPOSITORY}/${PROJEC_NAME}/worker:0.0.0",
+      "name": "worker",
+      "cpu": 256,
+      "dependsOn": [
+          {
+             "Condition": "START",
+             "ContainerName": "nanny"
+          }
+      ]
+
+    },
+    {
+      "image": "${IMAGE_REPOSITORY}/${PROJEC_NAME}/ui-server:0.0.0",
+      "name": "ui-server",
+      "cpu": 512,
+      "memory": 500,
+      "hostname": null,
+      "portMappings": {
+          "containerPort": 5000
+      },
+      "dependsOn": [
+          {
+             "Condition": "START",
+             "ContainerName": "nanny"
+          }
+      ]
+
+    },
+    {
+      "image": "${IMAGE_REPOSITORY}/${PROJEC_NAME}/commands:0.0.0",
+      "name": "commands",
+      "cpu": 512,
+      "memory": 512,
+      "hostname": null,
+      "portMappings": {
+          "containerPort": 5000
+      },
+      "dependsOn": [
+          {
+             "Condition": "START",
+             "ContainerName": "nanny"
+          }
+      ]
+    },
+    {
+      "image": "${IMAGE_REPOSITORY}/${PROJEC_NAME}/summarizer:0.0.0",
+      "name": "summarizer"
+      "cpu": 2048,
+      "memory": 1000,
+      "stopTimeout": 5,
+      "dependsOn": [
+          {
+             "Condition": "START",
+             "ContainerName": "nanny"
+          }
+      ]
+      "startTimeout": null
+    },
+    {
+      "image": "${IMAGE_REPOSITORY}/${PROJEC_NAME}/feed-admin:0.0.1",
+      "name": "feed-admin",
+      "portMappings": {
+          "containerPort": 3000
+      },
+      "portMappings": [],
+      "cpu": 512,
+      "memory": 512,
+      "dependsOn": [
+            {
+               "Condition": "START",
+               "ContainerName": "ui-server"
+            },
+            {
+               "Condition": "START",
+               "ContainerName": "commands"
+            }
+      ]
+    },
+    {
+      "image": "${IMAGE_REPOSITORY}/${PROJEC_NAME}/persistence:0.0.0",
+      "name": "persistence",
+      "cpu": 2048,
+      "memory": 1000,
+      "stopTimeout": 5,
+      "dependsOn": [
+          {
+             "Condition": "START",
+             "ContainerName": "nanny"
+          }
+      ]
+      "startTimeout": null
+
+    },
+    {
+      "image": "${IMAGE_REPOSITORY}/${PROJEC_NAME}/nanny:0.0.0",
+      "name": "nanny",
+      "cpu": 512,
+      "portMappings": {
+          "containerPort": 3000
+      },
+      "memory": 512,
+      "stopTimeout": 5,
+      "dependsOn": [
+          {
+              "Condition": "Start",
+              "ContainerName": "kafka"
+          },
+          {
+              "Condition": "Start",
+              "ContainerName": "mongo"
+          },
+          {
+              "Condition": "Start",
+              "ContainerName": "database"
+          }
+      ]
+    }
+  ],
+  "memory": ,
+  "taskRoleArn": null,
+  "compatibilities": [
+    "EC2"
+  ],
+  "taskDefinitionArn": "arn:aws:ecs:us-west-2:064106913348:task-definition/deployment:1",
+  "family": "deployment",
+  "requiresAttributes": [
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
+      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.17"
+    },
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
+      "name": "ecs.capability.container-ordering"
+    }
+  ],
+  "pidMode": null,
+  "requiresCompatibilities": [],
+  "networkMode": null,
+  "cpu": null,
+  "revision": 1,
+  "status": "ACTIVE",
+  "inferenceAccelerators": null,
+  "proxyConfiguration": null,
+  "volumes": []
+}

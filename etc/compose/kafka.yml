@@ -1,29 +1,6 @@
 version: '3'
 
 services:
-  mongo:
-    image: mongo
-    container_name: mongo
-    restart: always
-    ports:
-    - "27017:27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: root
-    command: mongod
-
-  mongo-express:
-    image: mongo-express
-    container_name: mongo-express
-    restart: always
-    depends_on:
-    - mongo
-    ports:
-    - "8081:8081"
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: root
-
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
     container_name: zookeeper
@@ -38,13 +15,16 @@ services:
     image: confluentinc/cp-kafka:latest
     container_name: kafka
     logging:
-       driver: "awslogs"
-       options:
-         awslogs-region: "us-west-2"
-         awslogs-group: "permission-logs"
+      driver: "awslogs"
+      options:
+        awslogs-region: "us-west-2"
+        awslogs-group: "permission-logs"
+        awslogs-stream-prefix: "stream"
+
     ports:
      - '9092:9092'
      - '29092:29092'
+
     environment:
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
       - KAFKA_CREATE_TOPICS="donedeal-results;donedeal-items;pistonheads-items;pistonheads-results;worker-queue"
@@ -52,13 +32,3 @@ services:
       - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
       - ALLOW_PLAINTEXT_LISTENER=yes
-
-  database:
-    container_name: database
-    image: postgres
-    ports:
-      - 5432:5432
-    environment:
-      - POSTGRES_PASSWORD=feeds
-      - POSTGRES_USER=feeds
-      - POSTGRES_DB=feeds
