@@ -4,14 +4,13 @@
     ], 
     "networkMode": "awsvpc", 
     "family": "feed-service-tasks", 
-    "ipcMode": null, 
-    "placementConstraints": [], 
-    "cpu": 4096, 
-    "executionRoleArn": "arn:aws:iam::064106913348:role/FeedAdmin", 
-    "memory": 8192, 
-    "taskRoleArn": null, 
+    "cpu": "4096", 
+    "executionRoleArn": "arn:aws:iam::064106913348:role/FeedAdmin",
+    "memory": "8192", 
     "containerDefinitions": [
         {
+            "image": "postgresql:latest",
+            "name": "database",
             "portMappings": [
                 {
                     "protocol": "tcp", 
@@ -34,8 +33,8 @@
                 }
             ], 
             "cpu": 0, 
-            "name": "database", 
             "memory": 512
+
         }, 
         {
             "environment": [
@@ -79,10 +78,10 @@
                     "hostPort": 29092
                 }
             ], 
-            "dependsOn": null, 
             "cpu": 0
         }, 
         {
+            "image": "mongo:latest",
             "environment": [
                 {
                     "name": "MONGO_INITDB_ROOT_PASSWORD", 
