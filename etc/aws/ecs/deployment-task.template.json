@@ -1,0 +1,200 @@
+{
+    "containerDefinitions": [
+        {
+            "name": "router", 
+            "image": "${IMAGE_REPOSITORY}//routing:0.0.0", 
+            "memory": 256, 
+            "dependsOn": [
+                {
+                    "containerName": "nanny", 
+                    "condition": "START"
+                }
+            ], 
+            "cpu": 256,
+            "environment": [
+                 {"name": "FLASK_PORT", "value": "5000"},
+                 {"name": "LOG_LEVEL", "value": "DEBUG"},
+                 {"name": "NANNY_HOST", "value": "feed_nanny"}
+            ]
+
+        }, 
+        {
+            "image": "${IMAGE_REPOSITORY}/${PROJECT_NAME}/worker:0.0.0", 
+            "dependsOn": [
+                {
+                    "containerName": "nanny", 
+                    "condition": "START"
+                }
+            ], 
+            "name": "worker", 
+            "cpu": 256,
+            "environment": [
+                 {"name": "CONTAINER_TIMEOUT", "value": "10"},
+                 {"name": "FLASK_PORT", "value": "5000"},
+                 {"name": "LOG_LEVEL", "value": "DEBUG"},
+                 {"name": "NANNY_HOST", "value": "feed_nanny"},
+                 {"name": "SELENIUM_PORT", "value": "4444"},
+                 {"name": "WORKER_TIMEOUT", "value": "3"},
+                 {"name": "LOGLEVEL", "value": "DEBUG"}
+            ]
+
+        }, 
+        {
+            "name": "ui-server", 
+            "image": "${IMAGE_REPOSITORY}/${PROJECT_NAME}/ui-server:0.0.0", 
+            "memory": 500, 
+            "dependsOn": [
+                {
+                    "containerName": "nanny", 
+                    "condition": "START"
+                }
+            ], 
+            "cpu": 512,
+            "environment": [
+                 {"name": "DATABASE_NAME", "value": "feeds"},
+                 {"name": "DATABASE_PASS", "value": "feeds"},
+                 {"name": "DATABASE_PORT", "value": "5432"},
+                 {"name": "DATABASE_USER", "value": "feeds"},
+                 {"name": "DATABASE_HOST", "value": "database"},
+                 {"name": "FLASK_PORT", "value": "5000"},
+                 {"name": "KAFKA_ADDRESS", "value": "kafka:9092"},
+                 {"name": "LEADER_START", "value": "\"feed has started\""},
+                 {"name": "LEADER_TEMPLATE", "value": "leader"},
+                 {"name": "LEADER_BASE_PORT", "value": "9000"},
+                 {"name": "LOG_LEVEL", "value": "DEBUG"},
+                 {"name": "MONGO_HOST", "value": "mongo:27017"},
+                 {"name": "MONGO_PASS", "value": "root"},
+                 {"name": "MONGO_USER", "value": "root"},
+                 {"name": "NANNY_HOST", "value": "feed_nanny"},
+                 {"name": "NETWORK", "value": "feed_default"},
+                 {"name": "PARAMETER_DATABASE", "value": "params"},
+                 {"name": "FORM_DATABASE", "value": "forms"},
+                 {"name": "PARAM_STATS_DATABASE", "value": "params_stats"}
+            ]
+
+        }, 
+        {
+            "name": "commands", 
+            "image": "${IMAGE_REPOSITORY}/${PROJECT_NAME}/commands:0.0.0", 
+            "memory": 512, 
+            "dependsOn": [
+                {
+                    "containerName": "nanny", 
+                    "condition": "START"
+                }
+            ], 
+            "cpu": 256,
+            "environment": [
+                 {"name": "FLASK_PORT", "value": "5000"}
+            ]
+
+        }, 
+        {
+            "name": "summarizer", 
+            "image": "${IMAGE_REPOSITORY}/${PROJECT_NAME}/summarizer:0.0.0", 
+            "memory": 1000, 
+            "dependsOn": [
+                {
+                    "containerName": "nanny", 
+                    "condition": "START"
+                }
+            ], 
+            "cpu": 512,
+            "environment": [
+                 {"name": "DATABASE_NAME", "value": "feeds"},
+                 {"name": "DATABASE_PASS", "value": "feeds"},
+                 {"name": "DATABASE_PORT", "value": "5432"},
+                 {"name": "DATABASE_USER", "value": "feeds"},
+                 {"name": "DATABASE_HOST", "value": "database"},
+                 {"name": "KAFKA_ADDRESS", "value": "kafka:9092"},
+                 {"name": "LOG_LEVEL", "value": "DEBUG"},
+                 {"name": "NANNY_HOST", "value": "feed_nanny"}
+            ]
+
+        }, 
+        {
+            "name": "feed-admin", 
+            "image": "${IMAGE_REPOSITORY}/${PROJECT_NAME}/feed-admin:0.0.1", 
+            "memory": 512, 
+            "dependsOn": [
+                {
+                    "containerName": "ui-server", 
+                    "condition": "START"
+                }, 
+                {
+                    "containerName": "commands", 
+                    "condition": "START"
+                }
+            ], 
+            "cpu": 256,
+            "environment": [
+                 {"name": "FLASK_PORT", "value": "5000"},
+                 {"name": "NETWORK", "value": "feed_default"},
+                 {"name": "COMMANDSERVER", "value": "http://feed_commands:5000"},
+                 {"name": "UISERVER", "value": "http://feed_ui-server:5000"},
+                 {"name": "SELENIUM_PORT", "value": "4444"},
+                 {"name": "WORKER_TIMEOUT", "value": "3"},
+                 {"name": "LOGLEVEL", "value": "DEBUG"}
+            ]
+
+        }, 
+        {
+            "name": "persistence", 
+            "image": "${IMAGE_REPOSITORY}/${PROJECT_NAME}/persistence:0.0.0", 
+            "memory": 1000, 
+            "dependsOn": [
+                {
+                    "containerName": "nanny", 
+                    "condition": "START"
+                }
+            ], 
+            "cpu": 512,
+            "environment": [
+                 {"name": "DATABASE_NAME", "value": "feeds"},
+                 {"name": "DATABASE_PASS", "value": "feeds"},
+                 {"name": "DATABASE_PORT", "value": "5432"},
+                 {"name": "DATABASE_USER", "value": "feeds"},
+                 {"name": "DATABASE_HOST", "value": "database"},
+                 {"name": "KAFKA_ADDRESS", "value": "kafka:9092"},
+                 {"name": "LOG_LEVEL", "value": "DEBUG"},
+                 {"name": "NANNY_HOST", "value": "feed_nanny"}
+            ]
+
+        }, 
+        {
+            "name": "nanny", 
+            "image": "${IMAGE_REPOSITORY}/${PROJECT_NAME}/nanny:0.0.0", 
+            "stopTimeout": 5, 
+            "memory": 512, 
+            "cpu": 256,
+            "environment": [
+                 {"name": "BROWSER_BASE_PORT", "value": "4444"},
+                 {"name": "BROWSER_IMAGE", "value": "selenium/standalone-chrome:3.141.59"},
+                 {"name": "CONTAINER_TIMEOUT", "value": "10"},
+                 {"name": "FLASK_PORT", "value": "5000"},
+                 {"name": "KAFKA_ADDRESS", "value": "kafka:9092"},
+                 {"name": "LEADER_BASE_PORT", "value": "9000"},
+                 {"name": "LOG_LEVEL", "value": "DEBUG"},
+                 {"name": "MAX_CONTAINERS", "value": "10"},
+                 {"name": "MONGO_HOST", "value": "mongo:27017"},
+                 {"name": "MONGO_PASS", "value": "root"},
+                 {"name": "MONGO_USER", "value": "root"},
+                 {"name": "NANNY_HOST", "value": "feed_nanny"},
+                 {"name": "NETWORK", "value": "feed_default"},
+                 {"name": "PARAMETER_DATABASE", "value": "params"},
+                 {"name": "PARAM_STATS_DATABASE", "value": "params_stats"},
+                 {"name": "SELENIUM_PORT", "value": "4444"}
+            ]
+
+        }
+    ], 
+    "networkMode": "awsvpc", 
+    "family": "feed-service-tasks", 
+    "executionRoleArn": "arn:aws:iam::064106913348:role/FeedAdmin",
+    "requiresCompatibilities": [
+        "FARGATE"
+    ], 
+    "memory": "8192", 
+    "cpu": "4096"
+
+}
