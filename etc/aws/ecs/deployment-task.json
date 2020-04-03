@@ -1,0 +1,132 @@
+{
+    "containerDefinitions": [
+        {
+            "name": "router", 
+            "image": "${IMAGE_REPOSITORY}//routing:0.0.0", 
+            "memory": 256, 
+            "portMappings": [{
+                "containerPort": 5000
+            }], 
+            "dependsOn": [
+                {
+                    "containerName": "nanny", 
+                    "condition": "START"
+                }
+            ], 
+            "cpu": 251
+        }, 
+        {
+            "image": "${IMAGE_REPOSITORY}/${PROJEC_NAME}/worker:0.0.0", 
+            "dependsOn": [
+                {
+                    "containerName": "nanny", 
+                    "condition": "START"
+                }
+            ], 
+            "name": "worker", 
+            "cpu": 256
+        }, 
+        {
+            "name": "ui-server", 
+            "image": "${IMAGE_REPOSITORY}/${PROJEC_NAME}/ui-server:0.0.0", 
+            "portMappings": [{
+                "containerPort": 5000
+            }], 
+            "memory": 500, 
+            "dependsOn": [
+                {
+                    "containerName": "nanny", 
+                    "condition": "START"
+                }
+            ], 
+            "cpu": 512
+        }, 
+        {
+            "name": "commands", 
+            "image": "${IMAGE_REPOSITORY}/${PROJEC_NAME}/commands:0.0.0", 
+            "portMappings":[ {
+                "containerPort": 5000
+            }], 
+            "memory": 512, 
+            "dependsOn": [
+                {
+                    "containerName": "nanny", 
+                    "condition": "START"
+                }
+            ], 
+            "cpu": 512
+        }, 
+        {
+            "name": "summarizer", 
+            "image": "${IMAGE_REPOSITORY}/${PROJEC_NAME}/summarizer:0.0.0", 
+            "memory": 1000, 
+            "dependsOn": [
+                {
+                    "containerName": "nanny", 
+                    "condition": "START"
+                }
+            ], 
+            "cpu": 2048
+        }, 
+        {
+            "name": "feed-admin", 
+            "image": "${IMAGE_REPOSITORY}/${PROJEC_NAME}/feed-admin:0.0.1", 
+            "memory": 512, 
+            "portMappings": [{"containerPort": 3000}], 
+            "dependsOn": [
+                {
+                    "containerName": "ui-server", 
+                    "condition": "START"
+                }, 
+                {
+                    "containerName": "commands", 
+                    "condition": "START"
+                }
+            ], 
+            "cpu": 512
+        }, 
+        {
+            "name": "persistence", 
+            "image": "${IMAGE_REPOSITORY}/${PROJEC_NAME}/persistence:0.0.0", 
+            "memory": 1000, 
+            "dependsOn": [
+                {
+                    "containerName": "nanny", 
+                    "condition": "START"
+                }
+            ], 
+            "cpu": 2048
+        }, 
+        {
+            "name": "nanny", 
+            "image": "${IMAGE_REPOSITORY}/${PROJEC_NAME}/nanny:0.0.0", 
+            "dependsOn": [
+                {
+                    "containerName": "kafka", 
+                    "condition": "Start"
+                }, 
+                {
+                    "containerName": "mongo", 
+                    "condition": "Start"
+                }, 
+                {
+                    "containerName": "database", 
+                    "condition": "Start"
+                }
+            ], 
+            "portMappings": [{
+                "containerPort": 3000
+            }], 
+            "stopTimeout": 5, 
+            "memory": 512, 
+            "cpu": 512
+        }
+    ], 
+    "networkMode": "awsvpc", 
+    "family": "feed-service-tasks", 
+    "requiresCompatibilities": [
+        "FARGATE"
+    ], 
+    "memory": "8192", 
+    "cpu": "4096"
+}
