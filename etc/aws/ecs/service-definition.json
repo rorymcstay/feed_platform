@@ -1,0 +1,20 @@
+{
+    "cluster": "feed-cluster",
+    "serviceName": "feed-service",
+    "taskDefinition": "feed-service-tasks:1",
+    "desiredCount": 1,
+    "launchType": "EC2",
+    "platformVersion": "LATEST",
+    "role": "arn:aws:iam::064106913348:role/FeedAdmin",
+    "networkConfiguration": {
+        "awsvpcConfiguration": {
+            "subnets": [
+                "subnet-05efb380736c64a71", 
+                "subnet-018b103b25eb9c865"],
+            "securityGroups": [
+                "sg-03c52ab4abf87888f"
+            ],
+            "assignPublicIp": "ENABLED"
+        }
+    }
+}

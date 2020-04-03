@@ -19,18 +19,9 @@
                 }
             ], 
             "environment": [
-                {
-                    "name": "POSTGRES_DB", 
-                    "value": "feeds"
-                }, 
-                {
-                    "name": "POSTGRES_PASSWORD", 
-                    "value": "feeds"
-                }, 
-                {
-                    "name": "POSTGRES_USER", 
-                    "value": "feeds"
-                }
+                {"name": "POSTGRES_DB","value": "feeds"}, 
+                {"name": "POSTGRES_PASSWORD","value": "feeds"}, 
+                {"name": "POSTGRES_USER","value": "feeds"}
             ], 
             "cpu": 0, 
             "memory": 512
@@ -38,30 +29,12 @@
         }, 
         {
             "environment": [
-                {
-                    "name": "ALLOW_PLAINTEXT_LISTENER", 
-                    "value": "yes"
-                }, 
-                {
-                    "name": "KAFKA_ADVERTISED_LISTENERS", 
-                    "value": "PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092"
-                }, 
-                {
-                    "name": "KAFKA_CREATE_TOPICS", 
-                    "value": "\"donedeal-results;donedeal-items;pistonheads-items;pistonheads-results;worker-queue\""
-                }, 
-                {
-                    "name": "KAFKA_LISTENER_SECURITY_PROTOCOL_MAP", 
-                    "value": "PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT"
-                }, 
-                {
-                    "name": "KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR", 
-                    "value": "1"
-                }, 
-                {
-                    "name": "KAFKA_ZOOKEEPER_CONNECT", 
-                    "value": "zookeeper:2181"
-                }
+                {"name": "ALLOW_PLAINTEXT_LISTENER","value": "yes"}, 
+                {"name": "KAFKA_ADVERTISED_LISTENERS",value": "PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092"}, 
+                {"name": "KAFKA_CREATE_TOPICS","value": "\"donedeal-results;donedeal-items;pistonheads-items;pistonheads-results;worker-queue\""}, 
+                {"name": "KAFKA_LISTENER_SECURITY_PROTOCOL_MAP","value": "PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT"}, 
+                {"name": "KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR","value": "1"}, 
+                {"name": "KAFKA_ZOOKEEPER_CONNECT","value": "zookeeper:2181"}
             ], 
             "name": "kafka", 
             "image": "confluentinc/cp-kafka:latest", 
@@ -83,14 +56,8 @@
         {
             "image": "mongo:latest",
             "environment": [
-                {
-                    "name": "MONGO_INITDB_ROOT_PASSWORD", 
-                    "value": "root"
-                }, 
-                {
-                    "name": "MONGO_INITDB_ROOT_USERNAME", 
-                    "value": "root"
-                }
+                {"name": "MONGO_INITDB_ROOT_PASSWORD", "value": "root"}, 
+                {"name": "MONGO_INITDB_ROOT_USERNAME","value": "root"}
             ], 
             "name": "mongo", 
             "cpu": 0, 
@@ -101,22 +68,14 @@
                     "hostPort": 27017
                 }
             ], 
-            "command": [
-                "mongod"
-            ], 
+            "command": ["mongod"], 
             "memory": 512, 
             "essential": true
         }, 
         {
             "environment": [
-                {
-                    "name": "ME_CONFIG_MONGODB_ADMINPASSWORD", 
-                    "value": "root"
-                }, 
-                {
-                    "name": "ME_CONFIG_MONGODB_ADMINUSERNAME", 
-                    "value": "root"
-                }
+                {"name": "ME_CONFIG_MONGODB_ADMINPASSWORD","value": "root"}, 
+                {"name": "ME_CONFIG_MONGODB_ADMINUSERNAME","value": "root"}
             ], 
             "name": "mongo-express", 
             "image": "mongo-express", 
@@ -132,18 +91,9 @@
         }, 
         {
             "environment": [
-                {
-                    "name": "ALLOW_ANONYMOUS_LOGIN", 
-                    "value": "yes"
-                }, 
-                {
-                    "name": "ZOOKEEPER_CLIENT_PORT", 
-                    "value": "2181"
-                }, 
-                {
-                    "name": "ZOOKEEPER_TICK_TIME", 
-                    "value": "2000"
-                }
+                {"name": "ALLOW_ANONYMOUS_LOGIN","value": "yes"}, 
+                {"name": "ZOOKEEPER_CLIENT_PORT","value": "2181"}, 
+                {"name": "ZOOKEEPER_TICK_TIME","value": "2000"}
             ], 
             "name": "zookeeper", 
             "image": "confluentinc/cp-zookeeper:latest", 
