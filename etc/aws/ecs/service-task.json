@@ -6,40 +6,10 @@
     "family": "feed-service-tasks", 
     "ipcMode": null, 
     "placementConstraints": [], 
-    "requiresAttributes": [
-        {
-            "targetType": null, 
-            "targetId": null, 
-            "name": "com.amazonaws.ecs.capability.logging-driver.awslogs", 
-            "value": null
-        }, 
-        {
-            "targetType": null, 
-            "targetId": null, 
-            "name": "ecs.capability.execution-role-awslogs", 
-            "value": null
-        }, 
-        {
-            "targetType": null, 
-            "targetId": null, 
-            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19", 
-            "value": null
-        }, 
-        {
-            "targetType": null, 
-            "targetId": null, 
-            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.17", 
-            "value": null
-        }
-    ], 
     "cpu": 4096, 
     "executionRoleArn": "arn:aws:iam::064106913348:role/FeedAdmin", 
-    "compatibilities": [
-        "EC2"
-    ], 
     "memory": 8192, 
     "taskRoleArn": null, 
-    "taskDefinitionArn": "arn:aws:ecs:us-west-2:064106913348:task-definition/services:2", 
     "containerDefinitions": [
         {
             "portMappings": [
