@@ -10,4 +10,7 @@ parser.add_argument('--escaped', action='store_true', default=False)
 
 if __name__ == '__main__':
     args = parser.parse_args()
-    populate(args.file, args.escaped, args.outfile)
+    if args.outfile == args.file:
+        print("outfile should be different from file!")
+    else:
+        populate(args.file, args.escaped, args.outfile)

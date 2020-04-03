@@ -1,0 +1,10 @@
+{
+    "taskDefinition": "arn:aws:ecs:us-west-2:064106913348:task-definition/feed-service-tasks:2",
+    "networkConfiguration": {
+        "awsvpcConfiguration": {
+            "subnets": ["subnet-05efb380736c64a71", "subnet-018b103b25eb9c865"],
+            "securityGroups": ["sg-03c52ab4abf87888f"],
+            "assignPublicIp": "ENABLED"
+        }
+    }
+}

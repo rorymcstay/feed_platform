@@ -16,7 +16,6 @@ Properties:
   - ContainerName: feed-admin
     ContainerPort: 3000
     Port: 3000
-  ServiceRegistries: 
   - ContainerName: ui-server
     ContainerPort: 5000
     Port: 5000
@@ -44,4 +43,4 @@ Properties:
   - ContainerName: zookeeper
     ContainerPort: 2181
     Port: 2181
-  TaskDefinition: String
+  TaskDefinition: "feed-service-tasks:latest" 

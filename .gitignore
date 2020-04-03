@@ -1,6 +1,8 @@
 .idea
 templates
 *.swp
+
+#incase components were to be pulled in 
 leader
 mapper
 nanny
@@ -12,8 +14,12 @@ feed-admin
 worker
 feed-admin
 feed-manager
-venv
-*.iml
-.auth
-build/manifest.txt
 
+# python stuff
+venv
+# incase there is any confidential things
+.env
+.auth
+
+# template resolved files
+etc/aws/ecs/deployment-task.json
