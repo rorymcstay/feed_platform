@@ -71,6 +71,16 @@ def updatePipeline(name):
     execute(command)
 
 
+def updateCloudWatch(name):
+    os.environ['COMPONENT'] = name
+    os.environ['PIPELINE_NAME'] = f'{os.getenv("PROJECT_NAME")}_{name}'
+    config = getDict(f'{os.environ["DEPLOYMENT_ROOT"]}/etc/aws/pipeline_template.json')
+    jsonString = "'{}'".format(json.dumps(config))
+    jsonString = jsonString.replace(' ', '')
+    command = f'aws codepipeline create-pipeline --cli-input-json {jsonString}'
+    logging.info(command)
+    execute(command)
+
 if __name__ == "__main__":
     args = parser.parse_args()
     if args.update_all:

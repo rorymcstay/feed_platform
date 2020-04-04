@@ -2,7 +2,7 @@
     "containerDefinitions": [
         {
             "name": "router", 
-            "image": "${IMAGE_REPOSITORY}//routing:0.0.0", 
+            "image": "${IMAGE_REPOSITORY}/${PROJECT_NAME}/routing:0.0.0", 
             "memory": 256, 
             "dependsOn": [
                 {
@@ -11,6 +11,14 @@
                 }
             ], 
             "cpu": 256,
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "feed-logs",
+                    "awslogs-region": "us-west-2",
+                    "awslogs-stream-prefix": "router"
+                }
+            },
             "environment": [
                  {"name": "FLASK_PORT", "value": "5000"},
                  {"name": "LOG_LEVEL", "value": "DEBUG"},
@@ -28,6 +36,14 @@
             ], 
             "name": "worker", 
             "cpu": 256,
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "feed-logs",
+                    "awslogs-region": "us-west-2",
+                    "awslogs-stream-prefix": "worker"
+                }
+            },
             "environment": [
                  {"name": "CONTAINER_TIMEOUT", "value": "10"},
                  {"name": "FLASK_PORT", "value": "5000"},
@@ -50,6 +66,14 @@
                 }
             ], 
             "cpu": 512,
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "feed-logs",
+                    "awslogs-region": "us-west-2",
+                    "awslogs-stream-prefix": "ui-server"
+                }
+            },
             "environment": [
                  {"name": "DATABASE_NAME", "value": "feeds"},
                  {"name": "DATABASE_PASS", "value": "feeds"},
@@ -75,7 +99,7 @@
         }, 
         {
             "name": "commands", 
-            "image": "${IMAGE_REPOSITORY}/${PROJECT_NAME}/commands:0.0.0", 
+            "image": "${IMAGE_REPOSITORY}/${PROJECT_NAME}/commands:0.0.3", 
             "memory": 512, 
             "dependsOn": [
                 {
@@ -84,6 +108,14 @@
                 }
             ], 
             "cpu": 256,
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "feed-logs",
+                    "awslogs-region": "us-west-2",
+                    "awslogs-stream-prefix": "commands"
+                }
+            },
             "environment": [
                  {"name": "FLASK_PORT", "value": "5000"}
             ]
@@ -91,7 +123,7 @@
         }, 
         {
             "name": "summarizer", 
-            "image": "${IMAGE_REPOSITORY}/${PROJECT_NAME}/summarizer:0.0.0", 
+            "image": "${IMAGE_REPOSITORY}/${PROJECT_NAME}/summarizer:0.0.2", 
             "memory": 1000, 
             "dependsOn": [
                 {
@@ -100,6 +132,14 @@
                 }
             ], 
             "cpu": 512,
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "feed-logs",
+                    "awslogs-region": "us-west-2",
+                    "awslogs-stream-prefix": "summarizer"
+                }
+            },
             "environment": [
                  {"name": "DATABASE_NAME", "value": "feeds"},
                  {"name": "DATABASE_PASS", "value": "feeds"},
@@ -114,8 +154,16 @@
         }, 
         {
             "name": "feed-admin", 
-            "image": "${IMAGE_REPOSITORY}/${PROJECT_NAME}/feed-admin:0.0.1", 
+            "image": "${IMAGE_REPOSITORY}/${PROJECT_NAME}/feed-admin:0.0.4", 
             "memory": 512, 
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "feed-logs",
+                    "awslogs-region": "us-west-2",
+                    "awslogs-stream-prefix": "feed-admin"
+                }
+            },
             "dependsOn": [
                 {
                     "containerName": "ui-server", 
@@ -149,6 +197,14 @@
                 }
             ], 
             "cpu": 512,
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "feed-logs",
+                    "awslogs-region": "us-west-2",
+                    "awslogs-stream-prefix": "persistence"
+                }
+            },
             "environment": [
                  {"name": "DATABASE_NAME", "value": "feeds"},
                  {"name": "DATABASE_PASS", "value": "feeds"},
@@ -167,6 +223,14 @@
             "stopTimeout": 5, 
             "memory": 512, 
             "cpu": 256,
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "feed-logs",
+                    "awslogs-region": "us-west-2",
+                    "awslogs-stream-prefix": "nanny"
+                }
+            },
             "environment": [
                  {"name": "BROWSER_BASE_PORT", "value": "4444"},
                  {"name": "BROWSER_IMAGE", "value": "selenium/standalone-chrome:3.141.59"},

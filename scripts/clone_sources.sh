@@ -13,7 +13,7 @@ clone_sources(){
         git clone "${GIT_CLONE_URL}"/"${PROJECT_NAME}"_"${image_dets[0]}" "${SOURCE_DIR}"/"${image_dets[0]}"
         cd "${SOURCE_DIR}"/${image_dets[0]} 
         cd "${SOURCE_DIR}" || exit
-  done < $DEPLOYMENT_ROOT/etc/component_manifest.txt
+  done < $DEPLOYMENT_ROOT/etc/manifest.txt
 
 }
 

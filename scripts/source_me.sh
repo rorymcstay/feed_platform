@@ -5,7 +5,7 @@ export PROJECT_NAME=feed
 
 # sdlc
 export IMAGE_REPOSITORY=064106913348.dkr.ecr.us-west-2.amazonaws.com
-export GIT_CLONE_URL=https://git-codecommit.us-west-2.amazonaws.com/v1/repos
+export GIT_CLONE_URL=ssh://git-codecommit.us-west-2.amazonaws.com/v1/repos
 
 ####### LOCAL DEVELOPMEMNT PARAMS #########
 # config database load params
@@ -27,7 +27,7 @@ export LEADER_TEMPLATE=leader
 export LOG_LEVEL=DEBUG
 
 alias gitstatus='for i in $(ls $SOURCE_DIR); do cd $SOURCE_DIR/$i; echo "### $i ###"; git status;done'
-
+alias sourceversions='for i in $(ls ~/dev/feed); do cd ~/dev/feed/$i && echo  $i=$(git describe --exact-match --tags $(git log -n1 --pretty='%h')) || echo ''; done | grep ='
 # docker file helpers
 alias dc="docker-compose -f $DEPLOYMENT_ROOT/etc/compose/development.yml "
 alias dc-up='dc up -d && dc logs --follow'

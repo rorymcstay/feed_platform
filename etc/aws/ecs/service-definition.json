@@ -1,11 +1,10 @@
 {
     "cluster": "feed-cluster",
+    "launchType": "FARGATE",
     "serviceName": "feed-service",
-    "taskDefinition": "feed-service-tasks:1",
+    "taskDefinition": "feed-service-tasks:4",
     "desiredCount": 1,
-    "launchType": "EC2",
     "platformVersion": "LATEST",
-    "role": "arn:aws:iam::064106913348:role/FeedAdmin",
     "networkConfiguration": {
         "awsvpcConfiguration": {
             "subnets": [

@@ -1,0 +1,26 @@
+{
+  "source": [
+    "aws.codecommit"
+  ],
+  "detail-type": [
+    "CodeCommit Repository State Change"
+  ],
+  "resources": [
+    "arn:aws:codecommit:us-west-2:064106913348:${COMPONENT}"
+  ],
+  "detail": {
+    "event": [
+      "referenceCreated",
+      "referenceUpdated",
+      "pullRequestCreated",
+      "pullRequestUpdated"
+    ],
+    "referenceType": [
+      "branch",
+      "tag"
+    ],
+    "referenceName": [
+      "master"
+    ]
+  }
+}
