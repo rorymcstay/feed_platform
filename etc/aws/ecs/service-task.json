@@ -156,6 +156,14 @@
                 }
             }
 
+        },
+        {
+            "name": "config_loader",
+            "image": "064106913348.dkr.ecr.us-west-2.amazonaws.com/config_data:latest",
+            "memory": 256,
+            "cpu": 100,
+            "dependsOn": [{"containerName": "mongo", "condition": "START"}],
+            "essential": false
         }
     ]
 }

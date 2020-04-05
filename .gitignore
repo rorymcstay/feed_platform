@@ -20,6 +20,8 @@ venv
 # incase there is any confidential things
 .env
 .auth
+__pycache__
 
 # template resolved files
 etc/aws/ecs/deployment-task.json
+deployment-task.json
