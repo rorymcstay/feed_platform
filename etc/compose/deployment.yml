@@ -2,15 +2,6 @@ version: '3'
 
 services:
 
-  worker:
-    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/worker:0.0.0
-    restart: unless-stopped
-    depends_on:
-    - nanny
-    stop_grace_period: 5s
-    env_file:
-    - ./envs/deployment.env
-
   router:
     container_name: feed_router
     image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/routing:0.0.0
@@ -62,6 +53,12 @@ services:
 
   persistence:
     image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/persistence:0.0.0
+    restart: unless-stopped
+    stop_grace_period: 5s
+    env_file:
+      - ./envs/deployment.env
+  leader:
+    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/leader:0.0.0
     restart: unless-stopped
     stop_grace_period: 5s
     env_file:

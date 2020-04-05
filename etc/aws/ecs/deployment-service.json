@@ -1,8 +1,9 @@
+
 {
     "cluster": "feed-cluster",
     "launchType": "FARGATE",
-    "serviceName": "feed-service",
-    "taskDefinition": "feed-service-tasks:8",
+    "serviceName": "feed-deployment",
+    "taskDefinition": "feed-deployment-tasks:1",
     "desiredCount": 1,
     "platformVersion": "LATEST",
     "networkConfiguration": {

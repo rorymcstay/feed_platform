@@ -37,11 +37,6 @@ services:
   kafka:
     image: confluentinc/cp-kafka:latest
     container_name: kafka
-    logging:
-       driver: "awslogs"
-       options:
-         awslogs-region: "us-west-2"
-         awslogs-group: "permission-logs"
     ports:
      - '9092:9092'
      - '29092:29092'

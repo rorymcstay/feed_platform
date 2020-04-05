@@ -21,6 +21,12 @@ services:
     env_file:
       - envs/deployment.env
 
+  leader:
+    container_name: leader
+    build: ${SOURCE_DIR}/leader
+    env_file:
+      - ./envs/deployment.env
+
   nanny:
     container_name: feed_nanny
     build: ${SOURCE_DIR}/nanny
@@ -40,7 +46,6 @@ services:
     build: ${SOURCE_DIR}/ui-server
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./envs:/home/src/config
     ports:
       - "5004:5000"
     env_file:
