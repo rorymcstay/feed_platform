@@ -1,9 +1,8 @@
-
 {
     "cluster": "feed-cluster",
     "launchType": "FARGATE",
-    "serviceName": "feed-deployment",
-    "taskDefinition": "feed-deployment-tasks:8",
+    "serviceName": "kafka",
+    "taskDefinition": "feed-kafka-tasks:1",
     "desiredCount": 1,
     "platformVersion": "LATEST",
     "networkConfiguration": {
@@ -16,5 +15,10 @@
             ],
             "assignPublicIp": "ENABLED"
         }
-    }
+    },
+    "serviceRegistries": [ 
+        {
+            "registryArn": "arn:aws:servicediscovery:us-west-2:064106913348:service/srv-m23emfvkuzbs7jmc"
+        }
+    ]
 }

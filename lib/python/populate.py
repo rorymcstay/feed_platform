@@ -10,9 +10,16 @@ import logging
 def replaceEnvVar(string):
     if "CODEBUILD" in string:
         return string
-    replacement = string.replace("$", "").format(**os.environ)
-    if replacement==string:
+    try:
+        replacement = string.replace("$", "").format(**os.environ)
+    except KeyError as ex:
+        logging.info(f'{ex.args} not found')
+        return string
+    if replacement==string.replace("$", ""):
         logging.info("Error replacing {}".format(string))
+        return string
+    if replacement == 'true':
+        return True
     return replacement
 
 
@@ -52,10 +59,10 @@ def populate(filename, escaped, outfile):
     populated = getDict(filename)
     jsonString = json.dumps(populated)
     if escaped:
-        jsonString = json.dumps(jsonString)
+        jsonString = json.dumps(jsonString, indent=4)
     if outfile == '':
         print(jsonString)
     else:
-        with open(outfile, 'w') as out:
+        with open(outfile, 'w+') as out:
             out.write(jsonString)
 

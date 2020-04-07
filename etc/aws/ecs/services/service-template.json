@@ -1,0 +1,25 @@
+{
+    "cluster": "${PROJECT_NAME}-cluster",
+    "launchType": "FARGATE",
+    "serviceName": "${COMPONENT_NAME}",
+    "taskDefinition": "${TASK_DEFINITION}",
+    "desiredCount": 1,
+    "platformVersion": "LATEST",
+    "networkConfiguration": {
+        "awsvpcConfiguration": {
+            "subnets": [
+                "${SUBNET_1}", 
+                "${SUBNET_2}"],
+            "securityGroups": [
+                "${SECURITY_GROUP}"
+            ],
+            "assignPublicIp": "${ASSIGN_PUBLIC_IP}"
+        }
+    },
+    "serviceRegistries": [ 
+        {
+            "registryArn": "${SERVICE_REGISTRY_ARN}"
+        }
+    ]
+}
+

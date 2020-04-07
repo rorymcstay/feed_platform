@@ -1,0 +1,45 @@
+{
+    "containerDefinitions": [
+        {
+            "name": "leader",
+            "image": "${IMAGE_REPOSITORY}/${PROJECT_NAME}/leader:0.1.1",
+            "stopTimeout": 5, 
+            "memory": 512, 
+            "cpu": 256,
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "feed-logs",
+                    "awslogs-region": "us-west-2",
+                    "awslogs-stream-prefix": "leader"
+                }
+            },
+            "dependsOn": [
+                {
+                    "containerName": "nanny", 
+                    "condition": "START"
+                },
+                {
+                    "containerName": "commands", 
+                    "condition": "START"
+                }
+            ], 
+            "environment": [
+                {"name": "NANNY_HOST", "value": "apis.feed"},
+                {"name": "COMMANDS_HOST", "value": "apis.feed"},
+                {"name": "KAFKA_ADDRESS", "value": "kafka.feed:29092"},
+                {"name": "ROUTER_HOST", "value": "localhost"},
+                {"name": "LOG_LEVEL", "value": "DEBUG"}
+            ]
+        }
+    ],
+    "networkMode": "awsvpc", 
+    "family": "feed-deployment-tasks", 
+    "executionRoleArn": "arn:aws:iam::064106913348:role/FeedAdmin",
+    "requiresCompatibilities": [
+        "FARGATE"
+    ], 
+    "memory": "512", 
+    "cpu": "256"
+
+}

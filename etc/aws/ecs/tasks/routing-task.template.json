@@ -1,0 +1,107 @@
+{
+    "containerDefinitions": [
+        {
+            "name": "router", 
+            "image": "${IMAGE_REPOSITORY}/${PROJECT_NAME}/routing:0.0.2", 
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "feed-logs",
+                    "awslogs-region": "us-west-2",
+                    "awslogs-stream-prefix": "router"
+                }
+            },
+            "portMappings": [
+                {
+                    "protocol": "tcp", 
+                    "containerPort": 5002, 
+                    "hostPort": 5002
+                }
+            ], 
+            "environment": [
+                 {"name": "LOG_LEVEL", "value": "DEBUG"},
+                 {"name": "NANNY_HOST", "value": ""},
+                 {"name": "FLASK_PORT", "value": ""
+            ]
+
+        }, 
+        {
+            "name": "nanny", 
+            "image": "${IMAGE_REPOSITORY}/${PROJECT_NAME}/nanny:0.0.0", 
+            "stopTimeout": 5, 
+            "memory": 512, 
+            "cpu": 256,
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "feed-logs",
+                    "awslogs-region": "us-west-2",
+                    "awslogs-stream-prefix": "nanny"
+                }
+            },
+            "portMappings": [
+                {
+                    "protocol": "tcp", 
+                    "containerPort": 5004, 
+                    "hostPort": 5004
+                }
+            ], 
+            "environment": [
+                 {"name": "BROWSER_BASE_PORT", "value": "4444"},
+                 {"name": "BROWSER_IMAGE", "value": "selenium/standalone-chrome:3.141.59"},
+                 {"name": "CONTAINER_TIMEOUT", "value": "10"},
+                 {"name": "KAFKA_ADDRESS", "value": "kafka.feed:29092"},
+                 {"name": "LEADER_BASE_PORT", "value": "9000"},
+                 {"name": "LOG_LEVEL", "value": "DEBUG"},
+                 {"name": "MAX_CONTAINERS", "value": "10"},
+                 {"name": "MONGO_HOST", "value": "feed-service.feed:27017"},
+                 {"name": "MONGO_PASS", "value": "root"},
+                 {"name": "MONGO_USER", "value": "root"},
+                 {"name": "NANNY_HOST", "value": "localhost"},
+                 {"name": "NETWORK", "value": "feed_default"},
+                 {"name": "PARAMETER_DATABASE", "value": "params"},
+                 {"name": "PARAM_STATS_DATABASE", "value": "params_stats"},
+                 {"name": "SELENIUM_PORT", "value": "4444"}
+            ]
+        }, 
+        {
+            "name": "commands", 
+            "image": "${IMAGE_REPOSITORY}/${PROJECT_NAME}/commands:0.0.6", 
+            "memory": 512, 
+            "dependsOn": [
+                {
+                    "containerName": "nanny", 
+                    "condition": "START"
+                }
+            ], 
+            "portMappings": [
+                {
+                    "protocol": "tcp", 
+                    "containerPort": 5001, 
+                    "hostPort": 5001
+                }
+            ], 
+            "cpu": 256,
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "feed-logs",
+                    "awslogs-region": "us-west-2",
+                    "awslogs-stream-prefix": "commands"
+                }
+            },
+            "environment": [
+                 {"name": "NANNY_HOST", "value": "localhost"}
+            ]
+
+        }
+    },
+    "networkMode": "awsvpc", 
+    "family": "router-task", 
+    "executionRoleArn": "arn:aws:iam::064106913348:role/FeedAdmin",
+    "requiresCompatibilities": [
+        "FARGATE"
+    ], 
+    "memory": "512", 
+    "cpu": "256"
+}

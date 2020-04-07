@@ -2,7 +2,7 @@
     "cluster": "feed-cluster",
     "launchType": "FARGATE",
     "serviceName": "feed-service",
-    "taskDefinition": "feed-service-tasks:15",
+    "taskDefinition": "feed-service-tasks:17",
     "desiredCount": 1,
     "platformVersion": "LATEST",
     "networkConfiguration": {
@@ -18,23 +18,7 @@
     },
     "serviceRegistries": [ 
         {
-
-            "containerName": "mongo",
-            "port": 27017,
-            "containerPort": 27017,
-            "registryArn": "arn:aws:servicediscovery:us-west-2:064106913348:service/srv-rf3m7q33fn6evxms"
-        },
-        {
-            "containerName": "database",
-            "port": 5432,
-            "containerPort": 5432,
-            "registryArn": "arn:aws:servicediscovery:us-west-2:064106913348:service/srv-mmme6mquuvxw2ot7" 
-        },
-        {
-            "containerName": "kafka",
-            "port": 9092,
-            "containerPort": 9092,
-            "registryArn": "arn:aws:servicediscovery:us-west-2:064106913348:service/srv-ousehdznt73klqev"
+            "registryArn": "arn:aws:servicediscovery:us-west-2:064106913348:service/srv-q2hcgwsuw65yux2m"
         }
     ]
 }
