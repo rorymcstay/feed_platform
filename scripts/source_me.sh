@@ -4,6 +4,7 @@ export SOURCE_DIR=$HOME/dev/feed
 export PROJECT_NAME=feed
 
 # sdlc
+export DEFAULT_REGION=us-west-2
 export IMAGE_REPOSITORY=064106913348.dkr.ecr.us-west-2.amazonaws.com
 export GIT_CLONE_URL=ssh://git-codecommit.us-west-2.amazonaws.com/v1/repos
 
