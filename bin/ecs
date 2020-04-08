@@ -96,22 +96,24 @@ def createOrUpdateServiceWithTask(args):
     nameEnvVar = f'COMPONENT_NAME={args.name},PROJECT_NAME={project_name}'
     temp_task_file = f'{temp_dir}/{args.name}-task.json'
     ecs_task_file_template = f'{ecs_task_location}/{args.name}-task.template.json'
+    ecs_service_file_template = f'{ecs_service_location}/{args.name}-task.template.json'
     execute('populate', '--file', ecs_task_file_template, '--outfile', temp_task_file, '--env-list', f'{nameEnvVar},COMPONENT_VERSION={args.version}')
-    taskDefinitionArn = execute('aws', 'ecs', 'register-task-definition', '--cli-input-json', f'file://{temp_task_file}', **os.environ)
+    taskDefinition = execute('aws', 'ecs', 'register-task-definition', '--cli-input-json', f'file://{temp_task_file}', **os.environ)
     update_service_args = ['aws', 'ecs', 'update-service', '--service', args.name,  '--cluster', cluster_name]
-    print(taskDefinitionArn)
+    print(taskDefinition)
+    task_definition_arn = taskDefinition.get('taskDefinition').get('taskDefinitionArn')
     if args.create_service and input(f'Are you sure you want to create service {args.name}? [Y/n]: ') == 'Y':
         print('creating template files')
         promptUserForFile(ecs_task_file_template, lambda: execute('populate', '--file', task_template, '--outfile', ecs_task_file_template,'--env-list', nameEnvVar, '--no-defaults'),no_interupt=False)
         promptUserForFile(ecs_service_file_template, lambda: execute('populate', '--file', service_template, '--outfile', ecs_service_file_template, '--env-list', nameEnvVar,'--no-defaults'), no_interupt=False)
         temp_service_file = f'{temp_dir}/{args.name}-service.json'
         createServiceRegistry(args.name)
-        createServiceEnvVars = f'TASK_DEFINITION={taskDefinitionArn.split("/")[-1]},SERVICE_REGISTRY_ARN={getServiceRegistryVal(args.name, "Arn")},{nameEnvVar}'
+        createServiceEnvVars = f'TASK_DEFINITION={task_definition_arn.split("/")[-1]},SERVICE_REGISTRY_ARN={getServiceRegistryVal(args.name, "Arn")},{nameEnvVar}'
         execute('populate', '--file', ecs_service_file_template, '--outfile', temp_service_file, '--env-list', createServiceEnvVars)
         temp_service_file = f'{temp_dir}/{args.name}-service.json'
         execute('aws', 'ecs', 'create-service', '--cli-input-json', f'file://{temp_service_file}')
 
-    out = execute(*update_service_args, '--task-definition', taskDefinitionArn.get('taskDefinition').get('taskDefinitionArn'), '--desired-count', '0')
+    out = execute(*update_service_args, '--task-definition', task_definition_arn, '--desired-count', '0')
     print(out)
 
 def updateAll(args):
