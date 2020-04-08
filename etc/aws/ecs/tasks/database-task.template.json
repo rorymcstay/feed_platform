@@ -1,0 +1,38 @@
+{
+    "containerDefinitions": [
+        {
+            "image": "postgres:latest",
+            "name": "database",
+            "portMappings": [
+                {
+                    "protocol": "tcp", 
+                    "containerPort": 5432, 
+                    "hostPort": 5432
+                }
+            ], 
+            "environment": [
+                {"name": "POSTGRES_DB","value": "feeds"}, 
+                {"name": "POSTGRES_PASSWORD","value": "feeds"}, 
+                {"name": "POSTGRES_USER","value": "feeds"}
+            ], 
+            "cpu": 0, 
+            "memory": 512,
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "feed-logs",
+                    "awslogs-region": "us-west-2",
+                    "awslogs-stream-prefix": "database"
+                }
+            }
+        }
+    ],
+    "networkMode": "awsvpc",
+    "family": "database-task",
+    "executionRoleArn": "arn:aws:iam::064106913348:role/FeedAdmin",
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "memory": "512",
+    "cpu": "256"
+}

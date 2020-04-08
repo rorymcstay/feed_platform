@@ -1,3 +1,5 @@
+<!--TODO environment variables for hosts/-->
+
 Getting started
 
 1. make the directories 

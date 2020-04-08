@@ -5,12 +5,41 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--file')
+parser.add_argument('--no-defaults',action='store_true')
 parser.add_argument('--outfile', default='')
 parser.add_argument('--escaped', action='store_true', default=False)
+parser.add_argument('--env-list', default='')
+
+base_env = f'{os.environ["DEPLOYMENT_ROOT"]}/etc/aws/aws.env'
+environment = JsonFile(base_env)
+
+
+
+def populate(filename, escaped, outfile, env):
+
+    populated = environment.getDict(filename)
+    jsonString = json.dumps(populated, indent=4)
+    if escaped:
+        jsonString = json.dumps(jsonString, indent)
+    if outfile == '':
+        print(jsonString)
+    else:
+        with open(outfile, 'w+') as out:
+            out.write(jsonString)
 
 if __name__ == '__main__':
+
     args = parser.parse_args()
+    if args.no_defaults:
+        environment.env_vars = {}
+    if args.env_list != '':
+        addition = {}
+        for var in args.env_list.split(','):
+            addition.update({var.split("=")[0].strip(): var.split("=")[1].strip()})
+        environment.addToEnv(addition)
     if args.outfile == args.file:
         print("outfile should be different from file!")
     else:
-        populate(args.file, args.escaped, args.outfile)
+        print(args.env_list)
+        print(json.dumps(environment.env_vars, indent=4))
+        populate(args.file, args.escaped, args.outfile, env=environment)

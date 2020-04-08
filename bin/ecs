@@ -5,30 +5,7 @@ import argparse
 import os
 import json
 import sys
-
-os.environ['PATH'] = os.environ['PATH'] + ':' + os.environ['DEPLOYMENT_ROOT']+'/bin/'
-os.environ['AWS_PAGER'] = ''
-project_name = os.environ['PROJECT_NAME']
-
-all_components = []
-with open(f'{os.environ["DEPLOYMENT_ROOT"]}/etc/manifest.txt') as manif:
-    manifest = map(lambda line: {line[0].strip(): line[1].strip() }, manif.read().split("\n"))
-
-
-def execute(*args, **kargs):
-    print(" ".join(args))
-    kargs.update({'PATH': f'{kargs.get("PATH")}:{os.getenv("DEPLOYMENT_ROOT")}/bin'})
-    out = ''
-    process = subprocess.Popen(args, env=os.environ, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True)
-    with process:
-        for line in process.stdout:
-            print(line)
-            out += line
-    try:
-        out = json.loads(out)
-    except Exception:
-        pass
-    return out
+from ecs import *
 
 parser = argparse.ArgumentParser()
 
@@ -37,124 +14,132 @@ parser.add_argument('--name', default='')
 parser.add_argument('--create-service', action='store_true', default=False)
 parser.add_argument('--start', action='store_true', default=False)
 parser.add_argument('--update', action='store_true', default=False)
+parser.add_argument('--update-all', action='store_true', default=False)
 parser.add_argument('--down', action='store_true', default=False)
+parser.add_argument('--configure-all-services', action='store_true', default=False)
+parser.add_argument('--get-manifest', action='store_true', default=False)
+parser.add_argument('--dump-env', action='store_true')
+parser.add_argument('--delete', action='store_true')
+parser.add_argument('--deep-clean-services', action='store_true')
+parser.add_argument('--overwrite', action='store_true')
 
+
+os.environ['PATH'] = os.environ['PATH'] + ':' + os.environ['DEPLOYMENT_ROOT']+'/bin/'
+os.environ['AWS_PAGER'] = ''
+project_name = os.environ['PROJECT_NAME']
+cluster_name = f'{project_name}-cluster'
+
+all_components = []
+with open(f'{os.environ["DEPLOYMENT_ROOT"]}/etc/manifest.txt') as manif:
+    manifest = {line.split("=")[0].strip(): line.split("=")[1].strip() for line in filter(lambda ln: "=" in ln,  manif.read().split("\n"))}
+
+
+temp_dir = f'{os.environ["DEPLOYMENT_ROOT"]}/tmp'
+if not os.path.exists(temp_dir):
+    os.mkdir(temp_dir)
 
 args = parser.parse_args()
+if args.get_manifest:
+    print( "\n".join(["{}: {}".format(key, manifest.get(key)) for key in manifest]))
+    sys.exit()
+if args.dump_env:
+    print(json.dumps(dict(**os.environ), indent=4))
+    sys.exit()
 
 ecs_task_location = f'{os.environ["DEPLOYMENT_ROOT"]}/etc/aws/ecs/tasks'
 ecs_service_location = f'{os.environ["DEPLOYMENT_ROOT"]}/etc/aws/ecs/services'
 task_template = f'{ecs_task_location}/task-template.json'
 service_template = f'{ecs_service_location}/service-template.json'
-ecs_task_file_template = f'{ecs_task_location}/{args.name}-task.template.json'
-ecs_service_file_template = f'{ecs_service_location}/{args.name}-service.template.json'
-outfile = f'{args.name}-task.json'
-outfile_service = f'{args.name}-service.json'
-
-os.environ["COMPONENT_NAME"] = args.name
-os.environ["SUBNET_1"] = "subnet-05efb380736c64a71"
-os.environ["SUBNET_2"] = "subnet-018b103b25eb9c865"
-os.environ["SECURITY_GROUP"] = "sg-03c52ab4abf87888f"
-os.environ["ASSIGN_PUBLIC_IP"] = "ENABLED"
-
-temp_dir = f'{os.environ["DEPLOYMENT_ROOT"]}/tmp'
+deployment_root = f'{os.environ["DEPLOYMENT_ROOT"]}'
 
 
-if not os.path.exists(temp_dir):
-    os.mkdir(temp_dir)
-
-
-update_service_args = ['aws', 'ecs', 'update-service', '--service', args.name,  '--cluster', f'{project_name}-cluster']
-
-if args.down:
-    if args.name == '':
-        for name in manifest:
-            out = execute('aws', 'ecs', 'update-service', '--cluster', f'{project_name}-service', '--service', f'{name}-service','--desired-count', '0')
+#######################################
+# Start and stop either all or one serv
+# ice
+#######################################
+def start(args):
+    update_service_args = ['aws', 'ecs', 'update-service', '--service', args.name,  '--cluster', cluster_name]
+    if args.down:
+        if args.name == '':
+            for name in manifest:
+                out = execute('aws', 'ecs', 'update-service', '--cluster', cluster_name, '--service', f'{name}','--desired-count', '0')
+                print(json.dumps(out, indent=4))
+        else:
+            out = execute(*update_service_args, '--desired-count', '0')
             print(json.dumps(out, indent=4))
-    else:
-        out = execute(*update_service_args, '--desired-count', '0')
-        print(json.dumps(out, indent=4))
-    sys.exit()
-if args.start:
-    if args.name == "":
-        for name in manifest:
-            out = execute('aws', 'ecs', 'update-service', '--cluster', f'{project_name}-service', '--service', f'{name}-service','--desired-count', '1')
+        sys.exit()
+
+def stop(args):
+    update_service_args = ['aws', 'ecs', 'update-service', '--service', args.name,  '--cluster', cluster_name]
+    if args.start:
+        if args.name == "":
+            for name in manifest:
+                out = execute('aws', 'ecs', 'update-service', '--cluster', cluster_name, '--service', f'{name}','--desired-count', '1')
+                print(json.dumps(out, indent=4))
+        else:
+            out = execute(*update_service_args, '--desired-count', '1')
             print(json.dumps(out, indent=4))
-    else:
-        out = execute(*update_service_args, '--desired-count', '0')
-        print(json.dumps(out, indent=4))
-    sys.exit()
+        sys.exit()
+stop(args)
+start(args)
+
+#######################################
+# Configure a new service template file
+#######################################
 
 
-
-
-
-if args.create_service:
-    execute('populate', '--file', task_template, '--outfile', ecs_task_file_template)
-    execute('populate', '--file', service_template, '--outfile', ecs_service_file_template)
-
-os.environ["COMPONENT_NAME"] = args.name
-os.environ["COMPONENT_VERSION"] = args.version
-os.environ["ASSIGN_PUBLIC_IP"] = 'false' if args.name != 'feed-admin' else 'true'
-
-def listNameSpaces():
-    namespaces = execute('aws', 'servicediscovery', 'list-namespaces').get('Namespaces')
-    return namespaces
-
-def getNamespace(name):
-    namespaces = listNameSpaces()
-    li = list(filter(lambda namespace: namespace.get('Name') == os.environ['PROJECT_NAME'], namespaces))
-    return li[0]
-
-def getServiceRegistries():
-    services = execute('aws', 'servicediscovery', 'list-services')
-    return services.get('Services')
-
-def getServiceRegistryArn(name):
-    services = getServiceRegistries()
-    print(f' have {",".join(list(map(lambda serv: serv.get("Name"), services)))} registries')
-    for i in filter(lambda service: service.get('Name') == name, services):
-        return i.get('Arn')
-    return None
-
-def createServiceRegistry(name):
-    if getServiceRegistryArn(name) is not None:
-        return
-    ns = getNamespace(name)
-    nsid = ns.get('Id')
-    service_registry = {
-        "Name": args.name,
-        "DnsConfig": {
-            "RoutingPolicy": "WEIGHTED",
-            "DnsRecords": [
-                {
-                    "Type": "A",
-                    "TTL": 300
-                }
-            ]
-        },
-    }
-    registry = execute('aws', 'servicediscovery', 'create-service','--namespace-id', nsid, '--cli-input-json', json.dumps(service_registry))
-
-if args.update or args.create_service:
-    # update the task defintion with environemnt and version
+def createOrUpdateServiceWithTask(args):
+    """
+    Populate the complete template file
+    with the version number and aws params
+    """
+    nameEnvVar = f'COMPONENT_NAME={args.name},PROJECT_NAME={project_name}'
     temp_task_file = f'{temp_dir}/{args.name}-task.json'
-    execute('populate', '--file', ecs_task_file_template, '--outfile', temp_task_file, **os.environ)
-    task_definition = execute('aws', 'ecs', 'register-task-definition', '--cli-input-json', f'file://{temp_task_file}', **os.environ)
-    taskDefinitionArn = task_definition.get('taskDefinition').get('taskDefinitionArn')
+    ecs_task_file_template = f'{ecs_task_location}/{args.name}-task.template.json'
+    execute('populate', '--file', ecs_task_file_template, '--outfile', temp_task_file, '--env-list', f'{nameEnvVar},COMPONENT_VERSION={args.version}')
+    taskDefinitionArn = execute('aws', 'ecs', 'register-task-definition', '--cli-input-json', f'file://{temp_task_file}', **os.environ)
+    update_service_args = ['aws', 'ecs', 'update-service', '--service', args.name,  '--cluster', cluster_name]
+    print(taskDefinitionArn)
+    if args.create_service and input(f'Are you sure you want to create service {args.name}? [Y/n]: ') == 'Y':
+        print('creating template files')
+        promptUserForFile(ecs_task_file_template, lambda: execute('populate', '--file', task_template, '--outfile', ecs_task_file_template,'--env-list', nameEnvVar, '--no-defaults'),no_interupt=False)
+        promptUserForFile(ecs_service_file_template, lambda: execute('populate', '--file', service_template, '--outfile', ecs_service_file_template, '--env-list', nameEnvVar,'--no-defaults'), no_interupt=False)
+        temp_service_file = f'{temp_dir}/{args.name}-service.json'
+        createServiceRegistry(args.name)
+        createServiceEnvVars = f'TASK_DEFINITION={taskDefinitionArn.split("/")[-1]},SERVICE_REGISTRY_ARN={getServiceRegistryVal(args.name, "Arn")},{nameEnvVar}'
+        execute('populate', '--file', ecs_service_file_template, '--outfile', temp_service_file, '--env-list', createServiceEnvVars)
+        temp_service_file = f'{temp_dir}/{args.name}-service.json'
+        execute('aws', 'ecs', 'create-service', '--cli-input-json', f'file://{temp_service_file}')
+
+    out = execute(*update_service_args, '--task-definition', taskDefinitionArn.get('taskDefinition').get('taskDefinitionArn'), '--desired-count', '0')
+    print(out)
+
+def updateAll(args):
+    for component in manifest:
+        args.name = component
+        args.version = manifest.get(component)
+        createOrUpdateServiceWithTask(args)
+
+#######################################
+# Create the AWS service and a registry
+#######################################
+if (args.create_service or args.update) and args.version != '' and args.name != '':
+    createOrUpdateServiceWithTask(args)
 
 
-if args.create_service:
-    createServiceRegistry(args.name)
-    os.environ['TASK_DEFINITION'] = taskDefinitionArn.split("/")[-1]
-    os.environ['SERVICE_REGISTRY_ARN'] = getServiceRegistryArn(args.name)
-    temp_service_file = f'{temp_dir}/{args.name}-service.json'
-    execute('populate', '--file', ecs_service_file_template, '--outfile', temp_service_file)
-    temp_service_file = f'{temp_dir}/{args.name}-service.json'
-    execute('aws', 'ecs', 'create-service', '--cli-input-json', f'file://{temp_service_file}')
+#######################################
+# Configure everything fresh
+#######################################
+if args.configure_all_services:
+    args.create_service = True
+    updateAll(args)
+if args.delete and args.name != '':
+    execute('ecs', '--down', '--name', args.name)
+    tearDownService(args.name)
 
-if args.update:
-    execute(*update_service_args, '--task-definition', taskDefinitionArn, '--desired-count', '0')
+if args.deep_clean_services:
+    execute('ecs', '--down')
+    [tearDownService(name) for name in manifest]
 
-
-
+if args.update_all:
+    updateAll(args)
