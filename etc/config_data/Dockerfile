@@ -9,7 +9,7 @@ COPY forms forms
 COPY params params
 COPY initialise.py initialise.py
 
-ENV DATAROOT=/usr/local/setup/mongo
+ENV CONFIG_DATAROOT=/usr/local/setup/mongo
 ENV DATABASE="localhost:27017"
 
 # Copying over necessary files

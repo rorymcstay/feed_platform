@@ -22,28 +22,8 @@
             ],
             "environment": [
                 {
-                    "name": "BROWSER_BASE_PORT",
-                    "value": "4444"
-                },
-                {
-                    "name": "CONTAINER_TIMEOUT",
-                    "value": "10"
-                },
-                {
-                    "name": "DATABASE_NAME",
-                    "value": "feeds"
-                }, 
-                {
-                    "name": "FLASK_PORT",
-                    "value": "80"
-                },
-                {
                     "name": "KAFKA_ADDRESS",
                     "value": "kafka.feed:29092"
-                },
-                {
-                    "name": "LEADER_START",
-                    "value": "\"feed has started\""
                 },
                 {
                     "name": "LOG_LEVEL",
@@ -51,31 +31,15 @@
                 },
                 {
                     "name": "NANNY_HOST",
-                    "value": "nanny.feed"
+                    "value": "supporting-service.feed"
                 },
                 {
                     "name": "ROUTER_HOST",
-                    "value": "routing.feed"
+                    "value": "supporting-service.feed"
                 },
                 {
                     "name": "COMMANDS_HOST",
-                    "value": "commands.feed"
-                },
-                {
-                    "name": "SUMMARIZER_HOST",
-                    "value": "summarizer.feed"
-                },
-                {
-                    "name": "SELENIUM_PORT",
-                    "value": "4444"
-                },
-                {
-                    "name": "WORKER_TIMEOUT",
-                    "value": "3"
-                },
-                {
-                    "name": "LOGLEVEL",
-                    "value": "DEBUG"
+                    "value": "supporting-service.feed"
                 }
             ]
         }

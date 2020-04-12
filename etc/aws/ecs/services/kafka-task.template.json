@@ -1,7 +1,7 @@
 {
     "cluster": "feed-cluster",
     "launchType": "FARGATE",
-    "serviceName": "ui-server",
+    "serviceName": "kafka",
     "taskDefinition": "${TASK_DEFINITION}",
     "desiredCount": 1,
     "platformVersion": "LATEST",

@@ -23,11 +23,11 @@
             "environment": [
                 {
                     "name": "COMMANDSERVER",
-                    "value": "http://commands.feed"
+                    "value": "http://supporting-service.feed:${COMMANDS_PORT}"
                 },
                 {
                     "name": "UISERVER",
-                    "value": "http://ui-server.feed"
+                    "value": "http://supporting-service.feed:${UISERVER_PORT}"
                 }
             ]
         }

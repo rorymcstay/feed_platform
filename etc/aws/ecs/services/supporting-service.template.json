@@ -1,7 +1,7 @@
 {
     "cluster": "feed-cluster",
     "launchType": "FARGATE",
-    "serviceName": "mongo",
+    "serviceName": "supporting-service",
     "taskDefinition": "${TASK_DEFINITION}",
     "desiredCount": 1,
     "platformVersion": "LATEST",

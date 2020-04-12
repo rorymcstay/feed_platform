@@ -16,10 +16,5 @@
             ],
             "assignPublicIp": "${ASSIGN_PUBLIC_IP}"
         }
-    },
-    "serviceRegistries": [
-        {
-            "registryArn": "${SERVICE_REGISTRY_ARN}"
-        }
-    ]
+    }
 }

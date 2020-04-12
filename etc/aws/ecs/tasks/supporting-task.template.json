@@ -1,0 +1,150 @@
+{
+    "containerDefinitions": [
+        {
+            "name": "config_data",
+            "image": "${IMAGE_REPOSITORY}/config_data:latest",
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "feed-logs",
+                    "awslogs-region": "${DEFAULT_REGION}",
+                    "awslogs-stream-prefix": "config-data"
+                }
+            },
+            "essential": false,
+            "dependsOn": [{"containerName": "mongo", "condition": "START"}]
+        },
+        {
+            "name": "commands",
+            "image": "${IMAGE_REPOSITORY}/feed/commands:${COMPONENT_VERSION}",
+            "memory": 409,
+            "cpu": 204,
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "feed-logs",
+                    "awslogs-region": "${DEFAULT_REGION}",
+                    "awslogs-stream-prefix": "commands"
+                }
+            },
+            "dependsOn": [
+                {"containerName": "nanny", "condition": "START"}
+            ],
+            "portMappings": [
+                {
+                    "protocol": "tcp",
+                    "containerPort": "${COMMANDS_PORT}",
+                    "hostPort": "${COMMANDS_PORT}"
+                }
+            ]
+        },
+        {
+            "name": "nanny",
+            "image": "${IMAGE_REPOSITORY}/feed/nanny:${COMPONENT_VERSION}",
+            "memory": 409,
+            "cpu": 204,
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "feed-logs",
+                    "awslogs-region": "${DEFAULT_REGION}",
+                    "awslogs-stream-prefix": "nanny"
+                }
+            },
+            "dependsOn": [
+                {"containerName": "mongo", "condition": "START"}
+            ],
+            "portMappings": [
+                {
+                    "protocol": "tcp",
+                    "containerPort": "${NANNY_PORT}",
+                    "hostPort": "${NANNY_PORT}" 
+                }
+            ]
+        },
+        {
+            "name": "ui-server",
+            "image": "${IMAGE_REPOSITORY}/feed/ui-server:${COMPONENT_VERSION}",
+            "memory": 409,
+            "cpu": 204,
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "feed-logs",
+                    "awslogs-region": "${DEFAULT_REGION}",
+                    "awslogs-stream-prefix": "ui-server"
+                }
+            },
+            "dependsOn": [
+                {"containerName": "nanny", "condition": "START"},
+                {"containerName": "commands", "condition": "START"}
+            ],
+            "portMappings": [
+                {
+                    "protocol": "tcp",
+                    "containerPort": "${UISERVER_PORT}",
+                    "hostPort": "${UISERVER_PORT}"
+                }
+            ]
+        },
+        {
+            "name": "routing",
+            "image": "${IMAGE_REPOSITORY}/feed/routing:${COMPONENT_VERSION}",
+            "memory": 409,
+            "cpu": 204,
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "feed-logs",
+                    "awslogs-region": "${DEFAULT_REGION}",
+                    "awslogs-stream-prefix": "routing"
+                }
+            },
+            "dependsOn": [
+                {"containerName": "nanny", "condition": "START"}
+            ],
+            "portMappings": [
+                {
+                    "protocol": "tcp",
+                    "containerPort": "${ROUTING_PORT}",
+                    "hostPort": "${ROUTING_PORT}"
+                }
+            ]
+        },
+        {
+            "image": "mongo:latest",
+            "environment": [
+                {"name": "MONGO_INITDB_ROOT_PASSWORD", "value": "root"},
+                {"name": "MONGO_INITDB_ROOT_USERNAME","value": "root"}
+            ],
+            "name": "mongo",
+            "cpu": 204,
+            "portMappings": [
+                {
+                    "protocol": "tcp",
+                    "containerPort": 27017,
+                    "hostPort": 27017
+                }
+            ],
+            "command": ["mongod"],
+            "memory": 409,
+            "essential": true,
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "${PROJECT_NAME}-logs",
+                    "awslogs-region": "${DEFAULT_REGION}",
+                    "awslogs-stream-prefix": "mongo"
+                }
+            }
+        }
+    ],
+    "networkMode": "awsvpc",
+    "family": "supporting-task",
+    "executionRoleArn": "arn:aws:iam::064106913348:role/FeedAdmin",
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "memory": "2048",
+    "cpu": "1024"
+}

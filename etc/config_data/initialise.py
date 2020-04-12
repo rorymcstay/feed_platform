@@ -31,7 +31,7 @@ params
 
 
 """
-dataroot=os.getenv("CONFIG_DATAROOT", f'{os.environ["DEPLOYMENT_ROOT"]}/etc/config_data/')
+dataroot=os.getenv("CONFIG_DATAROOT", f'{os.getenv("DEPLOYMENT_ROOT", "$HOME/app/feed")}/etc/config_data/')
 print(dataroot)
 
 log = logging.getLogger(__name__)
@@ -39,7 +39,7 @@ log.setLevel("INFO")
 
 def probeMongoDB():
     try:
-        cl = client.server_info()
+        cl = client.list_databases()
         log.info(cl)
     except ServerSelectionTimeoutError as ex:
         log.warning(f'server selection timeout with: {mongo_params}')

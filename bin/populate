@@ -40,6 +40,4 @@ if __name__ == '__main__':
     if args.outfile == args.file:
         print("outfile should be different from file!")
     else:
-        print(args.env_list)
-        print(json.dumps(environment.env_vars, indent=4))
         populate(args.file, args.escaped, args.outfile, env=environment)

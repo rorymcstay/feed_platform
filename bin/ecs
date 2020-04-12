@@ -22,6 +22,7 @@ parser.add_argument('--dump-env', action='store_true')
 parser.add_argument('--delete', action='store_true')
 parser.add_argument('--deep-clean-services', action='store_true')
 parser.add_argument('--overwrite', action='store_true')
+parser.add_argument('--supportin-services', action='store_true')
 
 
 os.environ['PATH'] = os.environ['PATH'] + ':' + os.environ['DEPLOYMENT_ROOT']+'/bin/'
@@ -29,9 +30,7 @@ os.environ['AWS_PAGER'] = ''
 project_name = os.environ['PROJECT_NAME']
 cluster_name = f'{project_name}-cluster'
 
-all_components = []
-with open(f'{os.environ["DEPLOYMENT_ROOT"]}/etc/manifest.txt') as manif:
-    manifest = {line.split("=")[0].strip(): line.split("=")[1].strip() for line in filter(lambda ln: "=" in ln,  manif.read().split("\n"))}
+manifest = getManifest()
 
 
 temp_dir = f'{os.environ["DEPLOYMENT_ROOT"]}/tmp'
@@ -51,7 +50,6 @@ ecs_service_location = f'{os.environ["DEPLOYMENT_ROOT"]}/etc/aws/ecs/services'
 task_template = f'{ecs_task_location}/task-template.json'
 service_template = f'{ecs_service_location}/service-template.json'
 deployment_root = f'{os.environ["DEPLOYMENT_ROOT"]}'
-
 
 #######################################
 # Start and stop either all or one serv
@@ -96,7 +94,7 @@ def createOrUpdateServiceWithTask(args):
     nameEnvVar = f'COMPONENT_NAME={args.name},PROJECT_NAME={project_name}'
     temp_task_file = f'{temp_dir}/{args.name}-task.json'
     ecs_task_file_template = f'{ecs_task_location}/{args.name}-task.template.json'
-    ecs_service_file_template = f'{ecs_service_location}/{args.name}-task.template.json'
+    ecs_service_file_template = f'{ecs_service_location}/{args.name}-service.template.json'
     execute('populate', '--file', ecs_task_file_template, '--outfile', temp_task_file, '--env-list', f'{nameEnvVar},COMPONENT_VERSION={args.version}')
     taskDefinition = execute('aws', 'ecs', 'register-task-definition', '--cli-input-json', f'file://{temp_task_file}', **os.environ)
     update_service_args = ['aws', 'ecs', 'update-service', '--service', args.name,  '--cluster', cluster_name]
@@ -107,7 +105,8 @@ def createOrUpdateServiceWithTask(args):
         promptUserForFile(ecs_task_file_template, lambda: execute('populate', '--file', task_template, '--outfile', ecs_task_file_template,'--env-list', nameEnvVar, '--no-defaults'),no_interupt=False)
         promptUserForFile(ecs_service_file_template, lambda: execute('populate', '--file', service_template, '--outfile', ecs_service_file_template, '--env-list', nameEnvVar,'--no-defaults'), no_interupt=False)
         temp_service_file = f'{temp_dir}/{args.name}-service.json'
-        createServiceRegistry(args.name)
+        if args.name in ['kafka', 'database']:
+            createServiceRegistry(args.name)
         createServiceEnvVars = f'TASK_DEFINITION={task_definition_arn.split("/")[-1]},SERVICE_REGISTRY_ARN={getServiceRegistryVal(args.name, "Arn")},{nameEnvVar}'
         execute('populate', '--file', ecs_service_file_template, '--outfile', temp_service_file, '--env-list', createServiceEnvVars)
         temp_service_file = f'{temp_dir}/{args.name}-service.json'
@@ -121,6 +120,12 @@ def updateAll(args):
         args.name = component
         args.version = manifest.get(component)
         createOrUpdateServiceWithTask(args)
+
+if args.name == 'supporting' and args.update or args.create_service:
+    setupSupportingServices(args.name)
+    sys.exit()
+
+
 
 #######################################
 # Create the AWS service and a registry
