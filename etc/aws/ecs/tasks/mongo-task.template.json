@@ -61,8 +61,16 @@
             "image": "064106913348.dkr.ecr.us-west-2.amazonaws.com/config_data:latest",
             "memory": 256,
             "cpu": 100,
-            "dependsOn": [{"containerName": "mongo", "condition": "START"}],
-            "essential": false
+            "dependsOn": [{"containerName": "mongo-express", "condition": "START"}],
+            "essential": false,
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "${PROJECT_NAME}-logs",
+                    "awslogs-region": "${DEFAULT_REGION}",
+                    "awslogs-stream-prefix": "mongo"
+                }
+            }
         }
     ],
     "networkMode": "awsvpc",

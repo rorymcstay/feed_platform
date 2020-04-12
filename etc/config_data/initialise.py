@@ -2,7 +2,8 @@ import json
 import os
 import logging
 from pymongo import MongoClient
-
+from pymongo.errors import ServerSelectionTimeoutError
+from time import sleep
 mongo_params = {
     "host": os.getenv("DATABASE", "localhost"),
     "username": os.getenv("MONGO_USER", "root"),
@@ -30,11 +31,20 @@ params
 
 
 """
-dataroot=os.getenv("DATAROOT", os.getcwd())
-
+dataroot=os.getenv("CONFIG_DATAROOT", f'{os.environ["DEPLOYMENT_ROOT"]}/etc/config_data/')
+print(dataroot)
 
 log = logging.getLogger(__name__)
+log.setLevel("INFO")
 
+def probeMongoDB():
+    try:
+        cl = client.server_info()
+        log.info(cl)
+    except ServerSelectionTimeoutError as ex:
+        log.warning(f'server selection timeout with: {mongo_params}')
+        return False
+    return True
 
 def writeCollection(collectionName, database):
     with open(os.path.join(dataroot, f"{database}/{collectionName}")) as file:
@@ -43,9 +53,9 @@ def writeCollection(collectionName, database):
 
 
 if __name__ == '__main__':
-    for databaseName in filter(lambda item: "." not in item, os.listdir(f"{dataroot}")):
-        for collection in os.listdir(os.path.join(dataroot, databaseName)):
-            if ".json" not in collection:
-                continue
-            print(f"inserting {collection} into {databaseName}")
+    while not probeMongoDB():
+        sleep(10)
+    for databaseName in filter(lambda item: "." not in item and 'Dockerfile'!= item , os.listdir(f"{dataroot}")):
+        for collection in filter(lambda name: ".json" in name, os.listdir(os.path.join(dataroot, databaseName))):
+            log.warning(f"inserting {collection} into {databaseName}")
             writeCollection(database=databaseName, collectionName=collection)

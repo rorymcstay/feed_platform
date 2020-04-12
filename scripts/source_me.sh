@@ -22,7 +22,7 @@ export BROWSER_CONTAINER_HOST=localhost
 export PERST_HOST=localhost
 export SUMMARIZER_HOST=localhost
 export PYTHONPATH="$PYTHONPATH:$SOURCE_DIR/utils"
-export DATAROOT=$HOME/app/feed/mongo
+export CONFIG_DATAROOT=$DEPLOYMENT_ROOT/etc/config_data
 export LEADER_TEMPLATE=leader
 
 export LOG_LEVEL=DEBUG
