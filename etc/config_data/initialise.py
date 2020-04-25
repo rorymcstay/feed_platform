@@ -31,7 +31,7 @@ params
 
 
 """
-dataroot=os.getenv("CONFIG_DATAROOT", f'{os.getenv("DEPLOYMENT_ROOT", "$HOME/app/feed")}/etc/config_data/')
+dataroot=os.getenv("CONFIG_DATAROOT", f'{os.getenv("DEPLOYMENT_ROOT", "/home/rory/app/feed")}/etc/config_data/')
 print(dataroot)
 
 log = logging.getLogger(__name__)

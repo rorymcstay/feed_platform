@@ -7,6 +7,7 @@ Getting started
         mkdir $HOME/dev/feed
 
     This repo should be in $HOME/app/feed
+
 2. then do
     
         ~/app/feed$ source environment.sh
@@ -15,26 +16,17 @@ Getting started
 3. then start the services
     
         ~/app/feed$ dc-services up -d
+   Sometimes kafka will fail to come up, re run the same command once again to verify
 
 4. then initialise the mongo database
         
-        ~/app/feed$ docker build config_data --tag config_data
-        ~/app/feed$ docker run --network feed_default config_data
-        # TODO: run the config_data container with the services.yml config
+        ~/app/feed$ docker build etc/config_data --tag config_data
+        ~/app/feed$ docker run --network compose_default config_data
 
-5. start the components
-
-        ~/app/feed$ dc up -d nanny ui-server router
-        ~/app/feed$ dc-up # this will follow logs allowing you to detatch
-        # TODO: app is clunky to start should minimise run dependencies
-
-6. build the leader image and pull selenium
-        
-        ~/dev/feed$ docker build leader --tag leader
-        ~/dev/feed$ docker pull selenium/standalone-chrome:3.141.59
-
-6. go to http://localhost:3000
-
+5. then start the app
+    
+        dc-deploy up -d # this is version containers from ecr
+        dc up  -d # source code built containers from SOURCE_DIR
 #Platform Road Map:
 
 ## monitoring

@@ -12,6 +12,16 @@ services:
     env_file:
     - envs/deployment.env
 
+  capture-crawler:
+    build: ${SOURCE_DIR}/capture-crawler
+    volumes:
+    - /var/run/docker.docker:/sock/var/run.sock
+    depends_on:
+    - nanny
+    stop_grace_period: 5s
+    env_file:
+    - envs/deployment.env
+
   router:
     container_name: feed_router
     build: ${SOURCE_DIR}/routing
@@ -35,8 +45,6 @@ services:
     - /var/run/docker.sock:/var/run/docker.sock
     ports:
     - "5003:5000"
-    environment:
-      BROWSER_BASE_PORT: 4444
     stop_grace_period: 5s
     env_file:
       - ./envs/deployment.env

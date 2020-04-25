@@ -4,15 +4,17 @@ services:
 
   router:
     container_name: feed_router
-    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/routing:0.0.0
+    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/routing:0.0.3
     restart: unless-stopped
     stop_grace_period: 5s
+    depends_on:
+    - nanny
     env_file:
       - ./envs/deployment.env
 
   nanny:
     container_name: feed_nanny
-    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/nanny:0.0.0
+    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/nanny:0.0.3
     restart: unless-stopped
     stop_grace_period: 5s
     environment:
@@ -22,53 +24,52 @@ services:
 
   ui-server:
     container_name: feed_ui-server
-    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/ui-server:0.0.0
+    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/ui-server:0.0.2
     restart: unless-stopped
+    depends_on:
+    - nanny
     env_file:
       - ./envs/deployment.env
 
   commands:
-    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/summarizer:0.0.0
+    container_name: feed_commands
+    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/commands:0.0.8
     restart: unless-stopped
+    depends_on:
+    - nanny
     stop_grace_period: 5s
     env_file:
     - envs/deployment.env
 
   summarizer:
-    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/summarizer:0.0.0
+    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/summarizer:0.0.4
     restart: unless-stopped
     stop_grace_period: 5s
+    depends_on:
+    - nanny
     env_file:
     - ./envs/deployment.env
     environment:
       - TOPICS=results
       - PREFIX=stg
 
-  mapper:
-    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/mapper:0.0.0
-    restart: unless-stopped
-    stop_grace_period: 5s
-    env_file:
-    - ./envs/deployment.env
-
-  persistence:
-    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/persistence:0.0.0
-    restart: unless-stopped
-    stop_grace_period: 5s
-    env_file:
-      - ./envs/deployment.env
   leader:
-    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/leader:0.0.0
+    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/leader:0.1.1
     restart: unless-stopped
     stop_grace_period: 5s
+    depends_on:
+    - nanny
     env_file:
       - ./envs/deployment.env
 
   feed-admin:
-    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/feed-admin:0.0.1
+    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/feed-admin:0.0.6
     restart: unless-stopped
+    depends_on:
+    - nanny
+    - commands
     ports:
-      - "80:80"
+      - "3000:80"
     stop_grace_period: 5s
     env_file:
       - ./envs/deployment.env
