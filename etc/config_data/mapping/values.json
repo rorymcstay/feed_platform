@@ -1,0 +1,104 @@
+[{
+    "name": "donedeal",
+    "value": {
+        "mapping": [
+            {
+                "staging_column_name": "card__price_4",
+                "final_column_name": "price"
+            },
+            {
+                "staging_column_name": "card__price_9",
+                "final_column_name": "road_tax"
+            },
+            {
+                "staging_column_name": "card__merit_2",
+                "final_column_name": "history_check"
+            },
+            {
+                "staging_column_name": "card__merit--gold",
+                "final_column_name": "warranty"
+            },
+            {
+                "staging_column_name": "card__header-title",
+                "final_column_name": "dealer_name"
+            },
+            {
+                "staging_column_name": "card__header-subinfo",
+                "final_column_name": "dealer_type"
+            },
+            {
+                "staging_column_name": "card__body-title",
+                "final_column_name": "description"
+            },
+            {
+                "staging_column_name": "card__body-keyinfo_5",
+                "final_column_name": "county"
+            },
+            {
+                "staging_column_name": "card__body-keyinfo_4",
+                "final_column_name": "age"
+            },
+            {
+                "staging_column_name": "card__body-keyinfo_3",
+                "final_column_name": "mileage"
+            },
+            {
+                "staging_column_name": "card__body-keyinfo_2",
+                "final_column_name": "engine_type"
+            },
+            {
+                "staging_column_name": "card__body-keyinfo",
+                "final_column_name": "year"
+            }
+        ]
+    },
+    "tableName": "t_stg_donedeal_results"
+},
+{
+    "name": "pistonheads",
+    "value": {
+        "mapping": [
+            {
+                "staging_column_name": "wheelspin-button-solid-green",
+                "final_column_name": "number"
+            },
+            {
+                "staging_column_name": "specs_4",
+                "final_column_name": "transmission"
+            },
+            {
+                "staging_column_name": "specs_3",
+                "final_column_name": "power"
+            },
+            {
+                "staging_column_name": "specs_2",
+                "final_column_name": "engine"
+            },
+            {
+                "staging_column_name": "specs",
+                "final_column_name": "mileage"
+            },
+            {
+                "staging_column_name": "price_3",
+                "final_column_name": "price"
+            },
+            {
+                "staging_column_name": "location",
+                "final_column_name": "county"
+            },
+            {
+                "staging_column_name": "listing-headline_2",
+                "final_column_name": "name"
+            },
+            {
+                "staging_column_name": "image_",
+                "final_column_name": "image"
+            },
+            {
+                "staging_column_name": "description",
+                "final_column_name": "description"
+            }
+        ]
+    },
+    "tableName": "t_stg_pistonheads_results"
+}]
