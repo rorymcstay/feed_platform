@@ -61,12 +61,20 @@ services:
     env_file:
       - ./envs/deployment.env
 
+  commands:
+    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/commands:0.0.8
+    restart: unless-stopped
+    stop_grace_period: 5s
+    depends_on:
+    - nanny
+    env_file:
+      - ./envs/deployment.env
+
   feed-admin:
     image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/feed-admin:0.1.1
     restart: unless-stopped
     depends_on:
     - nanny
-    - commands
     ports:
       - "3000:80"
     stop_grace_period: 5s
