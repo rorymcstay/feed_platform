@@ -7,6 +7,7 @@ WORKDIR /usr/local/setup/mongo
 COPY requirements.txt requirements.txt
 COPY forms forms
 COPY params params
+COPY mapping mapping
 COPY initialise.py initialise.py
 
 ENV CONFIG_DATAROOT=/usr/local/setup/mongo
