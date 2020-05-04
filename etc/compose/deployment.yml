@@ -71,7 +71,7 @@ services:
       - ./envs/deployment.env
 
   feed-admin:
-    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/feed-admin:0.1.1
+    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/feed-admin:0.1.2
     restart: unless-stopped
     depends_on:
     - nanny
