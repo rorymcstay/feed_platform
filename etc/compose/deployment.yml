@@ -44,7 +44,7 @@ services:
       - PREFIX=stg
 
   leader:
-    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/leader:0.2.0
+    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/leader:0.2.1
     restart: unless-stopped
     stop_grace_period: 5s
     depends_on:
@@ -53,7 +53,7 @@ services:
       - ./envs/deployment.env
 
   capture-crawler:
-    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/capture-crawler:0.0.0
+    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/capture-crawler:0.1.2
     restart: unless-stopped
     stop_grace_period: 5s
     depends_on:
