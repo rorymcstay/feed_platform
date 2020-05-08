@@ -14,7 +14,7 @@ services:
 
   nanny:
     container_name: feed_nanny
-    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/nanny:0.1.2
+    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/nanny:0.1.4
     restart: unless-stopped
     stop_grace_period: 5s
     environment:
@@ -24,7 +24,7 @@ services:
 
   ui-server:
     container_name: feed_ui-server
-    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/ui-server:0.0.6
+    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/ui-server:0.0.8
     restart: unless-stopped
     depends_on:
     - nanny
@@ -32,7 +32,7 @@ services:
       - ./envs/deployment.env
 
   summarizer:
-    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/summarizer:0.0.4
+    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/summarizer:0.1.0
     restart: unless-stopped
     stop_grace_period: 5s
     depends_on:
@@ -44,7 +44,7 @@ services:
       - PREFIX=stg
 
   leader:
-    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/leader:0.2.2
+    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/leader:0.2.3
     restart: unless-stopped
     stop_grace_period: 5s
     depends_on:
@@ -53,7 +53,7 @@ services:
       - ./envs/deployment.env
 
   capture-crawler:
-    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/capture-crawler:0.1.3
+    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/capture-crawler:0.1.4
     restart: unless-stopped
     stop_grace_period: 5s
     depends_on:
@@ -71,7 +71,7 @@ services:
       - ./envs/deployment.env
 
   feed-admin:
-    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/feed-admin:0.1.2
+    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/feed-admin:0.1.3
     restart: unless-stopped
     depends_on:
     - nanny

@@ -6,26 +6,29 @@ services:
     build: ${SOURCE_DIR}/worker
     volumes:
     - /var/run/docker.docker:/sock/var/run.sock
+    - ${SOURCE_DIR}/utils/feed:/usr/worker/feed
     depends_on:
     - nanny
     stop_grace_period: 5s
     env_file:
-    - envs/deployment.env
+    - ${DEPLOYMENT_ROOT}/etc/compose/envs/deployment.env
 
   capture-crawler:
     build: ${SOURCE_DIR}/capture-crawler
     volumes:
-    - /var/run/docker.docker:/sock/var/run.sock
+    - ${SOURCE_DIR}/utils/feed:/usr/capture-crawler/feed
     restart: 'always'
     depends_on:
     - nanny
     stop_grace_period: 5s
     env_file:
-    - envs/deployment.env
+    - ${DEPLOYMENT_ROOT}/etc/compose/envs/deployment.env
 
   router:
     container_name: feed_router
     build: ${SOURCE_DIR}/routing
+    volumes:   
+    - ${SOURCE_DIR}/utils/feed:/home/feed
     ports:
     - "5002:5000"
     stop_grace_period: 5s
@@ -35,42 +38,48 @@ services:
   leader:
     container_name: leader
     build: ${SOURCE_DIR}/leader
+    environment:
+    - LOG_LEVEL=INFO
     env_file:
-      - ./envs/deployment.env
+    - ${DEPLOYMENT_ROOT}/etc/compose/envs/deployment.env
+    volumes:
+    - ${SOURCE_DIR}/utils/feed:/usr/leader/feed
 
   nanny:
     container_name: feed_nanny
     build: ${SOURCE_DIR}/nanny
     volumes:
-    - ./config:/home/config
     - /var/run/docker.sock:/var/run/docker.sock
+    - ${SOURCE_DIR}/utils/feed:/home/feed
     ports:
     - "5003:5000"
     stop_grace_period: 5s
     env_file:
-      - ./envs/deployment.env
+    - ${DEPLOYMENT_ROOT}/etc/compose/envs/deployment.env
 
   ui-server:
     container_name: feed_ui-server
     build: ${SOURCE_DIR}/ui-server
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - ${SOURCE_DIR}/utils/feed:/home/feed
     ports:
       - "5004:5000"
     env_file:
-      - envs/deployment.env
+    - ${DEPLOYMENT_ROOT}/etc/compose/envs/deployment.env
 
   summarizer:
     container_name: feed_summarizer
     build: ${SOURCE_DIR}/summarizer
     volumes:
     - /var/run/docker.sock:/var/run/docker.sock
+    - ${SOURCE_DIR}/utils/feed:/home/feed
     stop_grace_period: 5s
     environment:
       - TOPICS=results
       - PREFIX=stg
     env_file:
-    - envs/deployment.env
+    - ${DEPLOYMENT_ROOT}/etc/compose/envs/deployment.env
 
   commands:
     container_name: feed_commands
@@ -81,7 +90,7 @@ services:
     ports:
       - "5001:5000"
     env_file:
-    - envs/deployment.env
+    - ${DEPLOYMENT_ROOT}/etc/compose/envs/deployment.env
 
   feed-admin:
     ports:
