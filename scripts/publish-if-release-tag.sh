@@ -9,7 +9,7 @@ IMAGE_NAME=$PROJECT_NAME/$COMPONENT
 echo "git describe --exact-match --tags $(git log -n1 --pretty='%h')"
 tag=$(git describe --exact-match --tags $(git log -n1 --pretty='%h'))
 
-export IS_RELEASE=1
+IS_RELEASE=1
 echo $tag | grep -E -q "^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(-(0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(\.(0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*)?(\+[0-9a-zA-Z-]+(\.[0-9a-zA-Z-]+)*)?$" \
     || IS_RELEASE=0
 
