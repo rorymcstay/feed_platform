@@ -42,3 +42,6 @@ alias gitpushall="for com in $(ls $SOURCE_DIR); do cd $SOURCE_DIR/$com; echo \"#
 
 export PATH="$PATH:/$DEPLOYMENT_ROOT/bin"
 export PYTHONPATH="$PYTHONPATH:$DEPLOYMENT_ROOT/lib/python"
+
+
+export WIREGUARD_INTERFACE=10.66.66.3

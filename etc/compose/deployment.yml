@@ -76,11 +76,11 @@ services:
     depends_on:
     - nanny
     ports:
-      - "3000:80"
+      - "80:80"
     stop_grace_period: 5s
     env_file:
       - ./envs/deployment.env
     environment:
       - UISERVER=http://feed_ui-server:5000
       - COMMANDSERVER=http://feed_commands:5000
-      - SERVERNAME=feed-admin
+      - SERVERNAME=${WIREGUARD_INTERFACE}
