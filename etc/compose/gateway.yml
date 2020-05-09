@@ -1,0 +1,45 @@
+version: '3'
+services:
+  feed-admin:
+    ports:
+     - "80:80"
+    container_name: feed-admin
+    build: ${SOURCE_DIR}/feed-admin
+    volumes:
+    - /etc/wireguard:/etc/wireguard
+    stop_grace_period: 5s
+    network_mode: "host"
+    environment:
+    - UISERVER=http://localhost:5004
+    - COMMANDSERVER=http://localhost:5001
+    - NANNYSERVER=http://localhost:5003
+    - SERVERNAME=localhost
+
+  wireguard:
+    image: linuxserver/wireguard
+    container_name: wireguard
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+      #- SERVERURL=wireguard.domain.com #optional
+      - SERVERPORT=51820 #optional
+      #- PEERS=1 #optional
+      #- PEERDNS=auto #optional
+      #- INTERNAL_SUBNET=10.13.13.0 #optional
+    volumes:
+      - ${SOURCE_DIR}/feed-admin/wireguard/:/config
+      - /lib/modules:/lib/modules
+      - /usr/src:/usr/src
+    ports:
+      - 51820:51820/udp
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+      - net.ipv6.conf.all.disable_ipv6=0
+      - net.ipv6.conf.default.disable_ipv6=0 
+      - net.ipv6.conf.lo.disable_ipv6=0
+    restart: unless-stopped
+
