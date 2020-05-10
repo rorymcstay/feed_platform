@@ -92,4 +92,14 @@ services:
     env_file:
     - ${DEPLOYMENT_ROOT}/etc/compose/envs/deployment.env
 
+  feed-admin:
+    ports:
+     - "3000:80"
+    container_name: feed-admin
+    build: ${SOURCE_DIR}/feed-admin
+    stop_grace_period: 5s
+    environment:
+    - UISERVER=http://feed_ui-server:5000
+    - COMMANDSERVER=http://feed_commands:5000
+    - SERVERNAME=feed-admin
 
