@@ -4,83 +4,85 @@ services:
 
   router:
     container_name: feed_router
-    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/routing:0.1.0
-    restart: unless-stopped
+    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/routing:${ROUTER_VERSION}
+    restart: ${RESTART:never}
     stop_grace_period: 5s
     depends_on:
     - nanny
     env_file:
-      - ./envs/deployment.env
+      - ${ENV_FILE}
 
   nanny:
     container_name: feed_nanny
-    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/nanny:0.1.8
-    restart: unless-stopped
+    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/nanny:${NANNY_VERSION}
+    restart: ${RESTART:never}
     stop_grace_period: 5s
     environment:
     - NETWORK=feed_default
     env_file:
-      - ./envs/deployment.env
+      - ${ENV_FILE}
 
   ui-server:
     container_name: feed_ui-server
-    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/ui-server:0.0.10
-    restart: unless-stopped
+    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/ui-server:${UISERVER_VERSION}
+    restart: ${RESTART:never}
     depends_on:
     - nanny
     env_file:
-      - ./envs/deployment.env
+      - ${ENV_FILE}
 
   summarizer:
-    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/summarizer:0.1.0
-    restart: unless-stopped
+    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/summarizer:${SUMMARIZER_VERSION}
+    restart: ${RESTART:=never}
     stop_grace_period: 5s
+    deploy:
+        replicas: ${SUMMARIZER_SCALE:=1}
     depends_on:
     - nanny
     env_file:
-    - ./envs/deployment.env
+    - ${ENV_FILE}
     environment:
       - TOPICS=results
       - PREFIX=stg
       - LOG_LEVEL=INFO
 
   leader:
-    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/leader:0.2.7
+    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/leader:${LEADER_VERSION}
     deploy:
-      replicas: 3
-    restart: unless-stopped
+        replicas: ${LEADER_SCALE:=1}
+    restart: ${RESTART:never}
     stop_grace_period: 5s
     depends_on:
     - nanny
     env_file:
-      - ./envs/deployment.env
+      - ${ENV_FILE}
     environment:
       - LOG_LEVEL=INFO
 
   capture-crawler:
-    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/capture-crawler:0.1.8
-    restart: unless-stopped
+    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/capture-crawler:${CAP_CRAWLER_VERSION}
+    restart: ${RESTART:never}
     stop_grace_period: 5s
     deploy:
-      replicas: 4
+        replicas: ${CRAWLER_SCALE:=1}
     depends_on:
     - nanny
     env_file:
-      - ./envs/deployment.env
+      - ${ENV_FILE}
     environment:
       - LOG_LEVEL=INFO
 
   feed-admin:
-    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/feed-admin:0.2.0
-    restart: unless-stopped
+    image: ${IMAGE_REPOSITORY}/${PROJECT_NAME}/feed-admin:${FEEDADMIN_VERSION}
+    restart: ${RESTART:never}
     depends_on:
     - nanny
     ports:
-      - "80:80"
+      - ${FEEDADMIN_PORT}:80
     stop_grace_period: 5s
     env_file:
-      - ./envs/deployment.env
+      - ${ENV_FILE}
     environment:
       - UISERVER=http://feed_ui-server:5000
       - COMMANDSERVER=http://feed_commands:5000
-      - SERVERNAME=${WIREGUARD_INTERFACE}
+      - SERVERNAME=${FEEDADMIN_SERVERNAME}

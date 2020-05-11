@@ -1,3 +1,5 @@
+# This dockerfile should only require the environment variables DEPLOYMENT_ROOT, SOURCE_DIR, ENV_FILE
+
 version: '3'
 
 services:
@@ -11,7 +13,7 @@ services:
     - nanny
     stop_grace_period: 5s
     env_file:
-    - ${DEPLOYMENT_ROOT}/etc/compose/envs/deployment.env
+    - ${ENV_FILE}
 
   capture-crawler:
     build: ${SOURCE_DIR}/capture-crawler
@@ -24,7 +26,7 @@ services:
     environment:
     - LOG_LEVEL=INFO
     env_file:
-    - ${DEPLOYMENT_ROOT}/etc/compose/envs/deployment.env
+    - ${ENV_FILE}
 
   router:
     container_name: feed_router
@@ -43,7 +45,7 @@ services:
     environment:
     - LOG_LEVEL=INFO
     env_file:
-    - ${DEPLOYMENT_ROOT}/etc/compose/envs/deployment.env
+    - ${ENV_FILE}
     volumes:
     - ${SOURCE_DIR}/utils/feed:/usr/leader/feed
 
@@ -57,7 +59,7 @@ services:
     - "5003:5000"
     stop_grace_period: 5s
     env_file:
-    - ${DEPLOYMENT_ROOT}/etc/compose/envs/deployment.env
+    - ${ENV_FILE}
 
   ui-server:
     container_name: feed_ui-server
@@ -68,7 +70,7 @@ services:
     ports:
       - "5004:5000"
     env_file:
-    - ${DEPLOYMENT_ROOT}/etc/compose/envs/deployment.env
+    - ${ENV_FILE}
 
   summarizer:
     container_name: feed_summarizer
@@ -82,7 +84,7 @@ services:
       - PREFIX=stg
       - LOG_LEVEL=INFO
     env_file:
-    - ${DEPLOYMENT_ROOT}/etc/compose/envs/deployment.env
+    - ${ENV_FILE}
 
   commands:
     container_name: feed_commands
@@ -93,7 +95,7 @@ services:
     ports:
       - "5001:5000"
     env_file:
-    - ${DEPLOYMENT_ROOT}/etc/compose/envs/deployment.env
+    - ${ENV_FILE}
 
   feed-admin:
     ports:
