@@ -21,6 +21,8 @@ services:
     depends_on:
     - nanny
     stop_grace_period: 5s
+    environment:
+    - LOG_LEVEL=INFO
     env_file:
     - ${DEPLOYMENT_ROOT}/etc/compose/envs/deployment.env
 
@@ -78,6 +80,7 @@ services:
     environment:
       - TOPICS=results
       - PREFIX=stg
+      - LOG_LEVEL=INFO
     env_file:
     - ${DEPLOYMENT_ROOT}/etc/compose/envs/deployment.env
 
