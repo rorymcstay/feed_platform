@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: feed-admin
+  name: feed-admin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: feed-admin
+  template:
+    metadata:
+      labels:
+        app: feed-admin
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - env:
+        - name: SERVERNAME
+          value: 10.66.66.4
+        - name: UISERVER
+          value: http://$(UISERVER_SERVICE_HOST):$(UISERVER_SERVICE_HOST)
+        - name: NANNYSERVER
+          value: http://$(NANNY_SERVICE_HOST):$(NANNY_SERVICE_PORT)
+        image: 064106913348.dkr.ecr.us-west-2.amazonaws.com/feed/feed-admin:0.2.2
+        name: feed-admin
+        ports:
+        - containerPort: 80
+        resources: {}
+      restartPolicy: Always

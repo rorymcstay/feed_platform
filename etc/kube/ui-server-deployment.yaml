@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: ui-server
+  name: ui-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ui-server
+  template:
+    metadata:
+      labels:
+        app: ui-server
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - env:
+        - name: KAFKA_ADDRESS
+          valueFrom:
+            configMapKeyRef:
+              key: KAFKA_ADDRESS
+              name: feedmachine-env
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              key: LOG_LEVEL
+              name: feedmachine-env
+        - name: NANNY_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: NANNY_HOST
+              name: feedmachine-env
+        - name: ROUTER_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: ROUTER_HOST
+              name: feedmachine-env
+        - name: SELENIUM_PORT
+          valueFrom:
+            configMapKeyRef:
+              key: SELENIUM_PORT
+              name: feedmachine-env
+        image: 064106913348.dkr.ecr.us-west-2.amazonaws.com/feed/ui-server:0.1.0
+        name: ui-server
+        resources: {}
+      restartPolicy: Always

@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: router
+  name: router
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: router
+  template:
+    metadata:
+      labels:
+        app: router
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - env:
+        - name: FLASK_PORT
+          valueFrom:
+            configMapKeyRef:
+              key: FLASK_PORT
+              name: feedmachine-env
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              key: LOG_LEVEL
+              name: feedmachine-env
+        - name: MONGO_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: MONGO_HOST
+              name: feedmachine-env
+        - name: MONGO_PASS
+          valueFrom:
+            configMapKeyRef:
+              key: MONGO_PASS
+              name: feedmachine-env
+        - name: MONGO_USER
+          valueFrom:
+            configMapKeyRef:
+              key: MONGO_USER
+              name: feedmachine-env
+        - name: NANNY_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: NANNY_HOST
+              name: feedmachine-env
+        image: 064106913348.dkr.ecr.us-west-2.amazonaws.com/feed/routing:0.1.0
+        name: router
+        resources: {}
+      restartPolicy: Always

@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: nanny
+  name: nanny
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nanny
+  template:
+    metadata:
+      labels:
+        app: nanny
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - env:
+        - name: FLASK_PORT
+          valueFrom:
+            configMapKeyRef:
+              key: FLASK_PORT
+              name: feedmachine-env
+        - name: LOG_LEVEL
+          value: "INFO"
+        - name: MONGO_HOST
+          value: $(MONGO_MONGODB_SERVICE_HOST):$(MONGO_MONGODB_SERVICE_PORT) 
+        - name: MONGO_PASS
+          valueFrom:
+            configMapKeyRef:
+              key: MONGO_PASS
+              name: feedmachine-env
+        - name: MONGO_USER
+          valueFrom:
+            configMapKeyRef:
+              key: MONGO_USER
+              name: feedmachine-env
+        - name: PARAMETER_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              key: PARAMETER_DATABASE
+              name: feedmachine-env
+        - name: PARAM_STATS_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              key: PARAM_STATS_DATABASE
+              name: feedmachine-env
+        - name: ROUTER_HOST
+          value: $(ROUTER_SERVICE_HOST)
+        - name: UISERVER_HOST
+          value: $(UISERVER_HOST)
+        image: 064106913348.dkr.ecr.us-west-2.amazonaws.com/feed/nanny:0.1.8
+        name: nanny
+        resources: {}
+      restartPolicy: Always
