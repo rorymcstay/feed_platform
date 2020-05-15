@@ -26,7 +26,10 @@ spec:
         - name: LOG_LEVEL
           value: "INFO"
         - name: MONGO_HOST
-          value: $(MONGO_MONGODB_SERVICE_HOST):$(MONGO_MONGODB_SERVICE_PORT) 
+          valueFrom:
+            configMapKeyRef:
+              key: MONGO_HOST
+              name: feedmachine-env
         - name: MONGO_PASS
           valueFrom:
             configMapKeyRef:
@@ -55,3 +58,16 @@ spec:
         name: nanny
         resources: {}
       restartPolicy: Always
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nanny
+spec:
+  selector:
+    app: nanny
+  ports:
+  - name: nanny
+    port: 80
+    targetPort: 80

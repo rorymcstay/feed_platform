@@ -47,3 +47,15 @@ spec:
         name: capture-crawler
         resources: {}
       restartPolicy: Always
+---      
+apiVersion: v1
+kind: Service
+metadata:
+  name: capture-crawler
+spec:
+  selector:
+    app: capture-crawler
+  ports:
+  - name: capture-crawler
+    port: 80
+    targetPort: 80

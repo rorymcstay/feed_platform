@@ -21,12 +21,24 @@ spec:
         - name: SERVERNAME
           value: 10.66.66.4
         - name: UISERVER
-          value: http://$(UISERVER_SERVICE_HOST):$(UISERVER_SERVICE_HOST)
+          value: http://ui-server
         - name: NANNYSERVER
-          value: http://$(NANNY_SERVICE_HOST):$(NANNY_SERVICE_PORT)
+          value: http://nanny
         image: 064106913348.dkr.ecr.us-west-2.amazonaws.com/feed/feed-admin:0.2.2
         name: feed-admin
         ports:
         - containerPort: 80
         resources: {}
       restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: feed-admin
+spec:
+  selector:
+    app: feed-admin
+  ports:
+  - name: feed-admin
+    port: 80
+    targetPort: 80

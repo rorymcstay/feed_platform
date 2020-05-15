@@ -48,3 +48,15 @@ spec:
         name: leader
         resources: {}
       restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: leader
+spec:
+  selector:
+    app: leader
+  ports:
+  - name: leader
+    port: 80
+    targetPort: 80

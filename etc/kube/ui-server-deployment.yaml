@@ -43,7 +43,65 @@ spec:
             configMapKeyRef:
               key: SELENIUM_PORT
               name: feedmachine-env
+        - name: DATABASE_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: DATABASE_HOST
+              name: feedmachine-env
+        - name: DATABASE_PORT
+          valueFrom:
+            configMapKeyRef:
+              key: DATABASE_PORT
+              name: feedmachine-env
+        - name: DATABASE_PASS
+          valueFrom:
+            configMapKeyRef:
+              key: DATABASE_PASS
+              name: feedmachine-env
+        - name: MONGO_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: MONGO_HOST
+              name: feedmachine-env
+        - name: MONGO_PASS
+          valueFrom:
+            configMapKeyRef:
+              key: MONGO_PASS
+              name: feedmachine-env
+        - name: MONGO_USER
+          valueFrom:
+            configMapKeyRef:
+              key: MONGO_USER
+              name: feedmachine-env
+        - name: PARAMETER_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              key: PARAMETER_DATABASE
+              name: feedmachine-env
+        - name: PARAM_STATS_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              key: PARAM_STATS_DATABASE
+              name: feedmachine-env
+        - name: DATABASE_USER
+          valueFrom:
+            configMapKeyRef:
+              key: DATABASE_USER
+              name: feedmachine-env
         image: 064106913348.dkr.ecr.us-west-2.amazonaws.com/feed/ui-server:0.1.0
         name: ui-server
         resources: {}
       restartPolicy: Always
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: ui-server
+spec:
+  selector:
+    app: ui-server
+  ports:
+  - name: ui-server
+    port: 80
+    targetPort: 80
