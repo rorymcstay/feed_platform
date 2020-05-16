@@ -15,7 +15,7 @@ spec:
         app: feed-admin
     spec:
       imagePullSecrets:
-      - name: regcred
+      - name: awsecr-cred 
       containers:
       - env:
         - name: SERVERNAME

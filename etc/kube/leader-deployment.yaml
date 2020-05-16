@@ -16,7 +16,7 @@ spec:
         app: leader
     spec:
       imagePullSecrets:
-      - name: regcred
+      - name: awsecr-cred 
       containers:
       - env:
         - name: KAFKA_ADDRESS

@@ -15,7 +15,7 @@ spec:
         app: nanny
     spec:
       imagePullSecrets:
-      - name: regcred
+      - name: awsecr-cred 
       containers:
       - name: nanny
         image: 064106913348.dkr.ecr.us-west-2.amazonaws.com/feed/nanny:0.1.8

@@ -15,7 +15,7 @@ spec:
         app: ui-server
     spec:
       imagePullSecrets:
-      - name: regcred
+      - name: awsecr-cred 
       containers:
       - name: ui-server
         image: 064106913348.dkr.ecr.us-west-2.amazonaws.com/feed/ui-server:0.1.0

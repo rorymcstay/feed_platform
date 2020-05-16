@@ -134,3 +134,12 @@ kubectl create secret generic regcred \
 enable storgae classes in microk8s
 
 microk8s enable <add-on> (storage)
+
+
+# automatioc image rollout endpoint
+on the gateway box
+1. install pip
+2. install flask, flask_classy
+3. ```pyton3 scripts/update-listener.py &``` run the listener endpoint in the background
+
+

@@ -15,7 +15,7 @@ spec:
         app: router
     spec:
       imagePullSecrets:
-      - name: regcred
+      - name: awsecr-cred 
       containers:
       - env:
         - name: FLASK_PORT
