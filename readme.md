@@ -68,6 +68,8 @@ Conduct the above steps without pinging or sshing to things
     
         ~/app/feed$ dc-services up -d
 
+# wireguard installation
+
 #Platform Road Map:
 
 ## monitoring
