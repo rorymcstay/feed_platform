@@ -1,0 +1,126 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: ui-server
+  name: ui-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ui-server
+  template:
+    metadata:
+      labels:
+        app: ui-server
+    spec:
+      imagePullSecrets:
+      - name: awsecr-cred 
+      containers:
+      - name: ui-server
+        image: 064106913348.dkr.ecr.us-west-2.amazonaws.com/feed/ui-server:0.1.0
+        ports:
+        - containerPort: 5000
+          name: http
+          protocol: TCP
+        env:
+        - name: KAFKA_ADDRESS
+          valueFrom:
+            configMapKeyRef:
+              key: KAFKA_ADDRESS
+              name: feedmachine-env
+        - name: UISERVER_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: FLASK_HOST
+              name: feedmachine-env
+        - name: FLASK_PORT
+          valueFrom:
+            configMapKeyRef:
+              key: FLASK_PORT
+              name: feedmachine-env
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              key: LOG_LEVEL
+              name: feedmachine-env
+        - name: NANNY_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: NANNY_HOST
+              name: feedmachine-env
+        - name: ROUTER_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: ROUTER_HOST
+              name: feedmachine-env
+        - name: SELENIUM_PORT
+          valueFrom:
+            configMapKeyRef:
+              key: SELENIUM_PORT
+              name: feedmachine-env
+        - name: DATABASE_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: DATABASE_HOST
+              name: feedmachine-env
+        - name: DATABASE_PORT
+          valueFrom:
+            configMapKeyRef:
+              key: DATABASE_PORT
+              name: feedmachine-env
+        - name: DATABASE_PASS
+          valueFrom:
+            configMapKeyRef:
+              key: DATABASE_PASS
+              name: feedmachine-env
+        - name: MONGO_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: MONGO_HOST
+              name: feedmachine-env
+        - name: MONGO_PASS
+          valueFrom:
+            configMapKeyRef:
+              key: MONGO_PASS
+              name: feedmachine-env
+        - name: MONGO_USER
+          valueFrom:
+            configMapKeyRef:
+              key: MONGO_USER
+              name: feedmachine-env
+        - name: PARAMETER_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              key: PARAMETER_DATABASE
+              name: feedmachine-env
+        - name: PARAM_STATS_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              key: PARAM_STATS_DATABASE
+              name: feedmachine-env
+        - name: DATABASE_USER
+          valueFrom:
+            configMapKeyRef:
+              key: DATABASE_USER
+              name: feedmachine-env
+
+        resources: {}
+      restartPolicy: Always
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: ui-server
+  labels:
+    service: ui-server
+spec:
+  selector:
+    app: ui-server
+  type: ClusterIP
+  ports:
+  - port: 5000
+    targetPort: 5000
+    protocol: TCP
+    name: http

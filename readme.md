@@ -82,4 +82,66 @@ https://grafana.com/grafana/dashboards/893
 ## Database initialisation script
 
 
+#https://hub.kubeapps.com/charts/incubator/kafka
+# Configuring a Kafka cluster using helm
+	rory@uatfeedmachine:~/feed/etc/kube$ helm init
+	Creating /home/rory/.helm 
+	Creating /home/rory/.helm/repository 
+	Creating /home/rory/.helm/repository/cache 
+	Creating /home/rory/.helm/repository/local 
+	Creating /home/rory/.helm/plugins 
+	Creating /home/rory/.helm/starters 
+	Creating /home/rory/.helm/cache/archive 
+	Creating /home/rory/.helm/repository/repositories.yaml 
+	Adding stable repo with URL: https://kubernetes-charts.storage.googleapis.com 
+	Adding local repo with URL: http://127.0.0.1:8879/charts 
+	$HELM_HOME has been configured at /home/rory/.helm.
+
+	Tiller (the Helm server-side component) has been installed into your Kubernetes Cluster.
+
+	Please note: by default, Tiller is deployed with an insecure 'allow unauthenticated users' policy.
+	To prevent this, run `helm init` with the --tiller-tls-verify flag.
+	For more information on securing your installation see: https://docs.helm.sh/using_helm/#securing-your-helm-installation
+	rory@uatfeedmachine:~/feed/etc/kube$ helm repo add incubator http://storage.googleapis.com/kubernetes-charts-incubator
+	"incubator" has been added to your repositories
+	rory@uatfeedmachine:~/feed/etc/kube$ helm install --name my-kafka incubator/kafka
+	Error: could not find a ready tiller pod
+	rory@uatfeedmachine:~/feed/etc/kube$ helm install --name my-kafka incubator/kafka
+	NAME:   my-kafka
+	LAST DEPLOYED: Thu May 14 20:41:59 2020
+	NAMESPACE: default
+	STATUS: DEPLOYED
+
+	RESOURCES:
+	==> v1/ConfigMap
+	NAME                AGE
+	my-kafka-zookeeper  1s
+
+# Mongo
+helm install bitnami/mongodb-sharded
+# Postgresql
+helm install bitnami/postgresql
+
+
+# regsitrey creds ecr
+helm install --name registry-creds --set ecr.enabled=true --set-string ecr.awsAccessKeyId="AKIAQ53IR3ZCMEGY2FEF" \
+--set-string ecr.awsSecretAccessKey="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" --set-string ecr.awsAccount="064106913348" --set-string ecr.awsRegion="us-west-2" --set-string ecr.awsAssumeRole="arn:aws:iam::064106913348:role/uatfeedmachine" \
+kir4h/registry-creds
+
+
+kubectl create secret generic regcred \
+    --from-file=.dockerconfigjson=/home/rory/snap/docker/423/.docker/config.json \
+    --type=kubernetes.io/dockerconfigjson
+
+enable storgae classes in microk8s
+
+microk8s enable <add-on> (storage)
+
+
+# automatioc image rollout endpoint
+on the gateway box
+1. install pip
+2. install flask, flask_classy
+3. ```pyton3 scripts/update-listener.py &``` run the listener endpoint in the background
+
 

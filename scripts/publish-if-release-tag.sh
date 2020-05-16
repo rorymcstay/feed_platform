@@ -21,6 +21,7 @@ if [ $IS_RELEASE -eq "1" ]; then
     $(aws ecr get-login --no-include-email --region us-west-2);_
     docker tag $IMAGE_REPOSITORY/$IMAGE_NAME $IMAGE_REPOSITORY/$IMAGE_NAME:$tag;
     docker push $IMAGE_REPOSITORY/$IMAGE_NAME:$tag;
+    curl "http://feedmachine.rorymcstay.com/updatemanager/rolloutImage/$COMPONENT/$tag"
     exit;
 fi
 

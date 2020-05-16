@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: capture-crawler
+  name: capture-crawler
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: capture-crawler
+  template:
+    metadata:
+      labels:
+        app: capture-crawler
+    spec:
+      imagePullSecrets:
+      - name: awsecr-cred 
+      containers:
+      - env:
+        - name: KAFKA_ADDRESS
+          valueFrom:
+            configMapKeyRef:
+              key: KAFKA_ADDRESS
+              name: feedmachine-env
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              key: LOG_LEVEL
+              name: feedmachine-env
+        - name: NANNY_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: NANNY_HOST
+              name: feedmachine-env
+        - name: ROUTER_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: ROUTER_HOST
+              name: feedmachine-env
+        - name: SELENIUM_PORT
+          valueFrom:
+            configMapKeyRef:
+              key: SELENIUM_PORT
+              name: feedmachine-env
+        - name: FLASK_PORT
+          valueFrom:
+            configMapKeyRef:
+              key: FLASK_PORT
+              name: feed-machine-env
+        image: 064106913348.dkr.ecr.us-west-2.amazonaws.com/feed/capture-crawler:0.1.8
+        name: capture-crawler
+        resources: {}
+      restartPolicy: Always
