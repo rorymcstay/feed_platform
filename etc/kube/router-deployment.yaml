@@ -48,8 +48,17 @@ spec:
             configMapKeyRef:
               key: NANNY_HOST
               name: feedmachine-env
+        - name: ROUTER_HOST
+          valueFrom: 
+            configMapKeyRef:
+              key: FLASK_HOST
+              name: feedmachine-env
         image: 064106913348.dkr.ecr.us-west-2.amazonaws.com/feed/routing:0.1.0
         name: router
+        ports:
+        - containerPort: 5000
+          name: http
+          protocol: TCP
         resources: {}
       restartPolicy: Always
 ---
@@ -61,7 +70,10 @@ metadata:
 spec:
   selector:
     app: router
+  type: ClusterIP
   ports:
-  - name: router
-    port: 80
-    targetPort: 80
+  - port: 5000
+    targetPort: 5000
+    protocol: TCP
+    name: http
+

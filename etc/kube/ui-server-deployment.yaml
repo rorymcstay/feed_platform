@@ -23,6 +23,11 @@ spec:
             configMapKeyRef:
               key: KAFKA_ADDRESS
               name: feedmachine-env
+        - name: FLASK_PORT
+          valueFrom:
+            configMapKeyRef:
+              key: FLASK_PORT
+              name: feedmachine-env
         - name: LOG_LEVEL
           valueFrom:
             configMapKeyRef:
@@ -90,6 +95,10 @@ spec:
               name: feedmachine-env
         image: 064106913348.dkr.ecr.us-west-2.amazonaws.com/feed/ui-server:0.1.0
         name: ui-server
+        ports:
+        - containerPort: 5000
+          name: http
+          protocol: TCP
         resources: {}
       restartPolicy: Always
 ---
@@ -101,7 +110,9 @@ metadata:
 spec:
   selector:
     app: ui-server
+  type: ClusterIP
   ports:
-  - name: ui-server
-    port: 80
-    targetPort: 80
+  - port: 5000
+    targetPort: 5000
+    protocol: TCP
+    name: http

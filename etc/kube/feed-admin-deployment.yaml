@@ -19,11 +19,11 @@ spec:
       containers:
       - env:
         - name: SERVERNAME
-          value: 10.66.66.4
+          value: "uatfeedmachine:30000"
         - name: UISERVER
-          value: http://ui-server
+          value: http://ui-server:5000
         - name: NANNYSERVER
-          value: http://nanny
+          value: http://nanny:5000
         image: 064106913348.dkr.ecr.us-west-2.amazonaws.com/feed/feed-admin:0.2.2
         name: feed-admin
         ports:
@@ -36,9 +36,11 @@ kind: Service
 metadata:
   name: feed-admin
 spec:
+  type: LoadBalancer
   selector:
     app: feed-admin
   ports:
-  - name: feed-admin
+  - protocol: "TCP"
     port: 80
+    nodePort: 30000
     targetPort: 80

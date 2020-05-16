@@ -67,16 +67,3 @@ spec:
         name: summarizer
         resources: {}
       restartPolicy: Always
----
-
-apiVersion: v1
-kind: Service
-metadata:
-  name: summarizer
-spec:
-  selector:
-    app: summarizer
-  ports:
-  - name: summarizer
-    port: 80
-    targetPort: 80

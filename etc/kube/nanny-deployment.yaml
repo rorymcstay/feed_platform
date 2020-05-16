@@ -17,7 +17,13 @@ spec:
       imagePullSecrets:
       - name: regcred
       containers:
-      - env:
+      - name: nanny
+        image: 064106913348.dkr.ecr.us-west-2.amazonaws.com/feed/nanny:0.1.8
+        ports:
+        - containerPort: 5000
+          name: http
+          protocol: TCP
+        env:
         - name: FLASK_PORT
           valueFrom:
             configMapKeyRef:
@@ -51,11 +57,21 @@ spec:
               key: PARAM_STATS_DATABASE
               name: feedmachine-env
         - name: ROUTER_HOST
-          value: $(ROUTER_SERVICE_HOST)
+          valueFrom:
+            configMapKeyRef:
+              key: ROUTER_HOST
+              name: feedmachine-env
         - name: UISERVER_HOST
-          value: $(UISERVER_HOST)
-        image: 064106913348.dkr.ecr.us-west-2.amazonaws.com/feed/nanny:0.1.8
-        name: nanny
+          valueFrom:
+            configMapKeyRef:
+              key: UISERVER_HOST
+              name: feedmachine-env
+        - name: NANNY_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: FLASK_HOST
+              name: feedmachine-env
+
         resources: {}
       restartPolicy: Always
 ---
@@ -64,10 +80,14 @@ apiVersion: v1
 kind: Service
 metadata:
   name: nanny
+  labels:
+    service: nanny
 spec:
   selector:
     app: nanny
+  type: ClusterIP
   ports:
-  - name: nanny
-    port: 80
-    targetPort: 80
+  - port: 5000
+    targetPort: 5000
+    protocol: TCP
+    name: http

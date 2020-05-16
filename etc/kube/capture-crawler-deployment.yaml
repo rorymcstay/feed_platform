@@ -43,19 +43,12 @@ spec:
             configMapKeyRef:
               key: SELENIUM_PORT
               name: feedmachine-env
+        - name: FLASK_PORT
+          valueFrom:
+            configMapKeyRef:
+              key: FLASK_PORT
+              name: feed-machine-env
         image: 064106913348.dkr.ecr.us-west-2.amazonaws.com/feed/capture-crawler:0.1.8
         name: capture-crawler
         resources: {}
       restartPolicy: Always
----      
-apiVersion: v1
-kind: Service
-metadata:
-  name: capture-crawler
-spec:
-  selector:
-    app: capture-crawler
-  ports:
-  - name: capture-crawler
-    port: 80
-    targetPort: 80
