@@ -17,11 +17,22 @@ spec:
       imagePullSecrets:
       - name: regcred
       containers:
-      - env:
+      - name: ui-server
+        image: 064106913348.dkr.ecr.us-west-2.amazonaws.com/feed/ui-server:0.1.0
+        ports:
+        - containerPort: 5000
+          name: http
+          protocol: TCP
+        env:
         - name: KAFKA_ADDRESS
           valueFrom:
             configMapKeyRef:
               key: KAFKA_ADDRESS
+              name: feedmachine-env
+        - name: UISERVER_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: FLASK_HOST
               name: feedmachine-env
         - name: FLASK_PORT
           valueFrom:
@@ -93,12 +104,7 @@ spec:
             configMapKeyRef:
               key: DATABASE_USER
               name: feedmachine-env
-        image: 064106913348.dkr.ecr.us-west-2.amazonaws.com/feed/ui-server:0.1.0
-        name: ui-server
-        ports:
-        - containerPort: 5000
-          name: http
-          protocol: TCP
+
         resources: {}
       restartPolicy: Always
 ---
@@ -107,6 +113,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: ui-server
+  labels:
+    service: ui-server
 spec:
   selector:
     app: ui-server
