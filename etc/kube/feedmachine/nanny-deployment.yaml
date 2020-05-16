@@ -28,14 +28,14 @@ spec:
           valueFrom:
             configMapKeyRef:
               key: FLASK_PORT
-              name: feedmachine-env
+              name: {{ .Values.environment }}
         - name: LOG_LEVEL
           value: "INFO"
         - name: MONGO_HOST
           valueFrom:
             configMapKeyRef:
               key: MONGO_HOST
-              name: feedmachine-env
+              name: {{ .Values.environment }}
         - name: MONGO_PASS
           valueFrom:
             configMapKeyRef:
@@ -45,16 +45,6 @@ spec:
           valueFrom:
             configMapKeyRef:
               key: MONGO_USER
-              name: feedmachine-env
-        - name: PARAMETER_DATABASE
-          valueFrom:
-            configMapKeyRef:
-              key: PARAMETER_DATABASE
-              name: feedmachine-env
-        - name: PARAM_STATS_DATABASE
-          valueFrom:
-            configMapKeyRef:
-              key: PARAM_STATS_DATABASE
               name: feedmachine-env
         - name: ROUTER_HOST
           valueFrom:

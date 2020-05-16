@@ -1,0 +1,17 @@
+
+apiVersion: v1
+data:
+  KAFKA_ADDRESS: kafka # template
+  KAFKA_TOPIC_PREFIX: p # template
+  LOG_LEVEL: INFO # template param
+  MONGO_HOST: mongo-mongodb:27017 # template param
+  CHAIN_DB: actionChains # template param
+  MONGO_USER: root # secret and template
+  DATABASE_HOST: database # template 
+  DATABASE_PORT: "5432" # tempalate
+  DATABASE_NAME: feeds # template 
+kind: ConfigMap
+metadata:
+  labels:
+    io.kompose.service: prod-env
+  name: prod-env

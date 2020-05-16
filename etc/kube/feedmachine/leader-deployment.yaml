@@ -23,12 +23,12 @@ spec:
           valueFrom:
             configMapKeyRef:
               key: KAFKA_ADDRESS
-              name: feedmachine-env
+              name: {{ .Values.environment }}
         - name: LOG_LEVEL
           valueFrom:
             configMapKeyRef:
               key: LOG_LEVEL
-              name: feedmachine-env
+              name: {{ .Values.environment }}
         - name: NANNY_HOST
           valueFrom:
             configMapKeyRef:
@@ -39,6 +39,11 @@ spec:
             configMapKeyRef:
               key: ROUTER_HOST
               name: feedmachine-env
+        - name: KAFKA_TOPIC_PREFIX
+          valueFrom:
+            configMapKeyRef:
+              key: KAFKA_TOPIC_PREFIX
+              name: {{ .Values.environment }}
         - name: SELENIUM_PORT
           valueFrom:
             configMapKeyRef:

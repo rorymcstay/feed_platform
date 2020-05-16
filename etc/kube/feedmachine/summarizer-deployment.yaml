@@ -22,7 +22,7 @@ spec:
           valueFrom:
             configMapKeyRef:
               key: KAFKA_ADDRESS
-              name: feedmachine-env
+              name: {{ .Values.environment }}
         - name: LOG_LEVEL
           valueFrom:
             configMapKeyRef:
@@ -63,6 +63,11 @@ spec:
             configMapKeyRef:
               key: DATABASE_USER
               name: feedmachine-env
+        - name: DATABASE_NAME
+          valueFrom:
+            configMapKeyRef:
+              key: DATABASE_NAME
+              name: {{ .Values.environment }}
         image: 064106913348.dkr.ecr.us-west-2.amazonaws.com/feed/summarizer:0.1.0
         name: summarizer
         resources: {}

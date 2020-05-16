@@ -27,22 +27,27 @@ spec:
           valueFrom:
             configMapKeyRef:
               key: LOG_LEVEL
-              name: feedmachine-env
+              name: {{ .Values.environment }}-env
         - name: MONGO_HOST
           valueFrom:
             configMapKeyRef:
               key: MONGO_HOST
-              name: feedmachine-env
+              name: {{ .Values.environment }}-env
         - name: MONGO_PASS
           valueFrom:
             configMapKeyRef:
               key: MONGO_PASS
-              name: feedmachine-env
+              name: {{ .Values.environment }}-env
         - name: MONGO_USER
           valueFrom:
             configMapKeyRef:
               key: MONGO_USER
-              name: feedmachine-env
+              name: {{ .Values.environment }}-env
+        - name: CHAIN_DB:
+          valueFrom:
+            configMapKeyRef:
+              key: CHAIN_DB
+              name: {{ .Values.environment }}-env
         - name: NANNY_HOST
           valueFrom:
             configMapKeyRef:

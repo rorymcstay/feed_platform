@@ -24,11 +24,6 @@ spec:
           name: http
           protocol: TCP
         env:
-        - name: KAFKA_ADDRESS
-          valueFrom:
-            configMapKeyRef:
-              key: KAFKA_ADDRESS
-              name: feedmachine-env
         - name: UISERVER_HOST
           valueFrom:
             configMapKeyRef:
@@ -43,7 +38,7 @@ spec:
           valueFrom:
             configMapKeyRef:
               key: LOG_LEVEL
-              name: feedmachine-env
+              name: {{ .Values.environment }}-env
         - name: NANNY_HOST
           valueFrom:
             configMapKeyRef:
@@ -63,47 +58,42 @@ spec:
           valueFrom:
             configMapKeyRef:
               key: DATABASE_HOST
-              name: feedmachine-env
+              name: {{ .Values.environment }}-env
         - name: DATABASE_PORT
           valueFrom:
             configMapKeyRef:
               key: DATABASE_PORT
-              name: feedmachine-env
+              name: {{ .Values.environment }}-env
         - name: DATABASE_PASS
           valueFrom:
             configMapKeyRef:
               key: DATABASE_PASS
-              name: feedmachine-env
+              name: {{ .Values.environment }}-env
         - name: MONGO_HOST
           valueFrom:
             configMapKeyRef:
               key: MONGO_HOST
-              name: feedmachine-env
+              name: {{ .Values.environment }}-env
         - name: MONGO_PASS
           valueFrom:
             configMapKeyRef:
               key: MONGO_PASS
-              name: feedmachine-env
+              name: {{ .Values.environment }}-env
         - name: MONGO_USER
           valueFrom:
             configMapKeyRef:
               key: MONGO_USER
-              name: feedmachine-env
-        - name: PARAMETER_DATABASE
+              name: {{ .Values.environment }}-env
+        - name: CHAIN_DB:
           valueFrom:
             configMapKeyRef:
-              key: PARAMETER_DATABASE
-              name: feedmachine-env
-        - name: PARAM_STATS_DATABASE
-          valueFrom:
-            configMapKeyRef:
-              key: PARAM_STATS_DATABASE
-              name: feedmachine-env
+              key: CHAIN_DB
+              name: {{ .Values.environment }}-env
         - name: DATABASE_USER
           valueFrom:
             configMapKeyRef:
               key: DATABASE_USER
-              name: feedmachine-env
+              name: {{ .Values.environment }}-env
 
         resources: {}
       restartPolicy: Always
