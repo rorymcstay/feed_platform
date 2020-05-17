@@ -102,9 +102,9 @@ https://grafana.com/grafana/dashboards/893
 helm repo add bitnami https://charts.bitnami.com/bitnami
 helm install bitnami/kafka
 # Mongo
-helm install bitnami/mongodb-sharded
+helm install bitnami/mongodb-sharded --values $DEPLOYMENT_ROOT/etc/kube/services/mongo_values.yaml --namespace services
 # Postgresql
-helm install bitnami/postgresql
+helm install bitnami/postgresql --values $DEPLOYMENT_ROOT/etc/kube/services/postgres_values.yaml --namespace services
 
 
 # regsitrey creds ecr
@@ -124,8 +124,23 @@ microk8s enable <add-on> (storage)
 
 # automatioc image rollout endpoint
 on the gateway box
+
 1. install pip
 2. install flask, flask_classy
 3. ```pyton3 scripts/update-listener.py &``` run the listener endpoint in the background
+
+# create new mongo user
+1. port for 27017 on uatfeedmachine like
+    
+       kubectl port-forward --namespace services svc/parameters-mongodb 27017:27017 --address 192.168.1.96
+2. on the client do 
+    
+        $ mongo mognodb:192.168.1.96:27017
+
+        > use admin
+        > db.auth( "root", "<pass>")
+        > db.createUser({ user: "uat_feeds", pwd: "uat_feeds_123", roles: [{role: "readWrite", db: "uat_actionChains"}], mechanisms: ["SCRAM-SHA-1"]})
+
+# create a new postgres user and database
 
 
