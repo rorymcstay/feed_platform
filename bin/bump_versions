@@ -1,0 +1,25 @@
+#!/usr/bin/env python3
+
+import os
+import argparse
+
+parser = argparse.ArgumentParser()
+
+parser.add_argument('--name')
+parser.add_argument('--version')
+
+if __name__ == '__main__':
+    args = parser.parse_args()
+    versions = {}
+    with open(f'{os.getenv("DEPLOYMENT_ROOT")}/etc/manifest.txt', 'r') as manifest:
+        for item in filter(lambda line: line.strip() != '',  manifest.read().split('\n')):
+            versions.update({item.split("=")[0]: item.split('=')[1]})
+    versions[args.name] = args.version
+    with open(f'{os.getenv("DEPLOYMENT_ROOT")}/etc/manifest.txt', 'w') as manifest:
+        for key in versions:
+            manifest.write(f'{key}={versions[key]}\n')
+    with open(f'{os.getenv("DEPLOYMENT_ROOT")}/etc/profiles/uat.versions.env', 'w') as manifest:
+        for key in versions:
+            newKey = key.upper().replace('-', '_')
+            manifest.write(f'export  {newKey}={versions[key]}\n')
+

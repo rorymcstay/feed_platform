@@ -1,0 +1,7 @@
+uiServerVersion: feed/ui-server:${UI_SERVER_VERSION}
+nannyVersion: feed/nanny:${NANNY_VERSION}
+leaderVersion: feed/leader:${LEADER_VERSION}
+routerVersion: feed/routing:${ROUTING_VERSION}
+summarizerVersion: feed/summarizer:${SUMMARIZER_VERSION}
+feedAdminVersion: feed/feed-admin:${FEED_ADMIN_VERSION}
+captureCrawlerVersion: feed/capture-crawler:${CAPTURE_CRAWLER_VERSION}
