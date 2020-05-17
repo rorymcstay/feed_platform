@@ -24,6 +24,11 @@ spec:
           name: http
           protocol: TCP
         env:
+        - name: KAFKA_ADDRESS
+          valueFrom:
+            configMapKeyRef:
+              key: KAFKA_ADDRESS
+              name: {{ .Values.environment }}-env
         - name: UISERVER_HOST
           valueFrom:
             configMapKeyRef:

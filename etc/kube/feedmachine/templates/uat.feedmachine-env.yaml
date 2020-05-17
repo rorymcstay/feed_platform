@@ -9,10 +9,9 @@ data:
   CHAIN_DB: uat_actionChains # template param
   MONGO_USER: root # secret and template
   DATABASE_USER: feeds
-  DATABASE_USER: pass
   MONGO_PASS: {{ .Values.mongoPassword }}
   DATABASE_PORT: "5432" # tempalate
-  DATABASE_PORT: "feeds" # tempalate
+  DATABASE_PASS: "feeds" # tempalate
   DATABASE_NAME: uat_feeds # template 
 kind: ConfigMap
 metadata:
