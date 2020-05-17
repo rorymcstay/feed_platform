@@ -20,3 +20,11 @@ summarizerVersion: feed/summarizer:0.1.0
 feedAdminVersion: feed/feed-admin:0.2.2
 captureCrawlerVersion: feed/capture-crawler:0.1.9
 imageRepository: 064106913348.dkr.ecr.us-west-2.amazonaws.com
+
+databaseUser: feeds
+databasePass: feeds
+databaseName: uat_feeds
+
+mongoUser: feeds
+mongoPass: feeds
+
