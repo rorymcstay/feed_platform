@@ -6,7 +6,7 @@ import logging
 from feed.engine import ThreadPool
 
 fh = logging.FileHandler('ci.log')
-fh.setLevel(logging.INFO)
+fh.setLevel('DEBUG')
 formatter = logging.Formatter('%(asctime)s: %(name)s - %(level)s - %s(message)')
 fh.setFormatter(formatter)
 
@@ -22,7 +22,8 @@ secret_key = '7201873fd83683026d53267fd3606471f51fdf68ad1b4da3709d3cf5f8e8f1f1'
 def execute(command):
     #, env=os.environ, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True)
     with subprocess.Popen(command, busize=10) as pro:
-        logging.info(pro.stderr)
+        for line in pro.stderr:
+            logger.info(line)
 
 class CommandRunner(ThreadPool):
     __instance = None
@@ -36,15 +37,15 @@ class CommandRunner(ThreadPool):
     @staticmethod
     def instance():
         if CommandRunner.__instance is None:
-            logging.info(f'Making instance of command runner')
+            logger.info(f'Making instance of command runner')
             return CommandRunner()
         else:
             return __instance
 
     def _rolloutImage(self, name, version):
         command = UpdateManager._updateCommand(get_component_name(name), version)
-        logging.info(f'rolling out image version {version} for {name}')
-        logging.info(f'Running: {" ".join(command)}')
+        logger.info(f'rolling out image version {version} for {name}')
+        logger.info(f'Running: {" ".join(command)}')
         subprocess.Popen(command, bufsize=10)
         return 'ok'
 
@@ -57,7 +58,7 @@ class CommandRunner(ThreadPool):
         return 'ok'
 
     def _promote(self):
-        logging.info(f'doing promotion step')
+        logger.info(f'doing promotion step')
 
 def get_component_name(name):
     return component_name_overrides.get(name, name)
@@ -72,11 +73,12 @@ class UpdateManager(FlaskView):
             veridentifier = camelCase[0] + camelCase[1].capitalize() + 'Version'
         else:
             veridentifier = camelCase[0] + 'Version'
-        return f'helm upgrade uat-feedmachine {os.getenv("DEPLOYMENT_ROOT")}/etc/kube/feedmachine --set {veridentifier}=feed/{name}:{version}'.split(' ')
+        return f'helm upgrade uat-feedmachine --set {veridentifier}=feed/{name}:{version} --namespace uat {os.getenv("DEPLOYMENT_ROOT")}/etc/kube/feedmachine '.split(' ')
 
     def rolloutImage(self, name, version, key):
         if key != secret_key:
             return 'invalid secret'
+        logging.info(f'request to rollout image {name}:{version}')
         CommandRunner.instance().rolloutImage(name, version)
         return 'ok'
 
