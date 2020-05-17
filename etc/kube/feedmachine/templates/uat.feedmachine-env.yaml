@@ -4,15 +4,15 @@ data:
   KAFKA_ADDRESS: kafka.services.svc.cluster.local # template
   KAFKA_TOPIC_PREFIX: p # template
   LOG_LEVEL: INFO # template param
-  MONGO_HOST: mongo-mongodb-sharded.services.svc.cluster.local:27017 # template param
-  DATABASE_HOST: database-postgresql.services.svc.cluster.local
   CHAIN_DB: uat_actionChains # template param
-  MONGO_USER: root # secret and template
-  DATABASE_USER: feeds
+  MONGO_HOST: parameters-mongodb.services.svc.cluster.local:27017 # template param
+  MONGO_USER: {{ .Values.mongoUser }} # secret and template
   MONGO_PASS: {{ .Values.mongoPassword }}
+  DATABASE_HOST: database-postgresql.services.svc.cluster.local
   DATABASE_PORT: "5432" # tempalate
-  DATABASE_PASS: "feeds" # tempalate
-  DATABASE_NAME: uat_feeds # template 
+  DATABASE_USER: {{ .Values.databaseUser }}
+  DATABASE_PASS: {{ .Values.databasePass }}
+  DATABASE_NAME: {{ .Values.databaseName }} # template 
 kind: ConfigMap
 metadata:
   labels:
