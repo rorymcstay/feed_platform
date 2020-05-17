@@ -73,7 +73,7 @@ class UpdateManager(FlaskView):
             veridentifier = camelCase[0] + camelCase[1].capitalize() + 'Version'
         else:
             veridentifier = camelCase[0] + 'Version'
-        return f'helm upgrade uat-feedmachine --set {veridentifier}=feed/{name}:{version} --namespace uat {os.getenv("DEPLOYMENT_ROOT")}/etc/kube/feedmachine '.split(' ')
+        return f'helm upgrade uat-feedmachine {os.getenv("DEPLOYMENT_ROOT")}/etc/kube/feedmachine --set {veridentifier}=feed/{name}:{version} --namespace uat'.split(' ')
 
     def rolloutImage(self, name, version, key):
         if key != secret_key:
