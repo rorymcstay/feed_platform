@@ -67,7 +67,12 @@ class UpdateManager(FlaskView):
     @staticmethod
     def _updateCommand(name, version):
         #'kubectl set image deployment/{name} {name}=064106913348.dkr.ecr.us-west-2.amazonaws.com/feed/{name}:{version}'.format(name=name, version=version).split(' ')
-        return 'helm upgrade uat-feedmachine --set routerVersion=feed/{name}:{version}'.format(name=name, version=version).split(' ')
+        camelCase = name.split('-')
+        if len(camelCase) > 1:
+            veridentifier = camelCase[0] + camelCase[1].capitalize() + 'Version'
+        else
+            veridentifier = camelCase[0] + 'Version'
+        return f'helm upgrade uat-feedmachine {os.getenv("DEPLOYMENT_ROOT"}/etc/kube/feedmachine --set {veridentifier}=feed/{name}:{version}'.split(' ')
 
     def rolloutImage(self, name, version, key):
         if key != secret_key:
