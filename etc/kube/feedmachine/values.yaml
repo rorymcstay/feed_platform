@@ -9,8 +9,8 @@ nannyReplicas: 1
 routerReplicas: 1
 uiServerReplicas: 1
 
-mongoPassword: 'oqoYLVD5hc'
-databasePassword: 'feeds'
+mongoUser: uat_feeds
+mongoPassword: uat_feeds_123
 
 uiServerVersion: feed/ui-server:0.1.0
 nannyVersion: feed/nanny:0.1.8
@@ -25,6 +25,5 @@ databaseUser: feeds
 databasePass: feeds
 databaseName: uat_feeds
 
-mongoUser: feeds
-mongoPass: feeds
+
 
