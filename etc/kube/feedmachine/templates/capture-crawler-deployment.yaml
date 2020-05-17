@@ -17,7 +17,14 @@ spec:
       imagePullSecrets:
       - name: awsecr-cred 
       containers:
-      - env:
+      - image: {{ .Values.imageRepository }}/{{ .Values.captureCrawlerVersion }}
+        name: capture-crawler
+        livenessProbe:
+          exec:
+            command:
+            - curl
+            - http://localhost/wd/hub/status # TODO look into making this a httpGet, without having to expose container
+        env:
         - name: KAFKA_ADDRESS
           valueFrom:
             configMapKeyRef:
@@ -58,7 +65,5 @@ spec:
             configMapKeyRef:
               key: FLASK_PORT
               name: feedmachine-env
-        image: {{ .Values.imageRepository }}/{{ .Values.captureCrawlerVersion }}
-        name: capture-crawler
         resources: {}
       restartPolicy: Always

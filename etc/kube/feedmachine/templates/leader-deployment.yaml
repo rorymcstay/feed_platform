@@ -18,7 +18,15 @@ spec:
       imagePullSecrets:
       - name: awsecr-cred
       containers:
-      - env:
+      - image: {{ .Values.imageRepository }}/{{ .Values.leaderVersion }}
+        name: leader
+        livenessProbe:
+          exec:
+            command:
+            - curl
+            - http://localhost/wd/hub/status # TODO look into making this a httpGet, without having to expose container
+        resources: {}
+        env:
         - name: KAFKA_ADDRESS
           valueFrom:
             configMapKeyRef:
@@ -54,7 +62,5 @@ spec:
             configMapKeyRef:
               key: SELENIUM_PORT
               name: feedmachine-env
-        image: {{ .Values.imageRepository }}/{{ .Values.leaderVersion }}
-        name: leader
-        resources: {}
+
       restartPolicy: Always

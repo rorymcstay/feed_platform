@@ -38,6 +38,16 @@ spec:
             configMapKeyRef:
               key: NANNY_HOST
               name: feedmachine-env
+        - name: FLASK_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: FLASK_HOST
+              name: feedmachine-env
+        - name: FLASK_PORT
+          valueFrom:
+            configMapKeyRef:
+              key: FLASK_PORT
+              name: feedmachine-env
         - name: ROUTER_HOST
           valueFrom:
             configMapKeyRef:

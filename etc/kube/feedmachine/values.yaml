@@ -12,13 +12,13 @@ uiServerReplicas: 1
 mongoUser: uat_feeds
 mongoPassword: uat_feeds_123
 
-uiServerVersion: feed/ui-server:0.1.0
-nannyVersion: feed/nanny:0.1.8
-leaderVersion: feed/leader:0.2.8
-routerVersion: feed/routing:0.1.1
-summarizerVersion: feed/summarizer:0.1.0
+uiServerVersion: feed/ui-server:0.1.2
+nannyVersion: feed/nanny:0.1.9
+leaderVersion: feed/leader:0.2.9
+routerVersion: feed/routing:0.1.2
+summarizerVersion: feed/summarizer:0.1.1
 feedAdminVersion: feed/feed-admin:0.2.2
-captureCrawlerVersion: feed/capture-crawler:0.1.9
+captureCrawlerVersion: feed/capture-crawler:0.1.10
 imageRepository: 064106913348.dkr.ecr.us-west-2.amazonaws.com
 
 databaseUser: feeds
