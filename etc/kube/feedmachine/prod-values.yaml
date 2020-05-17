@@ -1,0 +1,29 @@
+environment: prod
+feedAdminHostname: feedmachine:30000
+feedAdminServicePort: "30001"
+leaderReplicas: 3
+feedAdminReplicas: 1
+captureCrawlerReplicas: 3
+summarizerReplicas: 3
+nannyReplicas: 1
+routerReplicas: 1
+uiServerReplicas: 1
+
+mongoUser: feeds
+mongoPassword: feeds
+
+uiServerVersion: feed/ui-server:0.1.0
+nannyVersion: feed/nanny:0.1.8
+leaderVersion: feed/leader:0.2.8
+routerVersion: feed/routing:0.1.1
+summarizerVersion: feed/summarizer:0.1.0
+feedAdminVersion: feed/feed-admin:0.2.2
+captureCrawlerVersion: feed/capture-crawler:0.1.9
+imageRepository: 064106913348.dkr.ecr.us-west-2.amazonaws.com
+
+databaseUser: feeds
+databasePass: feeds
+databaseName: feeds
+
+
+
