@@ -37,7 +37,7 @@ services:
     - "5002:5000"
     stop_grace_period: 5s
     env_file:
-      - envs/deployment.env
+      - ${ENV_FILE}
 
   leader:
     container_name: leader

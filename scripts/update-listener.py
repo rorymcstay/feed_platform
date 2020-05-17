@@ -1,11 +1,63 @@
+import os
 from flask_classy import FlaskView
 from flask import Flask
 import subprocess
+import logging
+from feed.engine import ThreadPool
 
+fh = logging.FileHandler('ci.log')
+fh.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s: %(name)s - %(level)s - %s(message)')
+fh.setFormatter(formatter)
+
+logger = logging.getLogger(__name__)
+logger.addHandler(fh)
 
 component_name_overrides = {
     'routing': 'router'
 }
+
+secret_key = '7201873fd83683026d53267fd3606471f51fdf68ad1b4da3709d3cf5f8e8f1f1'
+
+def execute(command):
+    #, env=os.environ, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True)
+    with subprocess.Popen(command, busize=10) as pro:
+        logging.info(pro.stderr)
+
+class CommandRunner(ThreadPool):
+    __instance = None
+    def __init__(self):
+        if self.__instance is None:
+            super().__init__(1)
+            self.__instance = self
+        else:
+            pass
+
+    @staticmethod
+    def instance():
+        if CommandRunner.__instance is None:
+            logging.info(f'Making instance of command runner')
+            return CommandRunner()
+        else:
+            return __instance
+
+    def _rolloutImage(self, name, version):
+        command = UpdateManager._updateCommand(get_component_name(name), version)
+        logging.info(f'rolling out image version {version} for {name}')
+        logging.info(f'Running: {" ".join(command)}')
+        subprocess.Popen(command, bufsize=10)
+        return 'ok'
+
+    def rolloutImage(self, name, version):
+        self.add_task(self._rolloutImage, name, version)
+        return 'ok'
+
+    def promoteToProd(self):
+        self.add_task(self._promote)
+        return 'ok'
+
+    def _promote(self):
+        logging.info(f'doing promotion step')
 
 def get_component_name(name):
     return component_name_overrides.get(name, name)
@@ -14,11 +66,19 @@ class UpdateManager(FlaskView):
 
     @staticmethod
     def _updateCommand(name, version):
-        return 'kubectl set image deployment/{name} {name}=064106913348.dkr.ecr.us-west-2.amazonaws.com/feed/{name}:{version}'.format(name=name, version=version).split(' ')
+        #'kubectl set image deployment/{name} {name}=064106913348.dkr.ecr.us-west-2.amazonaws.com/feed/{name}:{version}'.format(name=name, version=version).split(' ')
+        return 'helm upgrade uat-feedmachine --set routerVersion=feed/{name}:{version}'.format(name=name, version=version).split(' ')
 
-    def rolloutImage(self, name, version):
-        command = UpdateManager._updateCommand(get_component_name(name), version)
-        subprocess.Popen(command, bufsize=10)
+    def rolloutImage(self, name, version, key):
+        if key != secret_key:
+            return 'invalid secret'
+        CommandRunner.instance().rolloutImage(name, version)
+        return 'ok'
+
+    def promoteToProd(self, key):
+        if key != secret_key:
+            return 'invalid secret'
+        CommandRunner.instance().promoteToProd()
         return 'ok'
 
 
