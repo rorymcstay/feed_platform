@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: router
+  name: router
+spec:
+  replicas: {{ .Values.routerReplicas }}
+  selector:
+    matchLabels:
+      app: router
+  template:
+    metadata:
+      labels:
+        app: router
+    spec:
+      imagePullSecrets:
+      - name: awsecr-cred 
+      containers:
+      - env:
+        - name: FLASK_PORT
+          valueFrom:
+            configMapKeyRef:
+              key: FLASK_PORT
+              name: feedmachine-env
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              key: LOG_LEVEL
+              name: {{ .Values.environment }}-env
+        - name: MONGO_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: MONGO_HOST
+              name: {{ .Values.environment }}-env
+        - name: MONGO_PASS
+          valueFrom:
+            configMapKeyRef:
+              key: MONGO_PASS
+              name: {{ .Values.environment }}-env
+        - name: MONGO_USER
+          valueFrom:
+            configMapKeyRef:
+              key: MONGO_USER
+              name: {{ .Values.environment }}-env
+        - name: CHAIN_DB
+          valueFrom:
+            configMapKeyRef:
+              key: CHAIN_DB
+              name: {{ .Values.environment }}-env
+        - name: NANNY_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: NANNY_HOST
+              name: feedmachine-env
+        - name: ROUTER_HOST
+          valueFrom: 
+            configMapKeyRef:
+              key: FLASK_HOST
+              name: feedmachine-env
+        image: {{ .Values.imageRepository }}/{{ .Values.routerVersion }}
+        name: router
+        ports:
+        - containerPort: 5000
+          name: http
+          protocol: TCP
+        resources: {}
+      restartPolicy: Always

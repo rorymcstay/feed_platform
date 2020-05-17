@@ -2,18 +2,17 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: leader
-  name: leader
+    app: capture-crawler
+  name: capture-crawler
 spec:
-  replicas: 2
+  replicas: {{ .Values.captureCrawlerReplicas }}
   selector:
     matchLabels:
-      app: leader
+      app: capture-crawler
   template:
-
     metadata:
       labels:
-        app: leader
+        app: capture-crawler
     spec:
       imagePullSecrets:
       - name: awsecr-cred 
@@ -23,12 +22,12 @@ spec:
           valueFrom:
             configMapKeyRef:
               key: KAFKA_ADDRESS
-              name: feedmachine-env
+              name: {{ .Values.environment }}-env
         - name: LOG_LEVEL
           valueFrom:
             configMapKeyRef:
               key: LOG_LEVEL
-              name: feedmachine-env
+              name: {{ .Values.environment }}-env
         - name: NANNY_HOST
           valueFrom:
             configMapKeyRef:
@@ -44,7 +43,17 @@ spec:
             configMapKeyRef:
               key: SELENIUM_PORT
               name: feedmachine-env
-        image: 064106913348.dkr.ecr.us-west-2.amazonaws.com/feed/leader:0.2.7
-        name: leader
+        - name: CHAIN_DB
+          valueFrom:
+            configMapKeyRef:
+               key: CHAIN_DB
+               name: {{ .Values.environment }}-env
+        - name: FLASK_PORT
+          valueFrom:
+            configMapKeyRef:
+              key: FLASK_PORT
+              name: feedmachine-env
+        image: {{ .Values.imageRepository }}/{{ .Values.captureCrawlerVersion }}
+        name: capture-crawler
         resources: {}
       restartPolicy: Always

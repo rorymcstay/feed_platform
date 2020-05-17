@@ -1,0 +1,8 @@
+advertisedListeners: PLAINTEXT://kafka:9092
+listenerSecurityProtocolMap: PLAINTEXT:PLAINTEXT
+allowPlaintextListener: true
+autoCreateTopicsEnable: true
+
+
+
+

@@ -8,7 +8,7 @@ spec:
   selector:
     matchLabels:
       app: summarizer
-  replicas: 2
+  replicas: {{ .Values.summarizerReplicas }}
   template:
     metadata:
       labels:
@@ -22,12 +22,12 @@ spec:
           valueFrom:
             configMapKeyRef:
               key: KAFKA_ADDRESS
-              name: feedmachine-env
+              name: {{ .Values.environment }}-env
         - name: LOG_LEVEL
           valueFrom:
             configMapKeyRef:
               key: LOG_LEVEL
-              name: feedmachine-env
+              name: {{ .Values.environment }}-env
         - name: NANNY_HOST
           valueFrom:
             configMapKeyRef:
@@ -47,23 +47,28 @@ spec:
           valueFrom:
             configMapKeyRef:
               key: DATABASE_HOST
-              name: feedmachine-env
+              name: {{ .Values.environment }}-env
         - name: DATABASE_PORT
           valueFrom:
             configMapKeyRef:
               key: DATABASE_PORT
-              name: feedmachine-env
+              name: {{ .Values.environment }}-env
         - name: DATABASE_PASS
           valueFrom:
             configMapKeyRef:
               key: DATABASE_PASS
-              name: feedmachine-env
+              name: {{ .Values.environment }}-env
         - name: DATABASE_USER
           valueFrom:
             configMapKeyRef:
               key: DATABASE_USER
-              name: feedmachine-env
-        image: 064106913348.dkr.ecr.us-west-2.amazonaws.com/feed/summarizer:0.1.0
+              name: {{ .Values.environment }}-env
+        - name: DATABASE_NAME
+          valueFrom:
+            configMapKeyRef:
+              key: DATABASE_NAME
+              name: {{ .Values.environment }}-env
+        image: {{ .Values.imageRepository }}/{{ .Values.summarizerVersion }}
         name: summarizer
         resources: {}
       restartPolicy: Always
