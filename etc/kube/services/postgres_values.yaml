@@ -1,0 +1,7 @@
+volumePermissions:
+  enabled: true
+
+postgresqlPassword: feeds
+postgresqlUsername: feeds
+postgresqlDatabase: feeds
+

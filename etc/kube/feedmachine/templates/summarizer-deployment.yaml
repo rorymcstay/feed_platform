@@ -2,38 +2,27 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: ui-server
-  name: ui-server
+    app: summarizer
+  name: summarizer
 spec:
-  replicas: 1
   selector:
     matchLabels:
-      app: ui-server
+      app: summarizer
+  replicas: {{ .Values.summarizerReplicas }}
   template:
     metadata:
       labels:
-        app: ui-server
+        app: summarizer
     spec:
       imagePullSecrets:
       - name: awsecr-cred 
       containers:
-      - name: ui-server
-        image: 064106913348.dkr.ecr.us-west-2.amazonaws.com/feed/ui-server:0.1.0
-        ports:
-        - containerPort: 5000
-          name: http
-          protocol: TCP
-        env:
-        - name: UISERVER_HOST
+      - env:
+        - name: KAFKA_ADDRESS
           valueFrom:
             configMapKeyRef:
-              key: FLASK_HOST
-              name: feedmachine-env
-        - name: FLASK_PORT
-          valueFrom:
-            configMapKeyRef:
-              key: FLASK_PORT
-              name: feedmachine-env
+              key: KAFKA_ADDRESS
+              name: {{ .Values.environment }}-env
         - name: LOG_LEVEL
           valueFrom:
             configMapKeyRef:
@@ -69,48 +58,17 @@ spec:
             configMapKeyRef:
               key: DATABASE_PASS
               name: {{ .Values.environment }}-env
-        - name: MONGO_HOST
-          valueFrom:
-            configMapKeyRef:
-              key: MONGO_HOST
-              name: {{ .Values.environment }}-env
-        - name: MONGO_PASS
-          valueFrom:
-            configMapKeyRef:
-              key: MONGO_PASS
-              name: {{ .Values.environment }}-env
-        - name: MONGO_USER
-          valueFrom:
-            configMapKeyRef:
-              key: MONGO_USER
-              name: {{ .Values.environment }}-env
-        - name: CHAIN_DB:
-          valueFrom:
-            configMapKeyRef:
-              key: CHAIN_DB
-              name: {{ .Values.environment }}-env
         - name: DATABASE_USER
           valueFrom:
             configMapKeyRef:
               key: DATABASE_USER
               name: {{ .Values.environment }}-env
-
+        - name: DATABASE_NAME
+          valueFrom:
+            configMapKeyRef:
+              key: DATABASE_NAME
+              name: {{ .Values.environment }}-env
+        image: {{ .Values.imageRepository }}/{{ .Values.summarizerVersion }}
+        name: summarizer
         resources: {}
       restartPolicy: Always
----
-
-apiVersion: v1
-kind: Service
-metadata:
-  name: ui-server
-  labels:
-    service: ui-server
-spec:
-  selector:
-    app: ui-server
-  type: ClusterIP
-  ports:
-  - port: 5000
-    targetPort: 5000
-    protocol: TCP
-    name: http
