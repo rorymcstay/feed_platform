@@ -25,3 +25,4 @@ etc/aws/ecs/deployment-task.json
 deployment-task.json
 tmp
 ci.log
+*.swp
