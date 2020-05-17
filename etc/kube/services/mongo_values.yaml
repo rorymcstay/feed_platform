@@ -2,4 +2,7 @@ mongodbPassword: feeds
 mongodbUsername: feeds
 mongodbDatabase: actionChains
 
+volumePermissions:
+  enabled: true
+
 

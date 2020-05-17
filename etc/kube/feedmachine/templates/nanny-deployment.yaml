@@ -34,15 +34,24 @@ spec:
             configMapKeyRef:
               key: LOG_LEVEL
               name: {{ .Values.environment }}-env
-        - name: MONGO_HOST
           valueFrom:
             configMapKeyRef:
-              key: MONGO_HOST
+              key: LOG_LEVEL
               name: {{ .Values.environment }}-env
         - name: MONGO_PASS
           valueFrom:
             configMapKeyRef:
               key: MONGO_PASS
+              name: {{ .Values.environment }}-env
+        - name: MONGO_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: MONGO_HOST
+              name: {{ .Values.environment }}-env
+        - name: CHAIN_DB 
+          valueFrom:
+            configMapKeyRef:
+              key: CHAIN_DB
               name: {{ .Values.environment }}-env
         - name: MONGO_USER
           valueFrom:
