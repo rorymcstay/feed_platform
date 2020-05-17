@@ -35,6 +35,10 @@ def listNameSpaces():
     namespaces = execute('aws', 'servicediscovery', 'list-namespaces').get('Namespaces')
     return namespaces
 
+def listImages(name):
+    images = execute('aws', 'ecr', 'list-images', '--repository-name', name)
+    return images
+
 def getNamespace(name):
     namespaces = listNameSpaces()
     li = list(filter(lambda namespace: namespace.get('Name') == os.environ['PROJECT_NAME'], namespaces))

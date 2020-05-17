@@ -1,7 +1,7 @@
 ui-server=0.0.2
 leader=0.1.1
 nanny=0.0.3
-routing=0.0.3
+routing=0.1.1
 summarizer=0.0.4
 commands=0.0.7
 feed-admin=0.0.6
