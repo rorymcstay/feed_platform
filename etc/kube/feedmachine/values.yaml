@@ -12,7 +12,7 @@ uiServerReplicas: 1
 mongoUser: uat_feeds
 mongoPassword: uat_feeds_123
 
-
+imageRepository: 064106913348.dkr.ecr.us-west-2.amazonaws.com
 
 databaseUser: feeds
 databasePass: feeds
