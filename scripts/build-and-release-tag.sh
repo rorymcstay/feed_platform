@@ -1,4 +1,5 @@
-#!/bin/bash
+!/bin/bash
+
 git clone $GIT_URL git_dir 
 
 cd git_dir || exit
