@@ -58,6 +58,7 @@ class CommandRunner(ThreadPool):
         return 'ok'
 
     def _promote(self):
+        execute(f'{os.getenv("DEPLOYMENT_ROOT")}/scripts/promote-to-prod.sh')
         logger.info(f'doing promotion step')
 
 def get_component_name(name):
@@ -69,7 +70,7 @@ class UpdateManager(FlaskView):
     def _updateCommand(name, version):
         #'kubectl set image deployment/{name} {name}=064106913348.dkr.ecr.us-west-2.amazonaws.com/feed/{name}:{version}'.format(name=name, version=version).split(' ')
         #f'helm upgrade uat-feedmachine {os.getenv("DEPLOYMENT_ROOT")}/etc/kube/feedmachine --set {veridentifier}=feed/{name}:{version} --namespace uat'.split(' ')
-        return f'{os.getenv("DEPLOYMENT_ROOT")}/scripts/bump_environment.sh {name} {version}'.split(" ")
+        return f'{os.getenv("DEPLOYMENT_ROOT")}/scripts/bump-uat-environment.sh {name} {version}'.split(" ")
 
     def rolloutImage(self, name, version, key):
         if key != secret_key:
