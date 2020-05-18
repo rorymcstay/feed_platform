@@ -21,7 +21,7 @@ secret_key = '7201873fd83683026d53267fd3606471f51fdf68ad1b4da3709d3cf5f8e8f1f1'
 
 def execute(command):
     #, env=os.environ, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True)
-    with subprocess.Popen(command, busize=10) as pro:
+    with subprocess.Popen(command, bufsize=10) as pro:
         for line in pro.stderr:
             logger.info(line)
 

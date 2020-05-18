@@ -20,4 +20,4 @@ if [[ $SUCCESS == "false" ]]; then
     git commit -m 'PROD environment upgrade - FAILURE' && git push
 else
     git commit -m 'PROD environment upgrade - SUCCESS' && git push
-
+fi
