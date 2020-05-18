@@ -2,16 +2,19 @@ source $DEPLOYMENT_ROOT/etc/profiles/cicd.env
 
 cd $DEPLOYMENT_ROOT
 
-git checkout -f environments
+#git checkout environments
 
 git pull origin master
 
-bump_version --name $1 --version $2
+bump_versions --name $1 --version $2
 
-source $DEPLOYMENT_ROOT/profiles/uat.versions.env
+cat etc/profiles/uat.versions.env
+source $DEPLOYMENT_ROOT/etc/profiles/uat.versions.env
 envsubst < $DEPLOYMENT_ROOT/etc/kube/versions-template.yaml > etc/uat.versions.yaml
+cat etc/uat.versions.yaml
 
-git add etc/manifest.txt etc/profiles/uat.version.env etc/uat.versions.yaml
+
+git add etc/manifest.txt etc/profiles/uat.versions.env etc/uat.versions.yaml
 
 
 

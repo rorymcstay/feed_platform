@@ -21,5 +21,5 @@ if __name__ == '__main__':
     with open(f'{os.getenv("DEPLOYMENT_ROOT")}/etc/profiles/uat.versions.env', 'w') as manifest:
         for key in versions:
             newKey = key.upper().replace('-', '_')
-            manifest.write(f'export  {newKey}={versions[key]}\n')
+            manifest.write(f'export  {newKey}_VERSION={versions[key]}\n')
 
