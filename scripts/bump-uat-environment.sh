@@ -4,7 +4,7 @@ source $DEPLOYMENT_ROOT/etc/profiles/cicd.env
 cd $DEPLOYMENT_ROOT
 
 git checkout environments
-
+git fetch
 git pull origin master
 
 bump_versions --name $1 --version $2
