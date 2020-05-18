@@ -20,4 +20,7 @@ if [[ $SUCCESS == "false" ]]; then
     git commit -m 'PROD environment upgrade - FAILURE' && git push
 else
     git commit -m 'PROD environment upgrade - SUCCESS' && git push
+    cp $DEPLOYMENT_ROOT/etc/manifest.txt $DEPLOYMENT_ROOT/etc/prod-manifest.txt
+    echo success
 fi
+
