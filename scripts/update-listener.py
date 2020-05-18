@@ -53,6 +53,11 @@ class CommandRunner(ThreadPool):
         self.add_task(self._rolloutImage, name, version)
         return 'ok'
 
+    def getCurrentVersions(self, env):
+        with open(f'{os.environ["DEPLOYMENT_ROOT"]}/etc/{env}.versions.yaml') as manifest:
+            txt = manifest.read()
+        return txt
+
     def promoteToProd(self):
         self.add_task(self._promote)
         return 'ok'
