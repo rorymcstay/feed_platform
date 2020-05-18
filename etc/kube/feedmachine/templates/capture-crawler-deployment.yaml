@@ -21,6 +21,8 @@ spec:
         name: capture-crawler
         # TODO Not working
         livenessProbe:
+          initialDelaySeconds: 15
+          periodSeconds: 60
           exec:
             command:
             - curl
