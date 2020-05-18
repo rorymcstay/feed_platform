@@ -6,3 +6,4 @@ routing=0.1.1
 summarizer=0.1.1
 ui-server=0.1.2
 utils=0.3.37
+router=0.1.3
