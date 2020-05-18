@@ -24,6 +24,11 @@ spec:
           name: http
           protocol: TCP
         env:
+        - name: KAFKA_TOPIC_PREFIX
+          valueFrom:
+            configMapKeyRef:
+              key: KAFKA_TOPIC_PREFIX
+              name: {{ .Values.environment }}-env
         - name: KAFKA_ADDRESS
           valueFrom:
             configMapKeyRef:
