@@ -20,11 +20,12 @@ spec:
       containers:
       - image: {{ .Values.imageRepository }}/{{ .Values.leaderVersion }}
         name: leader
-        livenessProbe:
-          exec:
-            command:
-            - curl
-            - http://localhost/wd/hub/status # TODO look into making this a httpGet, without having to expose container
+        # TODO Not working, liveliness probe for cap crawl and leader
+        #livenessProbe:
+        #  exec:
+        #    command:
+        #    - curl
+        #    - http://localhost/wd/hub/status # TODO look into making this a httpGet, without having to expose container
         resources: {}
         env:
         - name: KAFKA_ADDRESS
