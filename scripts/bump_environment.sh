@@ -1,3 +1,4 @@
+#!/bin/bash
 source $DEPLOYMENT_ROOT/etc/profiles/cicd.env
 
 cd $DEPLOYMENT_ROOT
