@@ -2,7 +2,7 @@ source $DEPLOYMENT_ROOT/etc/profiles/cicd.env
 
 cd $DEPLOYMENT_ROOT
 
-#git checkout environments
+git checkout environments
 
 git pull origin master
 
