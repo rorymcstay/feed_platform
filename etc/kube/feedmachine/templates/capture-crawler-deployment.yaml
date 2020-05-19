@@ -20,11 +20,13 @@ spec:
       - image: {{ .Values.imageRepository }}/{{ .Values.captureCrawlerVersion }}
         name: capture-crawler
         # TODO Not working
-        #livenessProbe:
-        #  exec:
-        #    command:
-        #    - curl
-        #    - http://localhost/wd/hub/status # TODO look into making this a httpGet, without having to expose container
+        livenessProbe:
+          initialDelaySeconds: 15
+          periodSeconds: 60
+          exec:
+            command:
+            - {{ .Values.crawler.healthCheckMethod }}
+            - {{ .Values.crawler.healthCheckEndpoint }} # TODO look into making this a httpGet, without having to expose container
         env:
         - name: KAFKA_ADDRESS
           valueFrom:
