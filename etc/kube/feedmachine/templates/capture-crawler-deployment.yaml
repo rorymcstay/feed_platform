@@ -25,8 +25,8 @@ spec:
           periodSeconds: 60
           exec:
             command:
-            - curl
-            - http://localhost:4444/wd/hub/status # TODO look into making this a httpGet, without having to expose container
+            - {{ .Values.crawler.healthCheckMethod }}
+            - {{ .Values.crawler.healthCheckEndpoint }} # TODO look into making this a httpGet, without having to expose container
         env:
         - name: KAFKA_ADDRESS
           valueFrom:

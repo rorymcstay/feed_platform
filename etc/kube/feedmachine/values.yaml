@@ -18,5 +18,9 @@ databaseUser: feeds
 databasePass: feeds
 databaseName: uat_feeds
 
+crawler:
+  healthCheckMethod: curl
+  healthCheckEndpoint: http://localhost:444/wd/hub/status
+
 
 
