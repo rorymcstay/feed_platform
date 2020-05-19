@@ -1,3 +1,5 @@
+!/bin/bash
+
 git clone $GIT_URL git_dir 
 
 cd git_dir || exit
@@ -18,9 +20,8 @@ echo $tag | grep -E -q $sem_ver_regex || IS_RELEASE=0
 
 if [ $IS_RELEASE -eq "1" ]; then
     echo "publishing docker image version $tag";
-    $(aws ecr get-login --no-include-email --region us-west-2);_
-    docker tag $IMAGE_REPOSITORY/$IMAGE_NAME $IMAGE_REPOSITORY/$IMAGE_NAME:$tag;
-    docker push $IMAGE_REPOSITORY/$IMAGE_NAME:$tag;
+    docker build -t "$IMAGE_REPOSITORY/$PROJECT_NAME/$COMPONENT:$tag" .
+    docker push "$IMAGE_REPOSITORY/$IMAGE_NAME:$tag";
     curl "http://feedmachine.rorymcstay.com/updatemanager/rolloutImage/$COMPONENT/$tag/7201873fd83683026d53267fd3606471f51fdf68ad1b4da3709d3cf5f8e8f1f1"
     exit;
 fi
