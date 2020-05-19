@@ -5,13 +5,8 @@ import subprocess
 import logging
 from feed.engine import ThreadPool
 
-fh = logging.FileHandler('{os.getenv("DEPLOYMENT_ROOT")}/ci.log')
-fh.setLevel(logging.DEBUG)
-formatter = logging.Formatter('%(asctime)s: tid:%(thread)d   %(name)s - %(levelname)s - %s(message)')
-fh.setFormatter(formatter)
+from logging.handlers import SMTPHandler
 
-logger = logging.getLogger()
-logger.addHandler(fh)
 
 component_name_overrides = {
     'routing': 'router'
@@ -19,14 +14,34 @@ component_name_overrides = {
 
 secret_key = '7201873fd83683026d53267fd3606471f51fdf68ad1b4da3709d3cf5f8e8f1f1'
 
+newline='\n'
+
+
+"""
+mail_handler = SMTPHandler(
+    mailhost='127.0.0.1',
+    fromaddr='server-error@example.com',
+    toaddrs=['admin@example.com'],
+    subject='Application Error'
+)
+mail_handler.setLevel(logging.ERROR)
+mail_handler.setFormatter(logging.Formatter(
+    '[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
+))
+if not app.debug:
+    app.logger.addHandler(mail_handler)
+"""
+
 def execute(command):
     #, env=os.environ, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True)
-    process = subprocess.Popen(command, bufsize=10, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
-    with open(process) as command_output:
-        for line in command_ouput:
-            logging.info(f'pid:{process.pid}: {line}')
-    process.wait(timeout=30)
-    logging.info(f'process {command} has returned with status code {process.returncode}')
+    logging.info(f' running {command}')
+    with subprocess.Popen(command, bufsize=10, stderr=subprocess.PIPE, stdout=subprocess.PIPE) as command_output:
+        for line in command_output.stderr:
+            logging.info(f'pid:{command_output.pid}: {str(line, "utf-8").strip(newline)}')
+        for line in command_output.stdout:
+            logging.info(f'pid:{command_output.pid}: {str(line, "utf-8").strip(newline)}')
+        command_output.wait(timeout=30)
+        logging.info(f'process {command} has returned with status code {command_output.returncode}')
 
 class CommandRunner(ThreadPool):
     __instance = None
@@ -95,7 +110,25 @@ class UpdateManager(FlaskView):
 
 
 if __name__ == '__main__':
-    app = Flask('updatelistener')
+    from logging.config import dictConfig
+
+    dictConfig({
+        'version': 1,
+        'formatters': {'default': {
+            'format': '[%(asctime)s]%(thread)d: %(module)s - %(levelname)s - %(message)s',
+        }},
+        'handlers': {'wsgi': {
+            'class': 'logging.FileHandler',
+            'filename': f'{os.getenv("DEPLOYMENT_ROOT")}/tmp/ci.log',
+            'formatter': 'default'
+        }},
+        'root': {
+            'level': 'INFO',
+            'handlers': ['wsgi']
+        }
+    })
+
+    app = Flask(__name__)
     UpdateManager.register(app)
     logging.info(app.url_map)
     app.run(host='0.0.0.0', port=5000)
