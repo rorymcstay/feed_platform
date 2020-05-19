@@ -5,13 +5,8 @@ import subprocess
 import logging
 from feed.engine import ThreadPool
 
-fh = logging.FileHandler('ci.log')
-fh.setLevel('DEBUG')
-formatter = logging.Formatter('%(asctime)s: %(name)s - %(level)s - %s(message)')
-fh.setFormatter(formatter)
+from logging.handlers import SMTPHandler
 
-logger = logging.getLogger(__name__)
-logger.addHandler(fh)
 
 component_name_overrides = {
     'routing': 'router'
@@ -19,11 +14,34 @@ component_name_overrides = {
 
 secret_key = '7201873fd83683026d53267fd3606471f51fdf68ad1b4da3709d3cf5f8e8f1f1'
 
+newline='\n'
+
+
+"""
+mail_handler = SMTPHandler(
+    mailhost='127.0.0.1',
+    fromaddr='server-error@example.com',
+    toaddrs=['admin@example.com'],
+    subject='Application Error'
+)
+mail_handler.setLevel(logging.ERROR)
+mail_handler.setFormatter(logging.Formatter(
+    '[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
+))
+if not app.debug:
+    app.logger.addHandler(mail_handler)
+"""
+
 def execute(command):
     #, env=os.environ, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True)
-    with subprocess.Popen(command, bufsize=10) as pro:
-        for line in pro.stderr:
-            logger.info(line)
+    logging.info(f' running {command}')
+    with subprocess.Popen(command, bufsize=10, stderr=subprocess.PIPE, stdout=subprocess.PIPE) as command_output:
+        for line in command_output.stderr:
+            logging.info(f'pid:{command_output.pid}: {str(line, "utf-8").strip(newline)}')
+        for line in command_output.stdout:
+            logging.info(f'pid:{command_output.pid}: {str(line, "utf-8").strip(newline)}')
+        command_output.wait(timeout=30)
+        logging.info(f'process {command} has returned with status code {command_output.returncode}')
 
 class CommandRunner(ThreadPool):
     __instance = None
@@ -37,15 +55,15 @@ class CommandRunner(ThreadPool):
     @staticmethod
     def instance():
         if CommandRunner.__instance is None:
-            logger.info(f'Making instance of command runner')
+            logging.info(f'Making instance of command runner')
             return CommandRunner()
         else:
             return __instance
 
     def _rolloutImage(self, name, version):
         command = UpdateManager._updateCommand(get_component_name(name), version)
-        logger.info(f'rolling out image version {version} for {name}')
-        logger.info(f'Running: {" ".join(command)}')
+        logging.info(f'rolling out image version {version} for {name}')
+        logging.info(f'Running: {" ".join(command)}')
         subprocess.Popen(command, bufsize=10)
         return 'ok'
 
@@ -64,7 +82,7 @@ class CommandRunner(ThreadPool):
 
     def _promote(self):
         execute(f'{os.getenv("DEPLOYMENT_ROOT")}/scripts/promote-to-prod.sh')
-        logger.info(f'doing promotion step')
+        logging.info(f'doing promotion step')
 
 def get_component_name(name):
     return component_name_overrides.get(name, name)
@@ -92,7 +110,25 @@ class UpdateManager(FlaskView):
 
 
 if __name__ == '__main__':
-    app = Flask('updatelistener')
+    from logging.config import dictConfig
+
+    dictConfig({
+        'version': 1,
+        'formatters': {'default': {
+            'format': '[%(asctime)s]%(thread)d: %(module)s - %(levelname)s - %(message)s',
+        }},
+        'handlers': {'wsgi': {
+            'class': 'logging.FileHandler',
+            'filename': f'{os.getenv("DEPLOYMENT_ROOT")}/tmp/ci.log',
+            'formatter': 'default'
+        }},
+        'root': {
+            'level': 'INFO',
+            'handlers': ['wsgi']
+        }
+    })
+
+    app = Flask(__name__)
     UpdateManager.register(app)
-    print(app.url_map)
+    logging.info(app.url_map)
     app.run(host='0.0.0.0', port=5000)

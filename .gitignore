@@ -26,3 +26,5 @@ deployment-task.json
 tmp
 ci.log
 *.swp
+
+update-listener-pid
