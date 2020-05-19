@@ -5,12 +5,12 @@ import subprocess
 import logging
 from feed.engine import ThreadPool
 
-fh = logging.FileHandler('ci.log')
-fh.setLevel('DEBUG')
-formatter = logging.Formatter('%(asctime)s: %(name)s - %(level)s - %s(message)')
+fh = logging.FileHandler('{os.getenv("DEPLOYMENT_ROOT")}/ci.log')
+fh.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(asctime)s: tid:%(thread)d   %(name)s - %(levelname)s - %s(message)')
 fh.setFormatter(formatter)
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger()
 logger.addHandler(fh)
 
 component_name_overrides = {
@@ -21,9 +21,12 @@ secret_key = '7201873fd83683026d53267fd3606471f51fdf68ad1b4da3709d3cf5f8e8f1f1'
 
 def execute(command):
     #, env=os.environ, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True)
-    with subprocess.Popen(command, bufsize=10) as pro:
-        for line in pro.stderr:
-            logger.info(line)
+    process = subprocess.Popen(command, bufsize=10, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+    with open(process) as command_output:
+        for line in command_ouput:
+            logging.info(f'pid:{process.pid}: {line}')
+    process.wait(timeout=30)
+    logging.info(f'process {command} has returned with status code {process.returncode}')
 
 class CommandRunner(ThreadPool):
     __instance = None
@@ -37,15 +40,15 @@ class CommandRunner(ThreadPool):
     @staticmethod
     def instance():
         if CommandRunner.__instance is None:
-            logger.info(f'Making instance of command runner')
+            logging.info(f'Making instance of command runner')
             return CommandRunner()
         else:
             return __instance
 
     def _rolloutImage(self, name, version):
         command = UpdateManager._updateCommand(get_component_name(name), version)
-        logger.info(f'rolling out image version {version} for {name}')
-        logger.info(f'Running: {" ".join(command)}')
+        logging.info(f'rolling out image version {version} for {name}')
+        logging.info(f'Running: {" ".join(command)}')
         subprocess.Popen(command, bufsize=10)
         return 'ok'
 
@@ -64,7 +67,7 @@ class CommandRunner(ThreadPool):
 
     def _promote(self):
         execute(f'{os.getenv("DEPLOYMENT_ROOT")}/scripts/promote-to-prod.sh')
-        logger.info(f'doing promotion step')
+        logging.info(f'doing promotion step')
 
 def get_component_name(name):
     return component_name_overrides.get(name, name)
@@ -94,5 +97,5 @@ class UpdateManager(FlaskView):
 if __name__ == '__main__':
     app = Flask('updatelistener')
     UpdateManager.register(app)
-    print(app.url_map)
+    logging.info(app.url_map)
     app.run(host='0.0.0.0', port=5000)
