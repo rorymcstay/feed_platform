@@ -11,5 +11,5 @@ docker run mongo -d
 source $CODEBUILD_SRC_DIR_platform/etc/profiles/dev.env
 pip install -r requirements.txt
 
-python -m unittest discover src/test
+python -m unittest discover src/test -p 'test_*.py'
 
