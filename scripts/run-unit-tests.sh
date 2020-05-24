@@ -1,5 +1,6 @@
 #!/bin/bash
-component=./ # default to current working director
+cwd=$pwd
+component=. # default to current working director
 while test $# -gt 0; do
   case "$1" in
     -h|--help)
@@ -38,7 +39,9 @@ while test $# -gt 0; do
       shift
       ;;
     --component*)
-      component=`echo $SOURCE_DIR/$1 | sed -e 's/^[^=]*=//g'`
+      shift
+      echo "Compnent $1 was specified"
+      component=`echo $SOURCE_DIR/$1`
       shift
       ;;
     *)
@@ -47,10 +50,19 @@ while test $# -gt 0; do
   esac
 done
 
+cd $component || echo "$component not found"
+
+echo 'Creating test docker network'
 docker network create test
 
+echo 'Source test environment'
 source $CODEBUILD_SRC_DIR_platform/etc/profiles/dev.env
+
+echo 'installing requirements'
 pip install -r requirements.txt
 
-python -m unittest discover $component/src/test -p 'test_*.py'
 
+echo "Starting the tests  in $component/src/test ..."
+python -m unittest discover $component/src/test -p 'test_*.py' --verbose
+
+cd $cwd
