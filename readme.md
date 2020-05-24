@@ -85,32 +85,21 @@ https://grafana.com/grafana/dashboards/893
 # Kubernetes
 
 ## initialise kafka, mongo and postgres
-
-1. kafka
-
-	
-
-#https://hub.kubeapps.com/charts/incubator/kafka
-# Configuring a Kafka cluster using helm
-	rory@uatfeedmachine:~/feed/etc/kube$ helm init
-	Creating /home/rory/.helm 
-	Creating /home/rory/.helm/repository 
-	rory@uatfeedmachine:~/feed/etc/kube$ helm repo add incubator http://storage.googleapis.com/kubernetes-charts-incubator
-	"incubator" has been added to your repositories
-	rory@uatfeedmachine:~/feed/etc/kube$ helm install --name my-kafka incubator/kafka
+# add the bitnami repos
+	helm repo add bitnami https://charts.bitnami.com/bitnami
 # Kafka
-helm repo add bitnami https://charts.bitnami.com/bitnami
-helm install bitnami/kafka
+	helm install kafka incubator/kafka --namespace services --values etc/kube/services/kafka-values.yaml 	
 # Mongo
-helm install bitnami/mongodb-sharded --values $DEPLOYMENT_ROOT/etc/kube/services/mongo_values.yaml --namespace services
+	helm install bitnami/mongodb-sharded --values etc/kube/services/mongo_values.yaml --namespace services
 # Postgresql
-helm install bitnami/postgresql --values $DEPLOYMENT_ROOT/etc/kube/services/postgres_values.yaml --namespace services
+	helm install bitnami/postgresql --values etc/kube/services/postgres_values.yaml --namespace services
 
 
 # regsitrey creds ecr
-helm install --name registry-creds --set ecr.enabled=true --set-string ecr.awsAccessKeyId="AKIAQ53IR3ZCMEGY2FEF" \
---set-string ecr.awsSecretAccessKey="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" --set-string ecr.awsAccount="064106913348" --set-string ecr.awsRegion="us-west-2" --set-string ecr.awsAssumeRole="arn:aws:iam::064106913348:role/uatfeedmachine" \
-kir4h/registry-creds
+This is not working, there is a manual script work around in scripts.
+	helm install --name registry-creds --set ecr.enabled=true --set-string ecr.awsAccessKeyId="AKIAQ53IR3ZCMEGY2FEF" \
+	--set-string ecr.awsSecretAccessKey="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" --set-string ecr.awsAccount="064106913348" --set-string ecr.awsRegion="us-west-2" --set-string ecr.awsAssumeRole="arn:aws:iam::064106913348:role/uatfeedmachine" \
+	kir4h/registry-creds
 
 
 kubectl create secret generic regcred \
@@ -143,4 +132,8 @@ on the gateway box
 
 # create a new postgres user and database
 
+# Setup monitoring
+	rory@uatfeedmachine:~/feed$ helm install grafana bitnami/grafana --namespace monitoring
+	rory@uatfeedmachine:~/feed$ kubectl port-forward svc/grafana 3000:3000 --address 192.168.1.96 --namespace monitoring &
 
+	rory@uatfeedmachine:~/feed $ helm install prometheus bitnami/prometheus-operator --namespace monitoring
