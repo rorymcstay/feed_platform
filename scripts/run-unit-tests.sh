@@ -9,8 +9,11 @@ while test $# -gt 0; do
       echo " "
       echo "options:"
       echo "-h, --help                show brief help"
-      echo "-a, --action=ACTION       specify an action to use"
-      echo "-o, --output-dir=DIR      specify a directory to store output in"
+      echo "--kafka                   pull kafka docker"
+      echo "--postgres                pull postgres"
+      echo "--mongo                   pull mongo"
+      echo "--selenium                pull selenium"
+      echo "--component               run 'component' test from '\$SOURCE_DIR'"
       exit 0
       ;;
     --mongo)
@@ -36,20 +39,6 @@ while test $# -gt 0; do
       ;;
     --component*)
       component=`echo $SOURCE_DIR/$1 | sed -e 's/^[^=]*=//g'`
-      shift
-      ;;
-    -o)
-      shift
-      if test $# -gt 0; then
-        export OUTPUT=$1
-      else
-        echo "no output dir specified"
-        exit 1
-      fi
-      shift
-      ;;
-    --output-dir*)
-      export OUTPUT=`echo $1 | sed -e 's/^[^=]*=//g'`
       shift
       ;;
     *)
