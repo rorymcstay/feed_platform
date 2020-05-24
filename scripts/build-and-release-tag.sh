@@ -19,7 +19,10 @@ echo $tag | grep -E -q $sem_ver_regex || IS_RELEASE=0
 
 if [ $IS_RELEASE -eq "1" ]; then
     echo "publishing docker image version $tag";
+    
+
     docker build -t "$IMAGE_REPOSITORY/$PROJECT_NAME/$COMPONENT:$tag" .
+
     echo $(aws ecr get-login --no-include-email --region us-west-2)
     $(aws ecr get-login --no-include-email --region us-west-2)
     echo docker push "$IMAGE_REPOSITORY/$IMAGE_NAME:$tag";
