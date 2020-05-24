@@ -59,10 +59,9 @@ echo 'Source test environment'
 source $CODEBUILD_SRC_DIR_platform/etc/profiles/dev.env
 
 echo 'installing requirements'
-pip install -r requirements.txt
-
+pip install -r requirements.txt || exit 1;
 
 echo "Starting the tests  in $component/src/test ..."
-python -m unittest discover $component/src/test -p 'test_*.py' --verbose
+python -m unittest discover $component/src/test -p 'test_*.py' --verbose || exit 1;
 
 cd $cwd

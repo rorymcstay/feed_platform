@@ -69,6 +69,11 @@ spec:
             configMapKeyRef:
               key: DATABASE_HOST
               name: {{ .Values.environment }}-env
+        - name: DATABASE_NAME
+          valueFrom:
+            configMapKeyRef:
+              key: DATABASE_NAME
+              name: {{ .Values.environment }}-env
         - name: DATABASE_PORT
           valueFrom:
             configMapKeyRef:
