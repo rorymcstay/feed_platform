@@ -20,7 +20,7 @@ databaseName: uat_feeds
 
 crawler:
   healthCheckMethod: curl
-  healthCheckEndpoint: http://localhost:444/wd/hub/status
+  healthCheckEndpoint: http://localhost:4444/wd/hub/status
 
 
 
