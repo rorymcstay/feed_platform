@@ -54,6 +54,11 @@ spec:
             configMapKeyRef:
               key: ROUTER_HOST
               name: feedmachine-env
+        - name: FLASK_PORT
+          valueFrom:
+            configMapKeyRef:
+              key: FLASK_PORT
+              name: feedmachine-env
         - name: KAFKA_TOPIC_PREFIX
           valueFrom:
             configMapKeyRef:

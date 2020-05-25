@@ -9,7 +9,7 @@ from logging.handlers import SMTPHandler
 
 
 component_name_overrides = {
-    'routing': 'router'
+    'router': 'routing'
 }
 
 secret_key = '7201873fd83683026d53267fd3606471f51fdf68ad1b4da3709d3cf5f8e8f1f1'
