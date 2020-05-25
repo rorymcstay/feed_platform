@@ -42,7 +42,7 @@ services:
      - '29092:29092'
     environment:
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
-      - KAFKA_CREATE_TOPICS="sample-queue;worker-queue;worker-route;summarizer-route;leader-route"
+      - KAFKA_CREATE_TOPICS="d-sample-queue;d-worker-queue;d-worker-route;d-summarizer-route;d-leader-route"
       - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
       - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
