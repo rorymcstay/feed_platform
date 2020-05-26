@@ -1,4 +1,4 @@
-capture-crawler=0.2.4
+capture-crawler=0.2.5
 feed-admin=0.2.5
 leader=0.3.5
 nanny=0.3.4
