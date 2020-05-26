@@ -4,6 +4,6 @@ leader=0.3.5
 nanny=0.3.4
 routing=0.1.7
 summarizer=0.1.6
-ui-server=0.1.9
+ui-server=0.2.0
 utils=0.3.37
 router=0.1.5
