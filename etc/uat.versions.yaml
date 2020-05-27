@@ -4,4 +4,4 @@ leaderVersion: feed/leader:0.3.9
 routerVersion: feed/routing:0.1.7
 summarizerVersion: feed/summarizer:0.1.8
 feedAdminVersion: feed/feed-admin:0.2.5
-captureCrawlerVersion: feed/capture-crawler:0.2.8
+captureCrawlerVersion: feed/capture-crawler:0.2.9
