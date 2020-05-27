@@ -1,6 +1,6 @@
 capture-crawler=0.2.8
 feed-admin=0.2.5
-leader=0.3.8
+leader=0.3.9
 nanny=0.3.8
 routing=0.1.7
 summarizer=0.1.8
