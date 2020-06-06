@@ -47,6 +47,8 @@ services:
       - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
       - ALLOW_PLAINTEXT_LISTENER=yes
+    depends_on:
+      - zookeeper
 
   database:
     container_name: database
@@ -54,6 +56,30 @@ services:
     ports:
       - 5432:5432
     environment:
-      - POSTGRES_PASSWORD=feeds
-      - POSTGRES_USER=feeds
-      - POSTGRES_DB=feeds
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_MULTIPLE_PASSWORDS=feeds,authn
+      - POSTGRES_MULTIPLE_USERS=feeds,authn
+      - POSTGRES_MULTIPLE_DATABASES=feeds,authn
+    volumes:
+      - ${DEPLOYMENT_ROOT}/etc/database:/docker-entrypoint-initdb.d
+
+  redis:
+    image: redis 
+
+  authn:
+    container_name: authn
+    image: keratin/authn-server:1.10.0
+    ports:
+    - "8080:3000"
+    environment:
+    - AUTHN_URL=http://authn:3000
+    - APP_DOMAINS=localhost
+    - DATABASE_URL=postgres://authn:authn@database:5432/feeds
+    - REDIS_URL=redis://6379/0
+    - SECRET_KEY_BASE=changeme
+    - HTTP_AUTH_USERNAME=hello
+    - HTTP_AUTH_PASSWORD=world 
+    depends_on:
+    - database
+    - redis
+
