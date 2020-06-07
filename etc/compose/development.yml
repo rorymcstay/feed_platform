@@ -4,17 +4,6 @@ version: '3'
 
 services:
 
-  worker:
-    build: ${SOURCE_DIR}/worker
-    volumes:
-    - /var/run/docker.docker:/sock/var/run.sock
-    - ${SOURCE_DIR}/utils/feed:/usr/worker/feed
-    depends_on:
-    - nanny
-    stop_grace_period: 5s
-    env_file:
-    - ${ENV_FILE}
-
   capture-crawler:
     build: ${SOURCE_DIR}/capture-crawler
     volumes:
@@ -71,6 +60,10 @@ services:
       - "5004:5000"
     env_file:
     - ${ENV_FILE}
+    environment:
+    - AUTHN_SERVER=http://authn:3000
+    - JWK_REFRESH_RATE=60
+    - AUTHN_AUDIENCE_CHALLENGE=devfeedmachine.local
 
   summarizer:
     container_name: feed_summarizer
@@ -86,25 +79,21 @@ services:
     env_file:
     - ${ENV_FILE}
 
-  commands:
-    container_name: feed_commands
-    build: ${SOURCE_DIR}/commands
-    volumes:
-    - /var/run/docker.sock:/var/run/docker.sock
-    stop_grace_period: 5s
-    ports:
-      - "5001:5000"
-    env_file:
-    - ${ENV_FILE}
-
   feed-admin:
     ports:
-     - "3000:80"
-    container_name: feed-admin
+     - "443:443"
+    volumes:
+     - ${SOURCE_DIR}/feed-admin/certs:/etc/certs
+    depends_on:
+     - ui-server
+
+    container_name: devfeedmachine.local
     build: ${SOURCE_DIR}/feed-admin
     stop_grace_period: 5s
     environment:
     - UISERVER=http://feed_ui-server:5000
-    - COMMANDSERVER=http://feed_commands:5000
-    - SERVERNAME=feed-admin
+    - SERVERNAME=devfeedmachine.local
+    - AUTHSERVER=http://authn:3000
 
+  certbot:
+    image: certbot/certbot
