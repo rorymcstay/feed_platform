@@ -1,0 +1,8 @@
+volumePermissions:
+  enabled: true
+master:
+  securityContext:
+    enabled: true
+    runAsUser: 0
+    fgGroup: 2000
+usePassword: false

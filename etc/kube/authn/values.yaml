@@ -1,8 +1,8 @@
 appDomains: feedmachine.rorymcstay.com,uatfeedmachine.local,10.66.66.1,ui-server-svc.uat,ui-server-svc.prod
-databaseUrl: postgres://auth:authn@database-postgresql.services.svc.cluster.local:5432/authn
+databaseUrl: postgres://database-postgresql:5432/authn?user=authn&password=authn
 authnServerPort: 3000
 redis:
-  password: nxltQrBv4F
+  password: 7MGh3jmmk0 
   user: 'authn'
   url: redis://redis-master.services.svc.cluster.local:6379/0
 credentials:

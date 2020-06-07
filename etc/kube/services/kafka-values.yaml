@@ -18,15 +18,15 @@ topics:
     replicationFactor: 1
     partitions: 2
 persistence:
-  enables: true
-prometheus:
-  kafka:
-    enabled: true
-    interval: 10s
-    scrapeTimeout: 10s
-    port: 9308
-    operator:
-      prometheusRule:
-        enabled: true
-        selector: 
-         - app.kubernetes.io/name: prometheus-operator
+  enabled: true
+#prometheus:
+#  kafka:
+#    enabled: false # true
+#    interval: 10s
+#    scrapeTimeout: 10s
+#    port: 9308
+#      operator:
+#      prometheusRule:
+#        enabled: false #  true
+#        selector: 
+#         - app.kubernetes.io/name: prometheus-operator

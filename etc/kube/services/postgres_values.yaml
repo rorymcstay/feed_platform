@@ -1,22 +1,60 @@
 volumePermissions:
   enabled: true
+image:
+  debug: true
 
  # TODO root credentials here
-postgresqlPassword: feeds
-postgresqlUsername: feeds
-postgresqlDatabase: feeds
+postgresqlPassword: postgres
+postgresqlUsername: postgres
+postgresqlDatabase: postgres
+
+initdbUser: postgres
+initdbPassword: postgres
 
 initDbScripts:
-  init.sql: " echo helloworld" # TODO initialise datbases and users here can do shell commands here
+  init.sql: "
+CREATE USER authn WITH PASSWORD authn;
+CREATE DATABASE authn;
+GRANT ALL PRIVILEGES on DATABASE TO authn;
+CREATE TABLE IF NOT EXISTS authn.accounts (
+    id SERIAL PRIMARY KEY,
+    username TEXT UNIQUE DEFAULT NULL,
+    password TEXT DEFAULT NULL,
+    locked boolean NOT NULL DEFAULT false,
+    require_new_password boolean NOT NULL DEFAULT false,
+    password_changed_at timestamptz DEFAULT NULL,
+    created_at timestamptz NOT NULL,
+    updated_at timestamptz NOT NULL,
+    deleted_at timestamptz DEFAULT NULL
+);
 
-# TODO mount ssl secrets here
+CREATE_USER feeds WITH PASSWORD feeds;
+CREATE DATABASE feeds;
+GRANT ALL PRIVILEGES on DATABASE TO feeds;
+commit;
+
+CREATE_USER uat_feeds WITH PASSWORD uat_feeds;
+CREATE DATABASE uat_feeds;
+GRANT ALL PRIVILEGES on DATABASE TO uat_feeds;
+commit;"
+
+volumePermissions:
+  enabled: true
+
+#shmVolume:
+#  enabled: true
+#  chmod:
+#    enabled: true
+
+
 master:
-  #https://helm.sh/docs/chart_template_guide/accessing_files/
   extraVolumes:
+  - name: certs
+    secret:
+      secretName: 'ssl-proxy-secret'
+      defaultMode: 0640
+  extraVolumeMounts:
+  - name: certs
+    mountPath: "/var/lib/certs"
 
-slave:
-  extraVolumes:
-
-extraEnv:
-  - name: POSTGRESQL_INITDB_ARGS
-    value: "-c ssl=on -c ssl_cert_file=/var/lib/postgresql/server.crt -c ssl_key_file=/var/lib/postgresql/server.key"
+postgresqlExtendedConf: { "ssl": "on", "sslCertFile":"'/var/lib/certs/server.crt'", "sslKeyFile":"'/var/lib/certs/server.key'" }

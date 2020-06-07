@@ -31,7 +31,7 @@ spec:
         image: {{ .Values.imageRepository }}/{{ .Values.feedAdminVersion }}
         name: feed-admin
         ports:
-        - containerPort: 80
+        - containerPort: 443
         resources: {}
       restartPolicy: Always
 
