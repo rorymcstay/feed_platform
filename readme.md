@@ -84,6 +84,17 @@ https://grafana.com/grafana/dashboards/893
 
 # Kubernetes
 
+## Configuring certificates for feed-admin and postgresql
+feed-admin and postgres are configures to use a secret for there certificates. A base64 encoded string done likes so
+
+	base64 certs/feed-admin/server.key  -w 0
+
+You may use ```mkcert``` to provision certificates. This signing cert must be then trusted on the gateway host.
+
+The encoded strings are added to the following locations
+	1. the values.yaml file (or prod-values.yaml for production) for feed-admin deployment in feedmachine helm chart template
+	2. the respective secrets config yaml in etc/kube/certs
+
 ## initialise kafka, mongo and postgres
 # add the bitnami repos
 	helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -135,7 +146,9 @@ on the gateway box
         > db.createUser({ user: "uat_feeds", pwd: "uat_feeds_123", roles: [{role: "readWrite", db: "uat_actionChains"}], mechanisms: ["SCRAM-SHA-1"]})
    this must be done for both production and uat users
 
-# create a new postgres user and database
+# expose database to outside host
+	
+	kubectl port-forward --address 192.168.1.96 --namespace services svc/database-postgresql 5432:5432
 
 # Setup monitoring
 	rory@uatfeedmachine:~/feed$ helm install grafana bitnami/grafana --namespace monitoring
