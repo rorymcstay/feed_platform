@@ -52,7 +52,7 @@ services:
 
   database:
     container_name: database
-    image: postgres
+    build: ${DEPLOYMENT_ROOT}/etc/database
     ports:
       - 5432:5432
     environment:
@@ -60,10 +60,11 @@ services:
       - POSTGRES_MULTIPLE_PASSWORDS=feeds,authn
       - POSTGRES_MULTIPLE_USERS=feeds,authn
       - POSTGRES_MULTIPLE_DATABASES=feeds,authn
-    volumes:
-      - ${DEPLOYMENT_ROOT}/etc/database:/docker-entrypoint-initdb.d
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    command: -c ssl=on -c ssl_cert_file=/var/lib/postgresql/server.crt -c ssl_key_file=/var/lib/postgresql/server.key
 
   redis:
+    container_name: redis
     image: redis 
 
   authn:
@@ -73,12 +74,13 @@ services:
     - "8080:3000"
     environment:
     - AUTHN_URL=http://authn:3000
-    - APP_DOMAINS=localhost
+    - APP_DOMAINS=localhost:3000,devfeedmachine.local,192.168.1.64,feed_ui-server
     - DATABASE_URL=postgres://authn:authn@database:5432/feeds
-    - REDIS_URL=redis://6379/0
+    - REDIS_URL=redis://redis:6379/0
     - SECRET_KEY_BASE=changeme
     - HTTP_AUTH_USERNAME=hello
     - HTTP_AUTH_PASSWORD=world 
+    command: "./authn server"
     depends_on:
     - database
     - redis
