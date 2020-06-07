@@ -17,5 +17,6 @@ databaseUser: feeds
 databasePass: feeds
 databaseName: feeds
 
-
+feedAdminKey: ""
+feedAdminCert: "" # base64 /etc/certs/feedmachine.rorymcstay.com.pem ... TODO
 

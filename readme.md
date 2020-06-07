@@ -93,6 +93,10 @@ https://grafana.com/grafana/dashboards/893
 	helm install bitnami/mongodb-sharded --values etc/kube/services/mongo_values.yaml --namespace services
 # Postgresql
 	helm install bitnami/postgresql --values etc/kube/services/postgres_values.yaml --namespace services
+# Redis - for authn
+
+	rory@uatfeedmachine:~$ helm install redis bitnami/redis --namespace services 
+
 
 
 # regsitrey creds ecr
@@ -129,6 +133,7 @@ on the gateway box
         > use admin
         > db.auth( "root", "<pass>")
         > db.createUser({ user: "uat_feeds", pwd: "uat_feeds_123", roles: [{role: "readWrite", db: "uat_actionChains"}], mechanisms: ["SCRAM-SHA-1"]})
+   this must be done for both production and uat users
 
 # create a new postgres user and database
 

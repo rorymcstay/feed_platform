@@ -1,0 +1,16 @@
+apiVersion: v1
+data:
+  AUTHN_URL: http://authn.services.svc.cluster.local
+  APP_DOMAINS: {{ .Values.appDomains }}
+  DATABASE_URL: {{ .Values.databaseUrl }}
+  REDIS_URL: {{ .Values.redis.url }}
+  REDIS_USER: {{ .Values.redis.user }}
+  REDIS_PASSWORD: {{ .Values.redis.password }}
+  SECRET_KEY_BASE: {{ .Values.credentials.secretKeyBase }}
+  HTTP_AUTH_USERNAME: {{ .Values.credentials.httpUser }}
+  HTTP_AUTH_PASSWORD: {{ .Values.credentials.httpPass }}
+kind: ConfigMap
+metadata:
+  labels:
+    io.kompose.service: authn-config-map
+  name: authn-config-map

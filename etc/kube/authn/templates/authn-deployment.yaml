@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: authn
+  name: authn
+spec:
+  replicas: {{ .Values.authnReplicas }}
+  selector:
+    matchLabels:
+      app: authn
+  template:
+    metadata:
+      labels:
+        app: authn
+    spec:
+      containers:
+      - name: authn-server
+        image: {{ .Values.authnServerImage }}
+        ports:
+        - containerPort: {{ .Values.authnServerPort }}
+          name: http
+          protocol: TCP
+        env:
+        - name: AUTHN_URL
+          valueFrom:
+            configMapKeyRef:
+              key: AUTHN_URL
+              name: authn-config-map
+        - name: APP_DOMAINS
+          valueFrom:
+            configMapKeyRef:
+              key: APP_DOMAINS
+              name: authn-config-map
+        - name: DATABASE_URL
+          valueFrom:
+            configMapKeyRef:
+              key: DATABASE_URL
+              name: authn-config-map
+        - name: REDIS_URL
+          valueFrom:
+            configMapKeyRef:
+              key: REDIS_URL
+              name: authn-config-map
+        - name: REDIS_USER
+          valueFrom:
+            configMapKeyRef:
+              key: REDIS_USER
+              name: authn-config-map
+        - name: REDIS_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              key: REDIS_PASSWORD
+              name: authn-config-map
+        - name: SECRET_KEY_BASE
+          valueFrom:
+            configMapKeyRef:
+              key: SECRET_KEY_BASE
+              name: authn-config-map
+        - name: HTTP_AUTH_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              key: HTTP_AUTH_USERNAME
+              name: authn-config-map
+        - name: HTTP_AUTH_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              key: HTTP_AUTH_PASSWORD
+              name: authn-config-map
+

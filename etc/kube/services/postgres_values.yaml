@@ -1,7 +1,22 @@
 volumePermissions:
   enabled: true
 
+ # TODO root credentials here
 postgresqlPassword: feeds
 postgresqlUsername: feeds
 postgresqlDatabase: feeds
 
+initDbScripts:
+  init.sql: " echo helloworld" # TODO initialise datbases and users here can do shell commands here
+
+# TODO mount ssl secrets here
+master:
+  #https://helm.sh/docs/chart_template_guide/accessing_files/
+  extraVolumes:
+
+slave:
+  extraVolumes:
+
+extraEnv:
+  - name: POSTGRESQL_INITDB_ARGS
+    value: "-c ssl=on -c ssl_cert_file=/var/lib/postgresql/server.crt -c ssl_key_file=/var/lib/postgresql/server.key"
