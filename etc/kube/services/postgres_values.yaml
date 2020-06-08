@@ -13,10 +13,10 @@ initdbPassword: postgres
 
 initDbScripts:
   init.sql: "
-CREATE USER authn WITH PASSWORD authn;
+CREATE USER authn WITH PASSWORD 'authn';
 CREATE DATABASE authn;
 GRANT ALL PRIVILEGES on DATABASE TO authn;
-CREATE TABLE IF NOT EXISTS authn.accounts (
+CREATE TABLE IF NOT EXISTS accounts (
     id SERIAL PRIMARY KEY,
     username TEXT UNIQUE DEFAULT NULL,
     password TEXT DEFAULT NULL,
@@ -28,12 +28,12 @@ CREATE TABLE IF NOT EXISTS authn.accounts (
     deleted_at timestamptz DEFAULT NULL
 );
 
-CREATE_USER feeds WITH PASSWORD feeds;
+CREATE USER feeds WITH PASSWORD 'feeds';
 CREATE DATABASE feeds;
 GRANT ALL PRIVILEGES on DATABASE TO feeds;
 commit;
 
-CREATE_USER uat_feeds WITH PASSWORD uat_feeds;
+CREATE USER uat_feeds WITH PASSWORD 'uat_feeds';
 CREATE DATABASE uat_feeds;
 GRANT ALL PRIVILEGES on DATABASE TO uat_feeds;
 commit;"

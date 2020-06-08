@@ -3,6 +3,7 @@ LABEL "Product"="PostgreSQL (SSL enabled)"
 
 # Move database initialisation scripts
 COPY init/configure-users.sh /docker-entrypoint-initdb.d/configure-users.sh 
+COPY init/configure-authn.sql /docker-entrypoint-initdb.d/configure-authn.sql
 
 # Copy over the certificates
 COPY certs/database-key.pem /var/lib/postgresql/server.key

@@ -94,6 +94,3 @@ services:
     - UISERVER=http://feed_ui-server:5000
     - SERVERNAME=devfeedmachine.local
     - AUTHSERVER=http://authn:3000
-
-  certbot:
-    image: certbot/certbot
