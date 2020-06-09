@@ -28,7 +28,7 @@ if [ $IS_RELEASE -eq "1" ]; then
     echo docker push "$IMAGE_REPOSITORY/$IMAGE_NAME:$tag";
     docker push "$IMAGE_REPOSITORY/$IMAGE_NAME:$tag" || exit 1;
     echo curl "http://feedmachine.rorymcstay.com/updatemanager/rolloutImage/$COMPONENT/$tag/7201873fd83683026d53267fd3606471f51fdf68ad1b4da3709d3cf5f8e8f1f1"
-    curl "http://feedmachine.rorymcstay.com/updatemanager/rolloutImage/$COMPONENT/$tag/7201873fd83683026d53267fd3606471f51fdf68ad1b4da3709d3cf5f8e8f1f1"
+    curl "https://feedmachine.rorymcstay.com/updatemanager/rolloutImage/$COMPONENT/$tag/7201873fd83683026d53267fd3606471f51fdf68ad1b4da3709d3cf5f8e8f1f1"
     exit;
 fi
 
