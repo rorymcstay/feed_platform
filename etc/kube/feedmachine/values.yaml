@@ -1,5 +1,5 @@
 environment: uat
-feedAdminHostname: uatfeedmachine:30000
+feedAdminHostname: uatfeedmachine
 feedAdminServicePort: "30000"
 leaderReplicas: 1
 feedAdminReplicas: 1

@@ -13,11 +13,7 @@ spec:
     metadata:
       labels:
         app: feed-admin
-    spec:
-      volumes:
-       - mountPath: "/etc/certs"
-         name: feed-admin-ssl
-         readOnly: true
+    spec:        
       imagePullSecrets:
       - name: awsecr-cred 
       containers:
@@ -33,5 +29,14 @@ spec:
         ports:
         - containerPort: 443
         resources: {}
+        volumeMounts:
+        - mountPath: "/etc/certs"
+          name: feed-admin-ssl
+          readOnly: true
+      volumes:
+      - name: feed-admin-ssl
+        secret:
+          secretName: 'feed-admin-ssl'
+          defaultMode: 0640
       restartPolicy: Always
 
