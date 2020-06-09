@@ -24,6 +24,8 @@ spec:
           value: http://ui-server:5000
         - name: NANNYSERVER
           value: http://nanny:5000
+        - name: AUTHSERVER
+          value: {{ .Values.authServer }}
         image: {{ .Values.imageRepository }}/{{ .Values.feedAdminVersion }}
         name: feed-admin
         ports:
