@@ -3,5 +3,5 @@ nannyVersion: feed/nanny:0.4.1
 leaderVersion: feed/leader:0.4.2
 routerVersion: feed/routing:0.2.1
 summarizerVersion: feed/summarizer:0.3.1
-feedAdminVersion: feed/feed-admin:0.3.2
+feedAdminVersion: feed/feed-admin:0.3.3
 captureCrawlerVersion: feed/capture-crawler:0.3.2
