@@ -1,6 +1,6 @@
 apiVersion: v1
 data:
-  AUTHN_URL: http://authn.services.svc.cluster.local
+  AUTHN_URL: http://authn.services.svc.cluster.local:3000
   APP_DOMAINS: {{ .Values.appDomains }}
   DATABASE_URL: {{ .Values.databaseUrl }}
   REDIS_URL: {{ .Values.redis.url }}

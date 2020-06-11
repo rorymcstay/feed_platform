@@ -1,5 +1,5 @@
-appDomains: feedmachine.rorymcstay.com,uatfeedmachine.local,10.66.66.1,ui-server-svc.uat,ui-server-svc.prod
-databaseUrl: postgres://database-postgresql:5432/authn?user=authn&password=authn
+appDomains: feedmachine.rorymcstay.com,uatfeedmachine.local,10.66.66.1,ui-server-svc.uat,ui-server-svc.prod,uatfeedmachine,uatfeedmachine:30000,https:uatfeedmachine:30000
+databaseUrl: postgres://postgres:postgres@database-postgresql:5432/authn
 authnServerPort: 3000
 redis:
   password: 7MGh3jmmk0 

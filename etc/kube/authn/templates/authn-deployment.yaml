@@ -19,8 +19,6 @@ spec:
         image: {{ .Values.authnServerImage }}
         ports:
         - containerPort: {{ .Values.authnServerPort }}
-          name: http
-          protocol: TCP
         env:
         - name: AUTHN_URL
           valueFrom:
