@@ -10,6 +10,6 @@ spec:
   type: ClusterIP
   ports:
   - port: {{ .Values.authnServerPort }}
-    targetPort: 80
+    targetPort: {{ .Values.authnServerPort }}
     protocol: TCP
     name: http
