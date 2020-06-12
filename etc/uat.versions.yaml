@@ -1,4 +1,4 @@
-uiServerVersion: feed/ui-server:0.3.2
+uiServerVersion: feed/ui-server:0.3.3
 nannyVersion: feed/nanny:0.4.1
 leaderVersion: feed/leader:0.4.2
 routerVersion: feed/routing:0.2.1
