@@ -7,7 +7,7 @@ source $DIR/../etc/profiles/cicd.env
 
 alias kubectl='microk8s.kubectl '
 secret_name=awsecr-cred
-auth_location=/home/rory/snap/docker/current/.docker/config.json
+auth_location=/home/rory/snap/docker/471/.docker/config.json
 
 
 echo "Authentication file location: '$auth_location'"

@@ -1,5 +1,5 @@
 environment: prod
-feedAdminHostname: feedmachine:30000
+feedAdminHostname: feedmachine
 feedAdminServicePort: "30001"
 leaderReplicas: 3
 feedAdminReplicas: 1

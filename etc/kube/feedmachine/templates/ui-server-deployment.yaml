@@ -111,6 +111,8 @@ spec:
               name: {{ .Values.environment }}-env
         - name: AUTHN_SERVER
           value: {{ .Values.authServer }}
+        - name: SELECTOR_GADGET
+          value: /data/content/
 
         resources: {}
       restartPolicy: Always
