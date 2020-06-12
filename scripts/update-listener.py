@@ -81,7 +81,7 @@ class CommandRunner(ThreadPool):
         return 'ok'
 
     def _promote(self):
-        execute(f'{os.getenv("DEPLOYMENT_ROOT")}/scripts/promote-to-prod.sh')
+        execute(f'{os.getenv("DEPLOYMENT_ROOT")}/scripts/promote-to-prod.sh &> {os.environ["DEPLOYMENT_ROOT"]}/tmp/ci-scripts.log')
         logging.info(f'doing promotion step')
 
 def get_component_name(name):
