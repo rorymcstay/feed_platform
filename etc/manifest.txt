@@ -1,9 +1,9 @@
 capture-crawler=0.3.2
-feed-admin=0.3.2
+feed-admin=0.3.3
 leader=0.4.2
 nanny=0.4.1
 routing=0.2.1
 summarizer=0.3.1
-ui-server=0.3.1
+ui-server=0.3.5
 utils=0.3.37
 router=0.1.5
