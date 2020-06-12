@@ -155,3 +155,46 @@ on the gateway box
 	rory@uatfeedmachine:~/feed$ kubectl port-forward svc/grafana 3000:3000 --address 192.168.1.96 --namespace monitoring &
 
 	rory@uatfeedmachine:~/feed $ helm install prometheus bitnami/prometheus-operator --namespace monitoring
+
+
+# Configuring host
+	
+	microk8sk, enable helm3, 
+
+	install wireguard
+
+# Configuring wireguard
+
+	$ umask 077
+	$ wg genkey > privatekey
+
+	This will create privatekey on stdout containing a new private key.
+
+	You can then derive your public key from your private key:
+
+	$ wg pubkey < privatekey > publickey
+
+	make the wirgeuard
+
+		[Interface]
+		Address = 10.66.66.<Yourbit>/24,fd42:42:42::<theirbit>/64
+		PostUp = iptables -A FORWARD -i wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE; ip6tables -A FORWARD -i wg0 -j ACCEPT; ip6tables -t nat -A POSTROUTING -o eth0 -j MASQUERADE # Add forwarding when VPN is started
+		PostDown = iptables -D FORWARD -i wg0 -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE; ip6tables -D FORWARD -i wg0 -j ACCEPT; ip6tables -t nat -D POSTROUTING -o eth0 -j MASQUERADE # Remove forwarding when VPN is shutdown
+		ListenPort = 51820
+		PrivateKey  = IGyQikKxUWh4TzIES+NNLl+dUOnnGlUGr8oCtdiMpFg=
+
+		[Peer]
+		PublicKey = u/YJL4XOA2LWkku2hzwPbkU55fmoSJDgvzMj2+mgtxY=
+		AllowedIPs = 10.66.66.2/32, fd42:42:42::2/128
+		PersistentKeepalive = 15
+
+		[Peer]
+		PublicKey = 3w//zU+tBLr7wTwGDpymEY1sdDizh5iQ/UR+a8HpUXc=
+		AllowedIPs = 10.66.66.3/32, fd42:42:42::3/128
+		PersistentKeepalive = 15
+
+		[Peer]
+		PublicKey = E6ZINyNengLVpcV3zUo72ZJRMTYpCfzQZZitJ9bGMUQ=
+		AllowedIPs = 10.66.66.1/32, fd42:42:42::4/128
+		PersistentKeepalive = 15
+

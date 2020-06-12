@@ -17,7 +17,11 @@ cat etc/uat.versions.yaml
 
 git add etc/manifest.txt etc/profiles/uat.versions.env etc/uat.versions.yaml
 
-helm upgrade uat-feedmachine $DEPLOYMENT_ROOT/etc/kube/feedmachine --namespace uat --values etc/uat.versions.yaml --values etc/kube/feedmachine/values.yaml
+helm upgrade uat-feedmachine $DEPLOYMENT_ROOT/etc/kube/feedmachine \
+	--namespace uat \
+	--values etc/uat.versions.yaml \
+	--values etc/kube/feedmachine/values.yaml \
+	--values etc/kube/feedmachine/uat-values.yaml
 
 
 git commit -m 'UAT environment upgrade'
