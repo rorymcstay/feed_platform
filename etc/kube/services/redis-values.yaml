@@ -6,3 +6,5 @@ master:
     runAsUser: 0
     fgGroup: 2000
 usePassword: false
+cluster:
+  slaveCount: 1
