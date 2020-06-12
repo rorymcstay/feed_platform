@@ -13,9 +13,25 @@ initdbPassword: postgres
 
 initDbScripts:
   init.sql: "
+BEGIN;
+
+--CREATE DATABASE authn;
+--CREATE DATABASE feeds;
+--CREATE DATABASE uat_feeds;
+
+select * from sys.information_schema;
+
+
+START TRANSACTION;
 CREATE USER authn WITH PASSWORD 'authn';
-CREATE DATABASE authn;
-GRANT ALL PRIVILEGES on DATABASE TO authn;
+CREATE USER feeds WITH PASSWORD 'feeds';
+CREATE USER uat_feeds WITH PASSWORD 'uat_feeds';
+
+GRANT ALL PRIVILEGES on DATABASE authn TO authn;
+GRANT ALL PRIVILEGES on DATABASE feeds TO feeds;
+GRANT ALL PRIVILEGES on DATABASE uat_feeds TO uat_feeds;
+
+
 CREATE TABLE IF NOT EXISTS accounts (
     id SERIAL PRIMARY KEY,
     username TEXT UNIQUE DEFAULT NULL,
@@ -28,23 +44,7 @@ CREATE TABLE IF NOT EXISTS accounts (
     deleted_at timestamptz DEFAULT NULL
 );
 
-CREATE USER feeds WITH PASSWORD 'feeds';
-CREATE DATABASE feeds;
-GRANT ALL PRIVILEGES on DATABASE TO feeds;
-commit;
-
-CREATE USER uat_feeds WITH PASSWORD 'uat_feeds';
-CREATE DATABASE uat_feeds;
-GRANT ALL PRIVILEGES on DATABASE TO uat_feeds;
-commit;"
-
-volumePermissions:
-  enabled: true
-
-#shmVolume:
-#  enabled: true
-#  chmod:
-#    enabled: true
+COMMIT;"
 
 
 master:
