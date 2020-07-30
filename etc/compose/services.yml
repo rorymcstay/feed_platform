@@ -27,6 +27,7 @@ services:
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
     container_name: zookeeper
+    restart: always
     ports:
       - '2181:2181'
     environment:
@@ -37,6 +38,7 @@ services:
   kafka:
     image: confluentinc/cp-kafka:latest
     container_name: kafka
+    restart: always
     ports:
      - '9092:9092'
      - '29092:29092'
@@ -53,6 +55,7 @@ services:
   database:
     container_name: database
     build: ${DEPLOYMENT_ROOT}/etc/database
+    restart: always
     ports:
       - 5432:5432
     environment:
@@ -65,17 +68,19 @@ services:
 
   redis:
     container_name: redis
+    restart: always
     image: redis 
 
   authn:
     container_name: authn
+    restart: always
     image: keratin/authn-server:1.10.0
     ports:
     - "8080:3000"
     environment:
     - AUTHN_URL=http://authn:3000
     - APP_DOMAINS=localhost:3000,devfeedmachine.local,192.168.1.64,feed_ui-server
-    - DATABASE_URL=postgres://authn:authn@database:5432/feeds
+    - DATABASE_URL=postgres://authn:authn@database:5432/authn
     - REDIS_URL=redis://redis:6379/0
     - SECRET_KEY_BASE=changeme
     - HTTP_AUTH_USERNAME=hello
@@ -84,4 +89,3 @@ services:
     depends_on:
     - database
     - redis
-
