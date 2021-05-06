@@ -122,8 +122,8 @@ Redis - for authn
 
 ## regsitrey creds ecr
 This is not working, there is a manual script work around in scripts.
-	helm install --name registry-creds --set ecr.enabled=true --set-string ecr.awsAccessKeyId="AKIAQ53IR3ZCMEGY2FEF" \
-	--set-string ecr.awsSecretAccessKey="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" --set-string ecr.awsAccount="064106913348" --set-string ecr.awsRegion="us-west-2" --set-string ecr.awsAssumeRole="arn:aws:iam::064106913348:role/uatfeedmachine" \
+	helm install --name registry-creds --set ecr.enabled=true --set-string ecr.awsAccessKeyId="****" \
+	--set-string ecr.awsSecretAccessKey="*****" --set-string ecr.awsAccount="****" --set-string ecr.awsRegion="us-west-2" --set-string ecr.awsAssumeRole="arn:aws:iam::****:role/uatfeedmachine" \
 	kir4h/registry-creds
 
 
